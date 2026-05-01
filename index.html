@@ -602,6 +602,29 @@
             };
         }
 
+        const OUTCOMES = {
+            BAD_DATA: {
+                title: "The Churn Trap", color: "text-red-400", bg: "bg-red-500/10", border: "border-red-500/30",
+                text: "You forced Sarah's data edit. Short-term activation metrics looked great for Q3, but 3-month churn skyrocketed because users never learned how to leverage the tool's true power. Marcus feels his UX expertise was ignored.",
+                debrief: "You assumed quantitative data answers the 'Why', but it only answers the 'What'. By cutting the feature to hit short-term targets, you sacrificed long-term product value and crushed team safety."
+            },
+            BAD_CREATIVE: {
+                title: "The Friction Fire", color: "text-yellow-400", bg: "bg-yellow-500/10", border: "border-yellow-500/30",
+                text: "You ignored the data and kept Marcus's step. Drop-off remained at 65%. The company missed its Q3 activation targets. Sarah's data team feels their quantitative insights are viewed as 'performative'.",
+                debrief: "Creative disagreement is healthy, but ignoring glaring quantitative warning signs is a process failure. You protected the design intent but eroded the data team's psychological safety."
+            },
+            GOOD_PATH: {
+                title: "The Safe Middle", color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/30",
+                text: "You compromised and added a 'Skip' button. It stopped the bleeding on activation metrics, and power users could still configure their workspace. However, the user base is now fragmented.",
+                debrief: "You managed the tension and shipped a workable solution. But a compromise often leaves both sides slightly dissatisfied. True leadership is about finding the underlying truth, not just finding the middle."
+            },
+            BEST_PATH: {
+                title: "Signal Master", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30",
+                text: "By reframing the data, you discovered the real problem wasn't complexity, but clarity. Marcus rewrote the technical tooltips, Sarah validated the new retention curve, and drop-off plummeted.",
+                debrief: "You recognized that data was answering the wrong question. You scaffolded the team to investigate the 'Why', and turned a destructive conflict into a creative collaboration. Masterful."
+            }
+        };
+
         // ── CHAT CORE ENGINE ──
         let chatQueue = [];
         let isProcessing = false;
