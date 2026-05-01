@@ -130,6 +130,14 @@
         #sim-wrapper #btn-start:active {
             color: #000 !important;
         }
+        
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px black inset !important;
+            -webkit-text-fill-color: white !important;
+        }
     </style>
 </head>
 <body class="min-h-screen w-full flex items-center justify-center bg-gray-900 p-0 md:p-6 lg:p-8 overflow-x-hidden selection:bg-netflix-red selection:text-white" style="background: radial-gradient(ellipse at 50% 50%, #202a3a 0%, #0d131f 60%, #05080f 100%);">
@@ -184,7 +192,7 @@
                         <i data-lucide="puzzle" class="w-3.5 h-3.5"></i>
                     </div>
                     <div class="w-7 h-7 flex items-center justify-center rounded hover:bg-white/10 cursor-pointer transition-colors">
-                        <div class="w-5 h-5 rounded-md bg-gradient-to-tr from-gray-700 to-gray-600 flex items-center justify-center text-[9px] font-bold text-white border border-white/20">AR</div>
+                        <div class="w-5 h-5 rounded-md bg-gradient-to-tr from-gray-700 to-gray-600 flex items-center justify-center text-[9px] font-bold text-white border border-white/20">ME</div>
                     </div>
                     <div class="w-7 h-7 flex items-center justify-center rounded hover:bg-white/10 cursor-pointer transition-colors">
                         <i data-lucide="more-vertical" class="w-4 h-4"></i>
@@ -212,11 +220,13 @@
                 <p id="loading-text" aria-live="polite" class="text-[10px] font-semibold text-gray-400 uppercase tracking-widest animate-pulse relative z-10">Syncing local assets...</p>
             </div>
 
-            <!-- ── MAIN MENU ── -->
-            <div id="screen-start" class="absolute inset-0 hidden flex-col items-center justify-center bg-[#000000] fade-in-up z-40 p-6 overflow-y-auto">
-                <div class="w-full max-w-2xl mx-auto flex flex-col items-center space-y-6 my-auto py-12">
+            <!-- ── MAIN MENU / LOGIN ── -->
+            <div id="screen-start" class="absolute inset-0 hidden flex-col items-center justify-center bg-[#000000] fade-in-up z-40 p-4 md:p-6 overflow-y-auto">
+                <div class="w-full max-w-2xl mx-auto flex flex-col items-center space-y-6 my-auto py-8">
+                    
+                    <!-- Title Section -->
                     <div class="space-y-2 text-center">
-                        <h1 class="text-4xl font-bold tracking-tighter text-white">
+                        <h1 class="text-4xl md:text-5xl font-bold tracking-tighter text-white">
                             The <span class="text-netflix">Signal</span><br>and the Noise.
                         </h1>
                         <p class="text-sm text-gray-400 font-light max-w-sm mx-auto" id="start-subtitle">
@@ -224,8 +234,9 @@
                         </p>
                     </div>
 
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full text-left">
-                        <div class="glass-panel p-4 rounded-xl">
+                    <!-- Intro Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full text-left max-w-3xl">
+                        <div class="glass-panel p-4 rounded-xl border border-white/5">
                             <div class="w-8 h-8 rounded-lg bg-netflix flex items-center justify-center mb-3 shadow-[0_0_10px_rgba(229,9,20,0.4)]">
                                 <i data-lucide="target" class="w-4 h-4 text-white"></i>
                             </div>
@@ -234,7 +245,7 @@
                                 Loading scenario...
                             </p>
                         </div>
-                        <div class="glass-panel p-4 rounded-xl">
+                        <div class="glass-panel p-4 rounded-xl border border-white/5">
                             <div class="w-8 h-8 rounded-lg bg-netflix flex items-center justify-center mb-3 shadow-[0_0_10px_rgba(229,9,20,0.4)]">
                                 <i data-lucide="brain-circuit" class="w-4 h-4 text-white"></i>
                             </div>
@@ -247,9 +258,34 @@
                         </div>
                     </div>
 
-                    <button id="btn-start" onclick="startGame()" style="color:#000 !important;" class="apple-btn bg-white px-8 py-2.5 rounded-full font-bold text-sm hover:bg-gray-200 shadow-[0_0_30px_rgba(255,255,255,0.15)] focus:outline-none focus:ring-2 focus:ring-white/30">
-                        <span style="color:#000 !important;">Join Team Channel</span>
-                    </button>
+                    <!-- Authorization Form (Login) -->
+                    <div class="w-full max-w-md mx-auto mt-6 bg-[#111111] p-6 sm:p-8 rounded-2xl border border-white/10 shadow-2xl relative overflow-hidden">
+                        <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full blur-[50px] opacity-20 bg-netflix"></div>
+                        <div class="relative z-10 space-y-5 text-left">
+                            <div class="flex items-center justify-between mb-2">
+                                <div>
+                                    <h3 class="text-white font-bold text-base tracking-tight">System Authorization</h3>
+                                    <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-0.5">NovaCorp Comm Link</p>
+                                </div>
+                                <i data-lucide="lock" class="w-4 h-4 text-netflix"></i>
+                            </div>
+                            
+                            <div class="flex gap-3">
+                                <div class="flex-1">
+                                    <label class="block text-[10px] uppercase tracking-widest text-gray-400 mb-1.5 font-bold">First Name</label>
+                                    <input type="text" id="user-first-name" class="w-full bg-black border border-white/10 rounded-lg px-3 py-2.5 text-white text-[13px] focus:outline-none focus:border-netflix focus:ring-1 focus:ring-netflix transition-colors placeholder:text-gray-700" placeholder="e.g. Alex" required autocomplete="off">
+                                </div>
+                                <div class="flex-1">
+                                    <label class="block text-[10px] uppercase tracking-widest text-gray-400 mb-1.5 font-bold">Last Name</label>
+                                    <input type="text" id="user-last-name" class="w-full bg-black border border-white/10 rounded-lg px-3 py-2.5 text-white text-[13px] focus:outline-none focus:border-netflix focus:ring-1 focus:ring-netflix transition-colors placeholder:text-gray-700" placeholder="e.g. Rivera" required autocomplete="off">
+                                </div>
+                            </div>
+
+                            <button id="btn-start" onclick="startGame()" style="color:#000 !important;" class="apple-btn w-full bg-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-gray-200 shadow-[0_0_20px_rgba(255,255,255,0.1)] focus:outline-none focus:ring-2 focus:ring-white/30 mt-2">
+                                <span style="color:#000 !important;">Authorize & Join Team Channel</span>
+                            </button>
+                        </div>
+                    </div>
 
                     <button onclick="clearHistory(this)" class="text-[10px] text-gray-500 hover:text-gray-300 mt-2 transition-colors">Clear Simulation History</button>
                 </div>
@@ -312,10 +348,10 @@
                             <!-- Player -->
                             <div class="flex items-center space-x-2 px-2 py-1 rounded hover:bg-white/5 cursor-pointer">
                                 <div class="relative">
-                                    <img id="sidebar-user" class="w-5 h-5 rounded object-cover character-img" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150" alt="Alex">
+                                    <img id="sidebar-user" class="w-5 h-5 rounded object-cover character-img" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150" alt="User">
                                     <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 border border-black rounded-full"></div>
                                 </div>
-                                <span class="text-[13px] text-gray-300 truncate">Alex Rivera <span class="text-gray-500 ml-1 text-[10px]">(you)</span></span>
+                                <span id="dm-user-name" class="text-[13px] text-gray-300 truncate">Alex Rivera <span class="text-gray-500 ml-1 text-[10px]">(you)</span></span>
                             </div>
 
                             <!-- Sarah -->
@@ -540,6 +576,8 @@
         function resetState() {
             let history = JSON.parse(localStorage.getItem('nova_sim_history') || '[]');
             let scenarioIdx = history.length % SCENARIOS.length;
+            let savedFirst = localStorage.getItem('nova_sim_first_name') || '';
+            let savedLast = localStorage.getItem('nova_sim_last_name') || '';
             
             state = { 
                 scenarioIndex: scenarioIdx,
@@ -547,7 +585,9 @@
                 evidenceGathered: [], 
                 ambiguityHeld: false, 
                 scaffoldScore: 0, 
-                pendingDecision: null 
+                pendingDecision: null,
+                firstName: savedFirst,
+                lastName: savedLast
             };
 
             // Update UI for the scenario
@@ -578,6 +618,18 @@
             document.getElementById('sidebar-marcus').src = imgMarcusUrl;
 
             resetState();
+            
+            // Pre-fill form if history exists
+            document.getElementById('user-first-name').value = state.firstName;
+            document.getElementById('user-last-name').value = state.lastName;
+
+            // Allow hitting Enter on form
+            document.getElementById('user-first-name').addEventListener('keypress', function(e) {
+                if(e.key === 'Enter') document.getElementById('user-last-name').focus();
+            });
+            document.getElementById('user-last-name').addEventListener('keypress', function(e) {
+                if(e.key === 'Enter') startGame();
+            });
 
             loadingBar.style.width = "40%";
             setTimeout(() => { loadingBar.style.width = "80%";  loadingText.innerText = "Parsing simulation logic..."; }, 150);
@@ -588,6 +640,8 @@
                     setTimeout(() => {
                         document.getElementById('screen-loading').classList.add('hidden');
                         showScreen('screen-start');
+                        // Auto-focus first name
+                        if(!state.firstName) document.getElementById('user-first-name').focus();
                     }, 400);
                 }, 200);
             }, 400);
@@ -619,33 +673,63 @@
             if (iteration === 1) {
                 introSequence.push(
                     { sender: 'system_prompt', text: `You joined #${SCENARIOS[state.scenarioIndex].channel}`, delay: 600 },
-                    { sender: 'sarah', text: 'Alex! Glad you\'re here. We need you on this right now. I\'ve been leading analytics for Nova since day one.', delay: delay(1500) },
-                    { sender: 'marcus', text: 'And I\'m Marcus, Lead UX. Welcome to the fire, I guess.', delay: delay(1500) },
-                    { sender: 'system', text: '— Historical context loaded —', delay: 1000 }
+                    { sender: 'sarah', text: `Welcome to the team, ${state.firstName}! 👋 Glad to finally have our new Product Lead on board.`, delay: delay(1500) },
+                    { sender: 'marcus', text: `Hey ${state.firstName}! Welcome. I'm Marcus, Lead UX. Looking forward to working together.`, delay: delay(1500) },
+                    { sender: 'sarah', text: `Since it's your first week, we were just about to do a quick async stand-up. I'll go first: I'm Sarah, Head of Data.`, delay: delay(2000) },
+                    { sender: 'marcus', text: `Nice to meet you. For my stand-up: I'm finalizing the UI components for the new dashboard. No blockers so far.`, delay: delay(2000) },
+                    { sender: 'sarah', text: `Actually... I might have a blocker for both of us now.`, delay: delay(1500) },
+                    { sender: 'system', text: '— Scenario Briefing —', delay: 1000 }
                 );
             } else {
                 const lastRun = history[history.length - 1];
+                const lastDec = lastRun.decision;
+                
                 introSequence.push({ sender: 'system_prompt', text: `— Reviewing Previous Strategy —<br>Last outcome: ${lastRun.title}`, delay: 1000 });
-                introSequence.push({ sender: 'sarah', text: "Alright, new problem today. Let's make sure we handle this better than the last crisis.", delay: delay(2000) });
-                introSequence.push({ sender: 'marcus', text: "Agreed. Exec review is in 60 minutes. Let's focus.", delay: delay(2000) });
+                introSequence.push({ sender: 'sarah', text: `Morning team. Quick stand-up?`, delay: delay(1500) });
+                
+                if (lastDec === 'BAD_DATA') {
+                    introSequence.push({ sender: 'marcus', text: pick([
+                        `Morning. Yep, but whatever we do today, we CANNOT just cut features like last time. The churn was a disaster.`,
+                        `Morning. Ready. Let's just make sure we don't alienate our power users like we did with our last decision.`
+                    ]), delay: delay(2000) });
+                    introSequence.push({ sender: 'sarah', text: pick([
+                        `Fair enough, Marcus. My previous recommendation backfired. But we have a new blocker today.`,
+                        `Agreed. Trimming features caused long-term churn. But I have a new critical update for my stand-up.`
+                    ]), delay: delay(2000) });
+                } else if (lastDec === 'BAD_CREATIVE') {
+                    introSequence.push({ sender: 'sarah', text: pick([
+                        `${state.firstName}, keeping the UX as-is like we considered last time means we miss targets. We need to be more decisive today.`,
+                        `For my stand-up... well, last time we ignored the drop-off and failed our Q3 goals. Let's do better today.`
+                    ]), delay: delay(2000) });
+                    introSequence.push({ sender: 'marcus', text: pick([
+                        `I know. My UX purism might have hurt us then. Let's find a better balance today.`,
+                        `Point taken, Sarah. We need to fix friction without gutting the value prop. What's the new issue?`
+                    ]), delay: delay(2000) });
+                } else if (lastDec === 'GOOD_PATH') {
+                    introSequence.push({ sender: 'sarah', text: `Adding the 'Skip' button last time was an okay compromise, but it fragmented the users. Let's aim higher today.`, delay: delay(2000) });
+                    introSequence.push({ sender: 'marcus', text: `Agreed. We avoided a disaster, but we didn't solve the root problem. Let's dig deeper on this new issue.`, delay: delay(2000) });
+                } else if (lastDec === 'BEST_PATH') {
+                    introSequence.push({ sender: 'sarah', text: `We nailed it last time by investigating the logs deeply. Let's replicate that success today.`, delay: delay(2000) });
+                    introSequence.push({ sender: 'marcus', text: `Yeah, that fix was perfect. Let's apply that same rigor to today's stand-up.`, delay: delay(2000) });
+                }
             }
 
             // Scenario Specific Intro
             if (state.scenarioIndex === 0) {
                 // Onboarding Leak
                 introSequence.push(
-                    { sender: 'sarah', text: 'The beta onboarding metrics are in. We have a massive leak. 65% drop-off at "Advanced Configuration". It\'s cognitive overload.', delay: delay(2000) },
-                    { sender: 'sarah', text: 'We need to cut this complex step entirely and default them straight into the basic dashboard to save our Q3 activation targets.', delay: delay(2000) },
-                    { sender: 'marcus', text: 'Hold on. That step customizes the platform to their enterprise workflow. It is the core value prop of our highest tier!', delay: delay(2500) },
-                    { sender: 'marcus', text: 'If we cut it, the tool feels generic. Your data is missing the "why".', delay: delay(2000) },
-                    { sender: 'sarah', text: 'Alex, your call. What do we do?', delay: delay(1500) }
+                    { sender: 'sarah', text: `For my update: The beta onboarding metrics just came in. We have a massive leak. 65% drop-off at "Advanced Configuration".`, delay: delay(2000) },
+                    { sender: 'sarah', text: `It looks like cognitive overload. We need to cut this complex step entirely and default them straight into the basic dashboard to save our Q3 activation targets.`, delay: delay(2500) },
+                    { sender: 'marcus', text: `Hold on. That step customizes the platform to their enterprise workflow. It is the core value prop of our highest tier!`, delay: delay(2500) },
+                    { sender: 'marcus', text: `If we cut it, the tool feels generic. Your data is missing the "why".`, delay: delay(2000) },
+                    { sender: 'sarah', text: `${state.firstName}, you're the Product Lead. What's our play here?`, delay: delay(1500) }
                 );
             } else {
                 // Pricing Pivot
                 introSequence.push(
-                    { sender: 'sarah', text: 'Server costs for Nova are up 400%. We need to gate the Analytics Dashboard behind the Enterprise tier immediately to stop the bleeding.', delay: delay(2500) },
-                    { sender: 'marcus', text: 'You can\'t do that! Analytics is our core "Aha!" moment. If free users can\'t see their data, they\'ll never upgrade. It kills our product-led growth.', delay: delay(2500) },
-                    { sender: 'sarah', text: 'Alex, we are literally losing money every second. What do we do?', delay: delay(1500) }
+                    { sender: 'sarah', text: `My update is a red alert: Server costs for Nova are up 400%. We need to gate the Analytics Dashboard behind the Enterprise tier immediately to stop the bleeding.`, delay: delay(2500) },
+                    { sender: 'marcus', text: `You can't do that! Analytics is our core "Aha!" moment. If free users can't see their data, they'll never upgrade. It kills our product-led growth.`, delay: delay(2500) },
+                    { sender: 'sarah', text: `${state.firstName}, we are literally losing money every second. What do we do?`, delay: delay(1500) }
                 );
             }
             
@@ -656,9 +740,9 @@
                 currentScript = {
                     intro: introSequence,
                     gather1: [
-                        { sender: 'user', text: "@Sarah pull the FullStory session recordings for the drop-off step. Let's look at the raw tape.", delay: 500 },
+                        { sender: 'user', text: `@Sarah pull the FullStory session recordings for the drop-off step. Let's look at the raw tape.`, delay: 500 },
                         { sender: 'system_prompt', text: 'Fetching recordings... (Time elapsed: 15 mins)', delay: 1500 },
-                        { sender: 'sarah', text: "They aren't exhibiting 'overload' behaviors like erratic mouse movements. Instead, they hover over 'LDAP', 'SSO', and 'Webhooks'. They pause, then close the tab.", delay: delay(2500) },
+                        { sender: 'sarah', text: `They aren't exhibiting 'overload' behaviors like erratic mouse movements. Instead, they hover over 'LDAP', 'SSO', and 'Webhooks'. They pause, then close the tab.`, delay: delay(2500) },
                         { sender: 'action', type: 'scaffold_logs' }
                     ],
                     logs_correct: [
@@ -680,7 +764,7 @@
                         { sender: 'action', type: 'choices_post_gather' }
                     ],
                     gather2: [
-                        { sender: 'user', text: "@Sarah pull competitor B2B onboarding benchmarks.", delay: 500 },
+                        { sender: 'user', text: `@Sarah pull competitor B2B onboarding benchmarks.`, delay: 500 },
                         { sender: 'system_prompt', text: 'Aggregating industry data... (Time elapsed: 15 mins)', delay: 1500 },
                         { sender: 'sarah', text: 'High-friction onboarding is actually standard for enterprise tools. 60% drop-off is the 50th percentile.', delay: delay(2000) },
                         { sender: 'marcus', text: 'And look at the LTV! Competitors show users who complete complex setups have a 90% higher lifetime value.', delay: delay(2000) },
@@ -704,10 +788,10 @@
                 currentScript = {
                     intro: introSequence,
                     gather1: [
-                        { sender: 'user', text: "@Sarah let's look at the server load distribution. Where is the computation actually happening?", delay: 500 },
+                        { sender: 'user', text: `@Sarah let's look at the server load distribution. Where is the computation actually happening?`, delay: 500 },
                         { sender: 'system_prompt', text: 'Fetching server logs... (Time elapsed: 15 mins)', delay: 1500 },
-                        { sender: 'sarah', text: "Wait... 80% of the load isn't from active free users. It's from dormant legacy accounts running automated cron jobs.", delay: delay(2500) },
-                        { sender: 'action', type: 'scaffold_logs' } // Reusing this key for the first scaffold
+                        { sender: 'sarah', text: `Wait... 80% of the load isn't from active free users. It's from dormant legacy accounts running automated cron jobs.`, delay: delay(2500) },
+                        { sender: 'action', type: 'scaffold_logs' }
                     ],
                     logs_correct: [
                         { sender: 'system', text: 'CALIBRATION: Root cause accurately identified. (+1 Insight)', delay: 500 },
@@ -728,7 +812,7 @@
                         { sender: 'action', type: 'choices_post_gather' }
                     ],
                     gather2: [
-                        { sender: 'user', text: "Let's review the free-to-paid conversion paths. How important is analytics?", delay: 500 },
+                        { sender: 'user', text: `Let's review the free-to-paid conversion paths. How important is analytics?`, delay: 500 },
                         { sender: 'system_prompt', text: 'Aggregating conversion data... (Time elapsed: 15 mins)', delay: 1500 },
                         { sender: 'sarah', text: 'Wow. Users who interact with the Analytics Dashboard are 5x more likely to upgrade within 14 days.', delay: delay(2000) },
                         { sender: 'marcus', text: 'See! It\'s our primary acquisition driver. If we gate it, our funnel dies.', delay: delay(2000) },
@@ -766,12 +850,24 @@
         }
 
         function startGame() {
+            const fNameInput = document.getElementById('user-first-name');
+            const lNameInput = document.getElementById('user-last-name');
+            
+            if (!fNameInput.value.trim()) { fNameInput.focus(); return; }
+            if (!lNameInput.value.trim()) { lNameInput.focus(); return; }
+
+            state.firstName = fNameInput.value.trim();
+            state.lastName = lNameInput.value.trim();
+            localStorage.setItem('nova_sim_first_name', state.firstName);
+            localStorage.setItem('nova_sim_last_name', state.lastName);
+
+            // Update DOM element names
+            document.getElementById('dm-user-name').innerHTML = `${state.firstName} ${state.lastName} <span class="text-gray-500 ml-1 text-[10px]">(you)</span>`;
+
             initAudio();
             document.getElementById('interaction-area').classList.remove('hidden');
             showScreen('screen-play');
             
-            // Re-read state to ensure we have the correct scenario set
-            resetState();
             updateHUD();
             
             let initialChatHTML = `
@@ -853,7 +949,7 @@
                 let imgSrc, name, nameColor;
                 if (sender === 'user') {
                     imgSrc = imgUserUrl;
-                    name = 'Alex Rivera';
+                    name = `${state.firstName} ${state.lastName}`;
                     nameColor = 'text-white';
                 } else if (sender === 'sarah') {
                     imgSrc = imgSarahUrl;
@@ -1151,7 +1247,7 @@
                             <h4 class="text-[11px] uppercase tracking-widest font-bold ${outcome.color} flex items-center"><i data-lucide="book-open" class="w-3.5 h-3.5 mr-1.5"></i> Executive Debrief</h4>
                             <p class="text-[13px] text-gray-300 leading-relaxed">${outcome.debrief}</p>
                             <div class="mt-3 pt-3 border-t border-white/5">
-                                <p class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mb-1">Calibration Profile — Alex Rivera:</p>
+                                <p class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mb-1">Calibration Profile — ${state.firstName} ${state.lastName}:</p>
                                 <p class="text-[13px] font-bold ${calColor}">${calText}</p>
                             </div>
                         </div>
