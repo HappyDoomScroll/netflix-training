@@ -265,7 +265,7 @@
                             <div class="flex items-start justify-between mb-2">
                                 <div class="pr-4">
                                     <h3 class="text-white font-bold text-base tracking-tight">Join Workspace</h3>
-                                    <p class="text-[11px] text-gray-400 mt-1.5 leading-relaxed">Set up your profile to enter <b class="text-gray-200">#proj-nova-crisis</b>. The team needs to know who's stepping in to lead.</p>
+                                    <p class="text-[11px] text-gray-400 mt-1.5 leading-relaxed">Set up your profile to enter <b class="text-gray-200" id="login-channel-name">#proj-nova-crisis</b>. The team needs to know who's stepping in to lead.</p>
                                 </div>
                                 <div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center shrink-0 border border-white/10">
                                     <i data-lucide="hash" class="w-4 h-4 text-gray-400"></i>
@@ -451,10 +451,10 @@
         function clearHistory(btn) {
             localStorage.removeItem('nova_sim_history');
             btn.innerText = "History Cleared!";
+            resetState();
             setTimeout(() => {
                 btn.innerText = "Clear Simulation History";
-                window.location.reload();
-            }, 1000);
+            }, 2000);
         }
 
         // ── DYNAMIC PADDING ──
@@ -502,22 +502,26 @@
                     BAD_DATA: {
                         title: "The Churn Trap", color: "text-red-400", bg: "bg-red-500/10", border: "border-red-500/30",
                         text: "You forced Sarah's data edit. Activation metrics looked great, but 3-month churn skyrocketed because users never learned the tool's true power.",
-                        debrief: "Quantitative data answers the 'What', but often misses the 'Why'. By cutting the feature to hit short-term targets, you sacrificed long-term product value."
+                        debrief: "Quantitative data answers the 'What', but often misses the 'Why'. By cutting the feature to hit short-term targets, you sacrificed long-term product value.",
+                        coaching: "Always pair quantitative data (drop-off rates) with qualitative data (session logs). Metrics tell you where the leak is; user behavior tells you why it's happening."
                     },
                     BAD_CREATIVE: {
                         title: "The Friction Fire", color: "text-yellow-400", bg: "bg-yellow-500/10", border: "border-yellow-500/30",
                         text: "You ignored the data and kept Marcus's step. Drop-off remained at 65%. The company missed its Q3 activation targets.",
-                        debrief: "Creative disagreement is healthy, but ignoring glaring quantitative warning signs is a process failure. You protected the design intent but failed the business goals."
+                        debrief: "Creative disagreement is healthy, but ignoring glaring quantitative warning signs is a process failure. You protected the design intent but failed the business goals.",
+                        coaching: "While advocating for the user is crucial, you cannot ignore severe business metrics. Use data to validate whether your design is actually helping or hurting the user."
                     },
                     GOOD_PATH: {
                         title: "The Safe Middle", color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/30",
                         text: "You added a 'Skip' button. It stopped the bleeding on metrics, and power users could still configure their workspace. However, the user base is now fragmented.",
-                        debrief: "You managed the tension and shipped a workable solution. But a compromise often leaves both sides slightly dissatisfied. True leadership pushes for the underlying truth."
+                        debrief: "You managed the tension and shipped a workable solution. But a compromise often leaves both sides slightly dissatisfied. True leadership pushes for the underlying truth.",
+                        coaching: "Compromises often treat the symptom, not the disease. Don't settle for the middle ground until you've dug into the root cause of the friction."
                     },
                     BEST_PATH: {
                         title: "Signal Master", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30",
                         text: "By reframing the data, you discovered the real problem wasn't complexity, but clarity. Marcus rewrote the tooltips, and drop-off plummeted.",
-                        debrief: "You recognized that data was answering the wrong question. You scaffolded the team to investigate the 'Why', turning destructive conflict into creative collaboration."
+                        debrief: "You recognized that data was answering the wrong question. You scaffolded the team to investigate the 'Why', turning destructive conflict into creative collaboration.",
+                        coaching: "Excellent work. You correctly identified that 'friction' isn't always bad, and found the specific vocabulary mismatch causing the real issue."
                     }
                 }
             },
@@ -556,22 +560,26 @@
                     BAD_DATA: {
                         title: "The Growth Killer", color: "text-red-400", bg: "bg-red-500/10", border: "border-red-500/30",
                         text: "You gated the feature. Server costs dropped, but free-to-paid conversions plummeted by 80%. Without the 'Aha!' moment, users stopped upgrading.",
-                        debrief: "You reacted to a top-line metric (costs) without understanding its relationship to the growth loop. You saved the servers but starved the business."
+                        debrief: "You reacted to a top-line metric (costs) without understanding its relationship to the growth loop. You saved the servers but starved the business.",
+                        coaching: "Don't act on aggregate data alone. Always segment your metrics (e.g., active vs. dormant users) before cutting a feature that drives product-led growth."
                     },
                     BAD_CREATIVE: {
                         title: "The Budget Sink", color: "text-yellow-400", bg: "bg-yellow-500/10", border: "border-yellow-500/30",
                         text: "You kept it free. The UX remained pristine, but server costs exceeded the Q3 budget by week 4. Finance forced a feature freeze.",
-                        debrief: "You protected the user experience at the expense of business viability. Great UX is meaningless if the product runs out of funding to operate."
+                        debrief: "You protected the user experience at the expense of business viability. Great UX is meaningless if the product runs out of funding to operate.",
+                        coaching: "UX cannot exist in a vacuum separated from business reality. If infrastructure costs are spiraling, you must collaborate with Data to find a targeted technical solution."
                     },
                     GOOD_PATH: {
                         title: "The Band-Aid", color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/30",
                         text: "Limiting data to 7 days reduced server load by 30%. It wasn't enough to hit margin goals, and some users complained, but it kept the lights on.",
-                        debrief: "A solid, pragmatic compromise. However, by settling for the middle ground, you missed the root cause hidden deeper in the server logs."
+                        debrief: "A solid, pragmatic compromise. However, by settling for the middle ground, you missed the root cause hidden deeper in the server logs.",
+                        coaching: "While limiting the feature helped temporarily, true product leadership involves questioning the initial premise. Dig deeper into the logs before restricting value for your active users."
                     },
                     BEST_PATH: {
                         title: "The Scalpel", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30",
                         text: "By segmenting the data, you discovered 80% of the cost came from dormant legacy accounts. You purged them, saving the budget AND the free UX.",
-                        debrief: "Exceptional leadership. You didn't accept the false dichotomy. You pushed the team to segment the aggregate data, uncovering the true root cause."
+                        debrief: "Exceptional leadership. You didn't accept the false dichotomy. You pushed the team to segment the aggregate data, uncovering the true root cause.",
+                        coaching: "Outstanding. You recognized that the core 'Aha!' moment needed to be preserved, and used segmented data to eliminate the hidden technical debt."
                     }
                 }
             }
@@ -607,6 +615,7 @@
             `;
             document.getElementById('sidebar-channel-name').innerText = s.channel;
             document.getElementById('chat-header-name').innerText = s.channel;
+            document.getElementById('login-channel-name').innerText = '#' + s.channel;
             document.getElementById('url-bar').innerText = `https://app.novacorp.internal/${s.channel}`;
             document.getElementById('tab-title').innerText = s.channel;
         }
@@ -886,6 +895,33 @@
             document.getElementById('chat-container').innerHTML = initialChatHTML;
             document.getElementById('choices-list').innerHTML = '';
             
+            generateScript();
+            queueScenario('intro');
+        }
+
+        function restartSimulation() {
+            // Re-read and reset everything to start the next iteration cleanly
+            resetState();
+            
+            document.getElementById('chat-container').innerHTML = `
+                <div class="flex items-center justify-center my-4">
+                    <div class="h-px bg-white/5 flex-1"></div>
+                    <span class="text-[10px] font-semibold text-gray-500 px-4 border border-white/5 rounded-full py-1 bg-[#141414]">Today</span>
+                    <div class="h-px bg-white/5 flex-1"></div>
+                </div>
+            `;
+            document.getElementById('choices-list').innerHTML = '';
+            
+            // Remove the end screen card
+            const outcomes = document.querySelectorAll('#chat-container > .fade-in-up.mt-6');
+            outcomes.forEach(el => el.remove());
+
+            document.getElementById('interaction-area').classList.remove('hidden');
+            
+            updateHUD();
+            
+            chatQueue = [];
+            isProcessing = false;
             generateScript();
             queueScenario('intro');
         }
@@ -1234,12 +1270,6 @@
                 const wrapper   = document.createElement('div');
                 wrapper.className = "fade-in-up mt-6 w-full";
 
-                let calText = "", calColor = "";
-                if      (resultKey === 'BEST_PATH' && state.scaffoldScore >= 2) { calText = "Masterful Calibration (High Rigor)";            calColor = "text-emerald-400"; }
-                else if (resultKey === 'BEST_PATH')                              { calText = "Lucky Guess (Skipped Root Cause Analysis)";      calColor = "text-yellow-400"; }
-                else if (state.scaffoldScore > 0)                                { calText = "Analyzed correctly, but failed to execute.";     calColor = "text-yellow-400"; }
-                else                                                             { calText = "Blind Spot Detected (Low Analytical Rigor)";     calColor = "text-red-400"; }
-
                 wrapper.innerHTML = `
                     <div class="bg-[#1C1C1E] border border-white/10 rounded-xl p-5 md:p-6 shadow-xl relative overflow-hidden my-4">
                         <div class="absolute -top-10 -right-10 w-24 h-24 rounded-full blur-[50px] opacity-40 bg-current ${outcome.color}"></div>
@@ -1254,11 +1284,11 @@
                             <h4 class="text-[11px] uppercase tracking-widest font-bold ${outcome.color} flex items-center"><i data-lucide="book-open" class="w-3.5 h-3.5 mr-1.5"></i> Executive Debrief</h4>
                             <p class="text-[13px] text-gray-300 leading-relaxed">${outcome.debrief}</p>
                             <div class="mt-3 pt-3 border-t border-white/5">
-                                <p class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mb-1">Calibration Profile — ${state.firstName} ${state.lastName}:</p>
-                                <p class="text-[13px] font-bold ${calColor}">${calText}</p>
+                                <p class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mb-1 flex items-center"><i data-lucide="lightbulb" class="w-3 h-3 mr-1 text-yellow-500"></i> Coaching Tip</p>
+                                <p class="text-[13px] font-medium text-gray-200 leading-relaxed">${outcome.coaching}</p>
                             </div>
                         </div>
-                        <button onclick="location.reload()" class="w-full mt-4 bg-white text-black hover:bg-gray-200 font-bold py-2.5 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-white/30 text-[13px]">Try Another Strategy</button>
+                        <button onclick="restartSimulation()" class="w-full mt-4 bg-white text-black hover:bg-gray-200 font-bold py-2.5 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-white/30 text-[13px]">Try Another Strategy</button>
                     </div>
                 `;
                 container.appendChild(wrapper);
