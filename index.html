@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="An interactive, conversational leadership simulation designed to teach critical thinking, data analysis, and psychological safety in high-stakes product management.">
     <title>The Signal & The Noise | Leadership Sim</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -10,19 +11,26 @@
     <style>
         :root {
             --netflix-red: #E50914;
+            --netflix-red-light: #ff4d57;
             --apple-dark-bg: #000000;
+            --slack-bg: #141414;
+            --slack-hover: #1f1f1f;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--apple-dark-bg);
-            color: #F5F5F7; 
+            background-color: var(--apple-dark-bg) !important;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
             overscroll-behavior: none;
             -webkit-font-smoothing: antialiased;
         }
 
+        /* ── Shared component styles ── */
         .text-netflix { color: var(--netflix-red); }
-        .bg-netflix { background-color: var(--netflix-red); }
+        .text-netflix-light { color: var(--netflix-red-light); }
+        .bg-netflix   { background-color: var(--netflix-red); }
 
         .glass-panel {
             background: rgba(28, 28, 30, 0.7);
@@ -33,15 +41,14 @@
         }
 
         .glass-bar {
-            background: linear-gradient(to top, rgba(0,0,0,0.95) 20%, rgba(0,0,0,0.8) 70%, transparent);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: var(--slack-bg);
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
 
         .fade-in-up {
-            animation: fadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            animation: fadeInUp 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
             opacity: 0;
-            transform: translateY(10px);
+            transform: translateY(8px);
         }
 
         @keyframes fadeInUp {
@@ -49,42 +56,30 @@
         }
 
         .character-img {
-            filter: grayscale(20%) brightness(0.9);
-            object-fit: cover;
+            filter: grayscale(10%) brightness(0.95);
+            object-fit: cover !important;
+            border-radius: 6px !important;
         }
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
-        
-        .apple-btn {
-            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        .apple-btn:active:not(:disabled) { transform: scale(0.97); }
-        .apple-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        
-        /* Chat Specific Styles */
-        .chat-bubble {
-            max-width: 85%;
-            word-wrap: break-word;
-            animation: chatPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            transform-origin: bottom left;
-            opacity: 0;
-            transform: scale(0.9);
-        }
-        .chat-bubble.user {
-            transform-origin: bottom right;
-        }
+        #sim-wrapper ::-webkit-scrollbar { width: 6px; }
+        #sim-wrapper ::-webkit-scrollbar-track { background: transparent; }
+        #sim-wrapper ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        #sim-wrapper ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
 
-        @keyframes chatPop {
-            to { opacity: 1; transform: scale(1); }
+        .apple-btn { transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .apple-btn:active:not(:disabled) { transform: scale(0.98); }
+
+        /* Slack specific message hover */
+        .slack-message {
+            transition: background-color 0.15s ease;
+        }
+        .slack-message:hover {
+            background-color: var(--slack-hover);
         }
 
         .typing-indicator span {
             display: inline-block;
-            width: 5px;
-            height: 5px;
+            width: 5px; height: 5px;
             background-color: #888;
             border-radius: 50%;
             margin: 0 2px;
@@ -92,7 +87,7 @@
         }
         .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
         .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
-        
+
         @keyframes bounce {
             0%, 80%, 100% { transform: scale(0); }
             40% { transform: scale(1); }
@@ -103,335 +98,556 @@
             50% { transform: scale(1.5); opacity: 0.7; }
         }
 
+        @keyframes subtlePulse {
+            0%   { box-shadow: 0 -10px 20px -10px rgba(229, 9, 20, 0); }
+            50%  { box-shadow: 0 -10px 20px -10px rgba(229, 9, 20, 0.15); }
+            100% { box-shadow: 0 -10px 20px -10px rgba(229, 9, 20, 0); }
+        }
+
+        .attention-pulse {
+            animation: subtlePulse 2.5s infinite;
+            border-top: 1px solid rgba(229, 9, 20, 0.5) !important;
+        }
+
         .glow-breathe {
             position: absolute;
-            width: 150px;
-            height: 150px;
+            width: 150px; height: 150px;
             background: radial-gradient(circle, rgba(229,9,20,0.8) 0%, rgba(0,0,0,0) 70%);
             animation: breathe 4s ease-in-out infinite;
             z-index: 0;
             border-radius: 50%;
         }
 
-        .readable-role {
-            font-size: 0.85rem;
-            letter-spacing: 0.05em;
-            font-weight: 600;
-        }
-        
-        /* Highlight for System Prompts */
         .system-prompt-bg {
-            background: linear-gradient(135deg, rgba(28,28,30,0.9) 0%, rgba(44,44,46,0.9) 100%);
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(229, 9, 20, 0.1);
+            border-left: 3px solid var(--netflix-red);
+        }
+
+        /* Lock start button text against WP theme overrides */
+        #sim-wrapper #btn-start,
+        #sim-wrapper #btn-start:hover,
+        #sim-wrapper #btn-start:focus,
+        #sim-wrapper #btn-start:active {
+            color: #000 !important;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center selection:bg-netflix-red selection:text-white">
+<body class="min-h-screen w-full flex items-center justify-center bg-gray-900 p-0 md:p-6 lg:p-8 overflow-x-hidden selection:bg-netflix-red selection:text-white" style="background: radial-gradient(ellipse at 50% 50%, #202a3a 0%, #0d131f 60%, #05080f 100%);">
 
-    <!-- Loading Screen -->
-    <div id="screen-loading" class="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center space-y-10 transition-opacity duration-700">
-        <div class="relative flex items-center justify-center">
-            <div class="glow-breathe"></div>
-            <!-- Stylized 'N' Logo -->
-            <svg viewBox="0 0 64 84" class="w-20 md:w-28 relative z-10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 0h19v84H0z" fill="#B20710"/>
-                <path d="M45 0h19v84H45z" fill="#B20710"/>
-                <path d="M0 0h20l44 84H44z" fill="#E50914" style="filter: drop-shadow(-6px 0px 8px rgba(0,0,0,0.6));"/>
-            </svg>
-        </div>
-        <div class="w-64 h-[4px] bg-white/10 rounded-full overflow-hidden relative z-10">
-            <div id="loading-bar" class="h-full bg-netflix w-0 transition-all duration-700 ease-out"></div>
-        </div>
-        <p id="loading-text" class="text-base font-semibold text-gray-300 uppercase tracking-widest animate-pulse relative z-10">Initializing Comm Channel...</p>
-    </div>
+    <!-- Desktop Grid Texture -->
+    <div class="absolute inset-0 pointer-events-none z-0" style="background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 32px 32px;"></div>
 
-    <!-- Main Menu -->
-    <div id="screen-start" class="hidden w-full max-w-6xl p-6 fade-in-up text-center space-y-12 py-24">
-        <div class="space-y-6">
-            <h1 class="text-6xl md:text-8xl font-bold tracking-tighter">
-                The <span class="text-netflix">Signal</span> <br>and the Noise.
-            </h1>
-            <p class="text-xl md:text-2xl text-gray-300 font-light max-w-2xl mx-auto tracking-tight">
-                A conversational product leadership simulation.
-            </p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto text-left mt-16 mb-16">
-            <div class="glass-panel p-8 rounded-3xl">
-                <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-6">
-                    <i data-lucide="target" class="w-6 h-6 text-netflix"></i>
+    <!-- Browser Window Container -->
+    <div id="browser-window" class="w-full h-[100dvh] min-h-[650px] md:h-[800px] md:max-h-[90vh] max-w-[1200px] flex flex-col bg-[#2b2d31] rounded-none md:rounded-xl overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.8),_0_0_0_1px_rgba(255,255,255,0.1)] relative z-10 mx-auto">
+
+        <!-- Browser Chrome Header -->
+        <div id="browser-chrome" class="flex flex-col shrink-0 bg-[#1e1f22]">
+            <div class="flex items-end px-3 pt-2 h-10 gap-2">
+                <div class="flex items-center gap-2 mb-2.5 mr-3 ml-1">
+                    <div class="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]"></div>
+                    <div class="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]"></div>
+                    <div class="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]"></div>
                 </div>
-                <h3 class="font-semibold text-xl mb-3 tracking-tight text-white">The Scenario</h3>
-                <p class="text-gray-400 text-sm leading-relaxed">
-                    You were just hired as the new Product Lead for Project Nova, a high-ticket B2B SaaS platform for Marketing Operations. In your first week, the beta dashboard starts bleeding users during the "Advanced Configuration" onboarding step. Your veteran Head of Data (Sarah) and Lead UX Designer (Marcus) are clashing over how to fix it in a live Slack channel.
-                </p>
-            </div>
-            <div class="glass-panel p-8 rounded-3xl">
-                <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-6">
-                    <i data-lucide="brain-circuit" class="w-6 h-6 text-netflix"></i>
-                </div>
-                <h3 class="font-semibold text-xl mb-3 tracking-tight text-white">Learning Objectives</h3>
-                <ul class="text-sm text-gray-400 space-y-2">
-                    <li>• <b>Analyze</b> conflicting qualitative and quantitative raw data to find root causes. <i class="text-xs text-gray-500">(Bloom's L4)</i></li>
-                    <li>• <b>Evaluate</b> the second-order business risks of proposed directives. <i class="text-xs text-gray-500">(Bloom's L5)</i></li>
-                    <li>• <b>Apply</b> psychological safety principles to mediate team conflict as a new leader. <i class="text-xs text-gray-500">(Bloom's L3)</i></li>
-                </ul>
-            </div>
-        </div>
-
-        <button onclick="startGame()" class="apple-btn bg-white text-black px-12 py-4 rounded-full font-bold text-lg hover:bg-gray-200 shadow-[0_0_40px_rgba(255,255,255,0.1)] focus:outline-none">
-            Join Team Channel
-        </button>
-    </div>
-
-    <!-- Game UI (Chat Interface) -->
-    <div id="screen-play" class="hidden w-full h-screen flex flex-col md:flex-row overflow-hidden">
-        
-        <!-- Left Panel: Context & Dashboard -->
-        <div class="w-full md:w-[350px] bg-[#0A0A0A] border-r border-white/10 p-6 flex flex-col z-20 shrink-0 shadow-2xl">
-            <div class="flex justify-between items-center mb-8">
-                <div class="text-xs uppercase tracking-[0.15em] text-gray-400 font-bold flex items-center">
-                    <div class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></div>
-                    # proj-nova-crisis
-                </div>
-            </div>
-
-            <!-- Dashboard Stats -->
-            <div class="space-y-4 mb-8">
-                <div class="glass-panel p-4 rounded-2xl border border-white/5">
-                    <div class="flex justify-between items-end mb-2">
-                        <span class="text-[10px] uppercase tracking-widest text-gray-500">Team Safety</span>
-                        <span id="trust-text" class="text-sm font-bold text-white">60%</span>
-                    </div>
-                    <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                        <div id="trust-bar" class="h-full bg-emerald-500 transition-all duration-700 ease-out" style="width: 60%;"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex-1 flex flex-col space-y-8">
-                <div class="text-xs uppercase tracking-[0.15em] text-gray-400 font-bold mb-2 border-b border-white/10 pb-3">Channel Members</div>
                 
-                <div class="flex items-center space-x-4">
-                    <img id="sidebar-sarah" class="w-12 h-12 rounded-full border border-blue-500/30 character-img" src="" alt="Sarah">
-                    <div>
-                        <h3 class="font-bold text-base text-white">Sarah Jenkins</h3>
-                        <p class="readable-role text-blue-300 mt-0.5">Product Data</p>
-                    </div>
+                <div class="flex items-center gap-2 bg-[#2b2d31] text-gray-200 text-[11px] px-3 py-2 rounded-t-lg min-w-[140px] max-w-[240px] border-t border-x border-white/5 relative z-10 shadow-[0_-2px_6px_rgba(0,0,0,0.2)]">
+                    <i data-lucide="hash" class="w-3.5 h-3.5 text-gray-400"></i>
+                    <span class="truncate font-medium flex-1">Nova Comm Channel</span>
+                    <i data-lucide="x" class="w-3.5 h-3.5 ml-auto opacity-50 hover:opacity-100 cursor-pointer"></i>
+                    <div class="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-[#2b2d31]"></div>
                 </div>
+                
+                <div class="flex items-center gap-2 text-gray-400 hover:bg-white/5 text-[11px] px-3 py-2 rounded-t-lg min-w-[140px] max-w-[200px] cursor-pointer transition-colors mb-0.5">
+                    <i data-lucide="layout-dashboard" class="w-3 h-3"></i>
+                    <span class="truncate font-medium flex-1">Nova Workspace</span>
+                </div>
+                
+                <div class="w-7 h-7 flex items-center justify-center rounded-full hover:bg-white/10 cursor-pointer text-gray-400 hover:text-white mb-1 transition-colors">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                </div>
+            </div>
 
-                <div class="flex items-center space-x-4">
-                    <img id="sidebar-marcus" class="w-12 h-12 rounded-full border border-yellow-500/30 character-img" src="" alt="Marcus">
-                    <div>
-                        <h3 class="font-bold text-base text-white">Marcus Vance</h3>
-                        <p class="readable-role text-yellow-300 mt-0.5">Lead UX</p>
+            <div class="flex items-center px-3 h-11 bg-[#2b2d31] border-b border-black/40 gap-2 relative z-0">
+                <div class="flex items-center gap-1 text-gray-300 pr-1">
+                    <div class="w-7 h-7 flex items-center justify-center rounded hover:bg-white/10 cursor-pointer transition-colors"><i data-lucide="arrow-left" class="w-4 h-4"></i></div>
+                    <div class="w-7 h-7 flex items-center justify-center rounded hover:bg-white/10 cursor-pointer transition-colors opacity-30"><i data-lucide="arrow-right" class="w-4 h-4"></i></div>
+                    <div class="w-7 h-7 flex items-center justify-center rounded hover:bg-white/10 cursor-pointer transition-colors"><i data-lucide="rotate-cw" class="w-3.5 h-3.5"></i></div>
+                </div>
+                
+                <div class="flex-1 flex items-center bg-[#1e1f22] rounded-full px-4 h-7 gap-3 border border-white/10 shadow-inner">
+                    <i data-lucide="lock" class="w-3.5 h-3.5 text-gray-400"></i>
+                    <span class="text-[11px] text-gray-300 font-mono tracking-tight flex-1 truncate select-all">https://app.novacorp.internal/comms</span>
+                    <i data-lucide="star" class="w-3.5 h-3.5 text-gray-400 cursor-pointer hover:text-white transition-colors"></i>
+                </div>
+                
+                <div class="flex items-center gap-1.5 text-gray-300 pl-1 hidden sm:flex">
+                    <div class="w-7 h-7 flex items-center justify-center rounded hover:bg-white/10 cursor-pointer transition-colors">
+                        <i data-lucide="puzzle" class="w-3.5 h-3.5"></i>
+                    </div>
+                    <div class="w-7 h-7 flex items-center justify-center rounded hover:bg-white/10 cursor-pointer transition-colors">
+                        <div class="w-5 h-5 rounded-md bg-gradient-to-tr from-gray-700 to-gray-600 flex items-center justify-center text-[9px] font-bold text-white border border-white/20">AR</div>
+                    </div>
+                    <div class="w-7 h-7 flex items-center justify-center rounded hover:bg-white/10 cursor-pointer transition-colors">
+                        <i data-lucide="more-vertical" class="w-4 h-4"></i>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Right Panel: Chat Stream -->
-        <div class="flex-1 relative flex flex-col h-full bg-[#050505]">
-            
-            <!-- Chat History -->
-            <div id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 pb-[300px]">
-                <!-- Chat Bubbles injected here -->
+        <!-- ── Sim App ── -->
+        <div id="sim-wrapper" class="flex-1 relative w-full h-full min-h-0 bg-[var(--slack-bg)] overflow-hidden font-sans flex flex-col">
+
+            <!-- ── LOADING SCREEN ── -->
+            <div id="screen-loading" class="absolute inset-0 z-50 bg-[#000000] flex flex-col items-center justify-center space-y-8 transition-opacity duration-500">
+                <div class="relative flex items-center justify-center">
+                    <div class="glow-breathe"></div>
+                    <svg viewBox="0 0 64 84" class="w-16 relative z-10" aria-label="Loading logo" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 0h19v84H0z" fill="#B20710"/>
+                        <path d="M45 0h19v84H45z" fill="#B20710"/>
+                        <path d="M0 0h20l44 84H44z" fill="#E50914" style="filter: drop-shadow(-6px 0px 8px rgba(0,0,0,0.6));"/>
+                    </svg>
+                </div>
+                <div class="w-48 h-[3px] bg-white/10 rounded-full overflow-hidden relative z-10">
+                    <div id="loading-bar" class="h-full bg-netflix w-0 transition-all duration-300 ease-out"></div>
+                </div>
+                <p id="loading-text" aria-live="polite" class="text-[10px] font-semibold text-gray-400 uppercase tracking-widest animate-pulse relative z-10">Syncing local assets...</p>
             </div>
 
-            <!-- Quick Replies (Interaction Area) -->
-            <div id="interaction-area" class="absolute bottom-0 left-0 right-0 p-4 md:p-6 glass-bar z-30 border-t border-white/5">
-                <div class="max-w-3xl mx-auto w-full">
+            <!-- ── MAIN MENU ── -->
+            <div id="screen-start" class="absolute inset-0 hidden flex-col items-center justify-center bg-[#000000] fade-in-up z-40 p-6 overflow-y-auto">
+                <div class="w-full max-w-2xl mx-auto flex flex-col items-center space-y-6 my-auto py-12">
+                    <div class="space-y-2 text-center">
+                        <h1 class="text-4xl font-bold tracking-tighter text-white">
+                            The <span class="text-netflix">Signal</span><br>and the Noise.
+                        </h1>
+                        <p class="text-sm text-gray-400 font-light max-w-sm mx-auto">
+                            A conversational product leadership simulation.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full text-left">
+                        <div class="glass-panel p-4 rounded-xl">
+                            <div class="w-8 h-8 rounded-lg bg-netflix flex items-center justify-center mb-3 shadow-[0_0_10px_rgba(229,9,20,0.4)]">
+                                <i data-lucide="target" class="w-4 h-4 text-white"></i>
+                            </div>
+                            <h3 class="font-semibold text-sm mb-1.5 text-white">The Scenario</h3>
+                            <p class="text-gray-400 text-xs leading-relaxed">
+                                You are the newly hired <b class="text-white">Product Lead</b> for Project Nova. In your first week, the dashboard is bleeding users. Mediate a conflict between <b class="text-blue-300">Sarah (Data)</b> and <b class="text-yellow-300">Marcus (UX)</b> before the exec review.
+                            </p>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl">
+                            <div class="w-8 h-8 rounded-lg bg-netflix flex items-center justify-center mb-3 shadow-[0_0_10px_rgba(229,9,20,0.4)]">
+                                <i data-lucide="brain-circuit" class="w-4 h-4 text-white"></i>
+                            </div>
+                            <h3 class="font-semibold text-sm mb-1.5 text-white">Learning Objectives</h3>
+                            <ul class="text-xs text-gray-400 space-y-1.5">
+                                <li>• <b class="text-white">Analyze</b> conflicting data to find root causes.</li>
+                                <li>• <b class="text-white">Evaluate</b> trade-offs and second-order risks.</li>
+                                <li>• <b class="text-white">Apply</b> psychological safety to mediate conflict.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <button id="btn-start" onclick="startGame()" style="color:#000 !important;" class="apple-btn bg-white px-8 py-2.5 rounded-full font-bold text-sm hover:bg-gray-200 shadow-[0_0_30px_rgba(255,255,255,0.15)] focus:outline-none focus:ring-2 focus:ring-white/30">
+                        <span style="color:#000 !important;">Join Team Channel</span>
+                    </button>
+
+                    <button onclick="clearHistory(this)" class="text-[10px] text-gray-500 hover:text-gray-300 mt-2 transition-colors">Clear Simulation History</button>
+                </div>
+            </div>
+
+            <!-- ── GAME UI ── -->
+            <div id="screen-play" class="absolute inset-0 hidden flex-col md:flex-row bg-[var(--slack-bg)] z-40 w-full h-full">
+
+                <!-- Left Panel (Slack Sidebar Style) -->
+                <div class="w-full md:w-[240px] bg-[#000000] border-b md:border-b-0 md:border-r border-white/5 pt-4 pb-2 px-3 flex flex-col z-20 shrink-0 shadow-lg">
                     
-                    <!-- Dynamic Choices List -->
-                    <div id="choices-list" class="flex flex-col space-y-3">
-                        <!-- Reply buttons injected here -->
+                    <!-- Workspace Header -->
+                    <div class="flex items-center justify-between mb-6 px-2 hover:bg-white/5 py-1.5 rounded cursor-pointer transition-colors">
+                        <span class="text-sm font-bold text-white tracking-tight">NovaCorp HQ</span>
+                        <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-gray-400"></i>
+                    </div>
+
+                    <div class="flex gap-2 md:block">
+                        <!-- Channel List -->
+                        <div class="mb-6 flex-1 hidden md:block">
+                            <div class="text-[10px] text-gray-400 font-semibold mb-2 px-2 flex items-center justify-between">
+                                <span>Channels</span>
+                                <i data-lucide="plus" class="w-3 h-3 cursor-pointer hover:text-white"></i>
+                            </div>
+                            <div class="flex flex-col space-y-0.5">
+                                <div class="flex items-center space-x-2 text-gray-400 px-2 py-1 rounded hover:bg-white/5 cursor-pointer">
+                                    <i data-lucide="hash" class="w-3.5 h-3.5"></i><span class="text-[13px]">general</span>
+                                </div>
+                                <div class="flex items-center space-x-2 text-gray-400 px-2 py-1 rounded hover:bg-white/5 cursor-pointer">
+                                    <i data-lucide="hash" class="w-3.5 h-3.5"></i><span class="text-[13px]">product-updates</span>
+                                </div>
+                                <!-- Active Channel -->
+                                <div class="flex items-center space-x-2 text-white bg-[#1C1C1E] px-2 py-1.5 rounded cursor-pointer relative">
+                                    <div class="absolute left-0 top-1.5 bottom-1.5 w-1 bg-netflix rounded-r"></div>
+                                    <i data-lucide="hash" class="w-3.5 h-3.5 opacity-70"></i><span class="text-[13px] font-medium">proj-nova-crisis</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Timer Widget -->
+                        <div class="bg-[#141414] p-3 rounded-lg border border-white/5 mb-4 shrink-0 flex-1 md:w-full">
+                            <div class="flex justify-between items-end mb-1.5">
+                                <span class="text-[10px] text-gray-400 font-medium">Exec Review</span>
+                                <span id="time-text" class="text-[11px] font-bold text-white">60 Mins</span>
+                            </div>
+                            <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                                <div id="time-bar" class="h-full bg-emerald-500 transition-all duration-700 ease-out" style="width:100%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Direct Messages -->
+                    <div class="hidden md:flex flex-col min-h-0 overflow-y-auto">
+                        <div class="text-[10px] text-gray-400 font-semibold mb-2 px-2 flex items-center justify-between">
+                            <span>Direct Messages</span>
+                            <i data-lucide="plus" class="w-3 h-3 cursor-pointer hover:text-white"></i>
+                        </div>
+                        
+                        <div class="flex flex-col space-y-1">
+                            <!-- Player -->
+                            <div class="flex items-center space-x-2 px-2 py-1 rounded hover:bg-white/5 cursor-pointer">
+                                <div class="relative">
+                                    <img id="sidebar-user" class="w-5 h-5 rounded object-cover character-img" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150" alt="Alex">
+                                    <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 border border-black rounded-full"></div>
+                                </div>
+                                <span class="text-[13px] text-gray-300 truncate">Alex Rivera <span class="text-gray-500 ml-1 text-[10px]">(you)</span></span>
+                            </div>
+
+                            <!-- Sarah -->
+                            <div class="flex items-center space-x-2 px-2 py-1 rounded hover:bg-white/5 cursor-pointer">
+                                <div class="relative">
+                                    <img id="sidebar-sarah" class="w-5 h-5 rounded object-cover character-img" src="" alt="Sarah">
+                                    <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 border border-black rounded-full"></div>
+                                </div>
+                                <span class="text-[13px] text-gray-300 truncate">Sarah Jenkins</span>
+                            </div>
+
+                            <!-- Marcus -->
+                            <div class="flex items-center space-x-2 px-2 py-1 rounded hover:bg-white/5 cursor-pointer">
+                                <div class="relative">
+                                    <img id="sidebar-marcus" class="w-5 h-5 rounded object-cover character-img" src="" alt="Marcus">
+                                    <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 border border-black rounded-full"></div>
+                                </div>
+                                <span class="text-[13px] text-gray-300 truncate">Marcus Vance</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Chat Feed -->
+                <div class="flex-1 flex flex-col overflow-hidden bg-[var(--slack-bg)] relative">
+                    
+                    <!-- Chat Header -->
+                    <div class="h-14 border-b border-white/5 flex items-center px-4 justify-between shrink-0 bg-[#141414] z-10 shadow-sm">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="hash" class="w-4 h-4 text-gray-400"></i>
+                            <span class="font-bold text-white text-sm">proj-nova-crisis</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-gray-400">
+                            <div class="flex -space-x-2">
+                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150&h=150" class="w-6 h-6 rounded border border-[#141414] character-img">
+                                <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=150&h=150" class="w-6 h-6 rounded border border-[#141414] character-img">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150" class="w-6 h-6 rounded border border-[#141414] character-img">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Container -->
+                    <div id="chat-container" aria-live="polite" class="flex-1 overflow-y-auto px-4 md:px-6 py-4 space-y-1 w-full">
+                    </div>
+
+                    <!-- Interaction Area (Simulated Message Input) -->
+                    <div id="interaction-area" class="shrink-0 p-4 glass-bar z-30 w-full transition-all duration-300">
+                        <div class="max-w-4xl mx-auto w-full">
+                            <div class="text-[10px] text-gray-500 font-semibold mb-2 flex items-center tracking-wider">
+                                <span class="bg-netflix text-white px-1.5 py-0.5 rounded text-[8px] mr-2 uppercase">Required</span> 
+                                <span class="text-gray-300 uppercase title-text">Action</span>
+                            </div>
+                            <div id="choices-list" class="flex flex-col sm:flex-row flex-wrap gap-2 w-full">
+                                <!-- Reply buttons injected here -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+
+        </div><!-- end #sim-wrapper -->
+    </div><!-- end browser window container -->
 
     <script>
-        // --- API SETUP ---
-        const apiKey = ""; 
-        let imgSarahUrl = "";
-        let imgMarcusUrl = "";
+        // ── ASSETS ──
+        const imgSarahUrl = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150&h=150';
+        const imgMarcusUrl = 'https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=150&h=150';
+        const imgUserUrl = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150';
         
-        async function fetchImageWithRetry(prompt, retries = 2) {
-            if (!apiKey) return null; 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/imagen-4.0-generate-001:predict?key=${apiKey}`;
-            const payload = { instances: { prompt: prompt }, parameters: { sampleCount: 1 } };
-            for (let i = 0; i < retries; i++) {
-                try {
-                    const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    const data = await response.json();
-                    if (data.predictions && data.predictions[0] && data.predictions[0].bytesBase64Encoded) {
-                        return `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
-                    } else throw new Error("Invalid format");
-                } catch (error) {
-                    if (i === retries - 1) return null; 
-                    await new Promise(r => setTimeout(r, 1000));
-                }
-            }
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
         }
 
-        async function initializeApp() {
-            lucide.createIcons();
-            const loadingBar = document.getElementById('loading-bar');
-            
-            const sarahPrompt = "A cinematic, dramatic corporate headshot of a highly intelligent female tech product manager in a modern, minimalist glass office. Bright, high contrast, moody, sharp focus, hyper-realistic.";
-            const marcusPrompt = "A cinematic, moody portrait of a passionate male Lead UX Designer wearing a stylish dark shirt in a design studio. Warm ambient lighting. Ultra premium, sharp focus, realistic.";
+        function playSubtlePop() {
+            if (!audioCtx || audioCtx.state === 'suspended') return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            if (navigator.vibrate) navigator.vibrate(10);
+        }
 
-            loadingBar.style.width = "40%";
-            imgSarahUrl = await fetchImageWithRetry(sarahPrompt) || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150&h=150';
-            
-            loadingBar.style.width = "80%";
-            imgMarcusUrl = await fetchImageWithRetry(marcusPrompt) || 'https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=150&h=150';
+        function clearHistory(btn) {
+            localStorage.removeItem('nova_sim_history');
+            btn.innerText = "History Cleared!";
+            setTimeout(() => btn.innerText = "Clear Simulation History", 2000);
+        }
 
-            document.getElementById('sidebar-sarah').src = imgSarahUrl;
+        // ── DYNAMIC PADDING ──
+        const interactionArea = document.getElementById('interaction-area');
+        const chatContainer   = document.getElementById('chat-container');
+        new ResizeObserver(() => {
+            chatContainer.style.paddingBottom = `${interactionArea.offsetHeight + 20}px`;
+            scrollToBottom();
+        }).observe(interactionArea);
+
+        // ── INIT ──
+        function initializeApp() {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            const loadingBar  = document.getElementById('loading-bar');
+            const loadingText = document.getElementById('loading-text');
+
+            // Preload character images
+            const i1 = new Image(); i1.src = imgSarahUrl;
+            const i2 = new Image(); i2.src = imgMarcusUrl;
+            const i3 = new Image(); i3.src = imgUserUrl;
+            
+            document.getElementById('sidebar-sarah').src  = imgSarahUrl;
             document.getElementById('sidebar-marcus').src = imgMarcusUrl;
 
-            loadingBar.style.width = "100%";
-            
+            loadingBar.style.width = "40%";
+            setTimeout(() => { loadingBar.style.width = "80%";  loadingText.innerText = "Parsing simulation logic..."; }, 150);
             setTimeout(() => {
-                document.getElementById('screen-loading').style.opacity = '0';
+                loadingBar.style.width = "100%"; loadingText.innerText = "System Ready.";
                 setTimeout(() => {
-                    document.getElementById('screen-loading').classList.add('hidden');
-                    document.getElementById('screen-start').classList.remove('hidden');
-                }, 700);
-            }, 600);
+                    document.getElementById('screen-loading').style.opacity = '0';
+                    setTimeout(() => {
+                        document.getElementById('screen-loading').classList.add('hidden');
+                        showScreen('screen-start');
+                    }, 400);
+                }, 200);
+            }, 400);
         }
 
-        // --- GAME STATE & SCRIPT ---
-        const state = { 
-            trust: 60, 
-            evidenceGathered: [], 
-            ambiguityHeld: false,
-            scaffoldScore: 0,
-            pendingDecision: null // Holds the final decision during the risk assessment
-        };
+        function showScreen(id) {
+            ['screen-start','screen-play'].forEach(s => {
+                const el = document.getElementById(s);
+                el.classList.add('hidden');
+                el.classList.remove('flex');
+            });
+            const target = document.getElementById(id);
+            target.classList.remove('hidden');
+            target.classList.add('flex');
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
 
-        const SCRIPT = {
-            intro: [
-                { sender: 'system', text: 'Channel #proj-nova-crisis created. You (New Product Lead), Sarah, and Marcus joined.', delay: 500 },
-                { sender: 'sarah', text: 'Welcome to the team. Wish the circumstances were better. The beta onboarding metrics for Project Nova are in. We have a massive leak.', delay: 1500 },
-                { sender: 'sarah', text: 'When users reach the "Advanced Configuration" step—where they link their internal databases—we are seeing a 65% drop-off. The signal is clear: users are experiencing cognitive overload.', delay: 2000 },
-                { sender: 'sarah', text: 'We need to cut this complex step entirely and default them straight into the basic dashboard to save our Q3 activation targets.', delay: 2000 },
-                { sender: 'marcus', text: 'Hold on. That configuration step is where the user customizes the platform to their specific enterprise workflow. It is the core value prop of our highest tier!', delay: 2500 },
-                { sender: 'marcus', text: 'If we cut it, the tool feels generic and they will churn later. Your data is missing the "why".', delay: 2000 },
-                { sender: 'action', type: 'choices_intro' }
-            ],
-            
-            // LOGS INVESTIGATION (SCAFFOLDING PHASE)
-            gather1: [
-                { sender: 'user', text: '@Sarah pull the FullStory session recordings for the drop-off step. Let\'s look at the raw tape.', delay: 500 },
-                { sender: 'system', text: 'Fetching recordings...', delay: 1500 },
-                { sender: 'sarah', text: 'I\'m watching the replays now. They aren\'t exhibiting "overload" behaviors like erratic mouse movements or idle scrolling.', delay: 2000 },
-                { sender: 'sarah', text: 'Instead, they are hovering over three labels: "LDAP Binding", "SSO Provisioning", and "Webhooks". They click them repeatedly, pause for 30 seconds, and then close the tab.', delay: 2500 },
-                { sender: 'system_prompt', text: 'SCAFFOLDING OPPORTUNITY: Help your team interpret this specific user behavior pattern.', delay: 1000 },
-                { sender: 'action', type: 'scaffold_logs' }
-            ],
-            logs_correct: [
-                { sender: 'user', text: 'They are hovering and clicking specific technical terms, then pausing. They are looking for tooltips or help text. It\'s a vocabulary mismatch.', delay: 500 },
-                { sender: 'marcus', text: 'Wait... you\'re right. Our target beta users are Marketing Ops, not IT. They don\'t know what "LDAP" means. It\'s a translation issue.', delay: 2000 },
-                { sender: 'sarah', text: 'That makes sense. They aren\'t overwhelmed by options, they just feel stupid because they don\'t know the acronyms.', delay: 2000 },
-                { sender: 'action', type: 'choices_post_gather' }
-            ],
-            logs_incorrect_bug: [
-                { sender: 'user', text: 'Rage-clicking means the buttons are broken. We need to file a critical bug report with engineering immediately.', delay: 500 },
-                { sender: 'marcus', text: 'Actually, those aren\'t buttons. They are just text labels for the form fields. They aren\'t meant to be clickable.', delay: 2000 },
-                { sender: 'sarah', text: 'Exactly. Which means they are clicking them out of frustration because they don\'t understand what the fields are asking for. It\'s a vocabulary issue.', delay: 2500 },
-                { sender: 'action', type: 'choices_post_gather' }
-            ],
-            logs_incorrect_overload: [
-                { sender: 'user', text: 'They are pausing and giving up. It\'s too much information at once. Sarah is right, it\'s cognitive overload.', delay: 500 },
-                { sender: 'sarah', text: 'Actually, looking closer... if it was overload, wouldn\'t they scroll around looking for an exit? They are fixated specifically on those three words.', delay: 2000 },
-                { sender: 'marcus', text: 'Sarah\'s right. They are stuck on the terminology. Our users are Marketing Ops, not IT. We need to translate "LDAP" into human terms.', delay: 2500 },
-                { sender: 'action', type: 'choices_post_gather' }
-            ],
+        // ── STATE ──
+        let state = {};
+        function resetState() {
+            state = { timeLeft: 60, evidenceGathered: [], ambiguityHeld: false, scaffoldScore: 0, pendingDecision: null };
+        }
+        resetState();
 
-            // BENCHMARKS INVESTIGATION (SCAFFOLDING PHASE)
-            gather2: [
-                { sender: 'user', text: '@Sarah pull competitor B2B onboarding benchmarks. Let\'s see industry standards.', delay: 500 },
-                { sender: 'system', text: 'Aggregating industry data...', delay: 1500 },
-                { sender: 'sarah', text: 'Benchmarks pulled. High-friction onboarding is actually standard for enterprise tools. A 60% drop-off is roughly the 50th percentile.', delay: 2000 },
-                { sender: 'marcus', text: 'And look at the LTV! Competitors show that users who complete complex setups have a 90% higher lifetime value.', delay: 2000 },
-                { sender: 'system_prompt', text: 'SCAFFOLDING OPPORTUNITY: How should the team view "friction" in this context?', delay: 1000 },
-                { sender: 'action', type: 'scaffold_benchmarks' }
-            ],
-            benchmarks_correct: [
-                { sender: 'user', text: 'Look at the LTV. In B2B Enterprise, friction isn\'t always bad. It acts as a filter, ensuring high-intent buyers get a deeply customized experience.', delay: 500 },
-                { sender: 'sarah', text: 'I see your point. We shouldn\'t optimize for pure volume if it sacrifices the quality of the activated user.', delay: 2000 },
-                { sender: 'action', type: 'choices_post_gather' }
-            ],
-            benchmarks_incorrect: [
-                { sender: 'user', text: 'Even if it\'s standard, 65% is too high. Our primary goal right now is top-of-funnel activation volume.', delay: 500 },
-                { sender: 'marcus', text: 'Optimizing for volume over value is how you build a generic product that no one loves. But you\'re the boss.', delay: 2000 },
-                { sender: 'action', type: 'choices_post_gather' }
-            ],
+        // ── SCRIPT GENERATOR (DYNAMIC) ──
+        let currentScript = {};
 
-            // DECISION PHASE
-            decision_prompt: [
-                { sender: 'system', text: 'Final Decision Required. Executive review in 15 mins.', delay: 1000 },
-                { sender: 'action', type: 'choices_decision' }
-            ]
-        };
+        function generateScript(history) {
+            const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+            const delay = (base) => base + Math.floor(Math.random() * 600); 
 
-        const OUTCOMES = {
-            BAD_DATA: {
-                title: "The Churn Trap", color: "text-red-400", bg: "bg-red-500/10", border: "border-red-500/30", trust: -30,
-                text: "You forced Sarah's data edit. Short-term activation metrics looked great for Q3, but 3-month churn skyrocketed because users never learned how to leverage the tool's true power. Marcus feels his UX expertise was ignored.",
-                debrief: "You assumed quantitative data answers the 'Why', but it only answers the 'What'. By cutting the feature to hit short-term targets, you sacrificed long-term product value and crushed team safety."
-            },
-            BAD_CREATIVE: {
-                title: "The Friction Fire", color: "text-yellow-400", bg: "bg-yellow-500/10", border: "border-yellow-500/30", trust: -15,
-                text: "You ignored the data and kept Marcus's step. Drop-off remained at 65%. The company missed its Q3 activation targets. Sarah's data team feels their quantitative insights are viewed as 'performative'.",
-                debrief: "Creative disagreement is healthy, but ignoring glaring quantitative warning signs is a process failure. You protected the design intent but eroded the data team's psychological safety."
-            },
-            GOOD_PATH: {
-                title: "The Safe Middle", color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/30", trust: +10,
-                text: "You compromised and added a 'Skip' button. It stopped the bleeding on activation metrics, and power users could still configure their workspace. However, the user base is now fragmented.",
-                debrief: "You managed the tension and shipped a workable solution. But a compromise often leaves both sides slightly dissatisfied. True leadership is about finding the underlying truth, not just finding the middle."
-            },
-            BEST_PATH: {
-                title: "Signal Master", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30", trust: +40,
-                text: "By reframing the data, you discovered the real problem wasn't complexity, but clarity. Marcus rewrote the technical tooltips, Sarah validated the new retention curve, and drop-off plummeted.",
-                debrief: "You recognized that data was answering the wrong question. You scaffolded the team to investigate the 'Why', and turned a destructive conflict into a creative collaboration. Masterful."
+            const iteration = history.length + 1;
+            let introSequence = [];
+
+            if (iteration === 1) {
+                introSequence = [
+                    { sender: 'system_prompt', text: 'You joined #proj-nova-crisis', delay: 600 },
+                    { sender: 'sarah', text: 'Alex! Glad you\'re here. We need you on this right now. I\'ve been leading analytics for Nova since day one.', delay: delay(1500) },
+                    { sender: 'marcus', text: 'And I\'m Marcus, Lead UX. I\'ve been designing this product for 18 months. Welcome to the fire, I guess.', delay: delay(1500) },
+                    { sender: 'system', text: '— Historical context loaded —', delay: 1000 },
+                    { sender: 'sarah', text: 'The beta onboarding metrics for Project Nova are in. We have a massive leak.', delay: delay(1500) },
+                    { sender: 'sarah', text: 'When users reach the "Advanced Configuration" step—where they link their internal databases—we are seeing a 65% drop-off. The signal is clear: users are experiencing cognitive overload.', delay: delay(2000) },
+                    { sender: 'sarah', text: 'We need to cut this complex step entirely and default them straight into the basic dashboard to save our Q3 activation targets.', delay: delay(2000) },
+                    { sender: 'marcus', text: 'Hold on. That configuration step is where the user customizes the platform to their specific enterprise workflow. It is the core value prop of our highest tier!', delay: delay(2500) },
+                    { sender: 'marcus', text: 'If we cut it, the tool feels generic and they will churn later. Your data is missing the "why".', delay: delay(2000) },
+                    { sender: 'sarah', text: 'Alex, as the new Product Lead this call is yours. We have 60 minutes before the exec review. What do we do?', delay: delay(1800) },
+                    { sender: 'action', type: 'choices_intro' }
+                ];
+            } else {
+                const lastRun = history[history.length - 1];
+                const lastDec = lastRun.decision;
+                
+                introSequence.push({ sender: 'system_prompt', text: `— Reviewing Previous Strategy —<br>Last outcome: ${lastRun.title}`, delay: 1000 });
+                
+                if (lastDec === 'BAD_DATA') {
+                    introSequence.push({ sender: 'marcus', text: pick([
+                        "Alex, whatever we do this time, we CANNOT just cut the feature like we discussed. The churn would be a disaster.",
+                        "Okay, let's step back. If we cut the config step we alienate our power users. Let's not do that."
+                    ]), delay: delay(2000) });
+                    introSequence.push({ sender: 'sarah', text: pick([
+                        "Marcus is right. My previous recommendation to cut the step carries too much risk. But we still have a 65% drop-off.",
+                        "Agreed. Trimming it causes long-term churn. But the 65% drop-off is still staring us in the face."
+                    ]), delay: delay(2000) });
+                } else if (lastDec === 'BAD_CREATIVE') {
+                    introSequence.push({ sender: 'sarah', text: pick([
+                        "Alex, keeping the step as-is like we considered means we'll miss all our targets. We have to change something.",
+                        "Okay, let's rethink this. If we ignore the drop-off and keep the UX as-is, we fail our Q3 goals."
+                    ]), delay: delay(2000) });
+                    introSequence.push({ sender: 'marcus', text: pick([
+                        "I know, I know. My UX purism might hurt us. But we still can't just delete it. There has to be a better way.",
+                        "Fair point, Sarah. The friction is too high. Let's find a way to fix it without gutting the value prop."
+                    ]), delay: delay(2000) });
+                } else if (lastDec === 'GOOD_PATH') {
+                    introSequence.push({ sender: 'sarah', text: "Adding the 'Skip' button is an okay compromise, but the user base will get too fragmented.", delay: delay(2000) });
+                    introSequence.push({ sender: 'marcus', text: "Agreed. We avoid a disaster, but we don't solve the actual problem. Let's dig deeper this time.", delay: delay(2000) });
+                } else if (lastDec === 'BEST_PATH') {
+                    introSequence.push({ sender: 'sarah', text: "We nailed it last time by investigating the logs and rewriting the UI copy. Let's review why that worked.", delay: delay(2000) });
+                    introSequence.push({ sender: 'marcus', text: "Yeah, the vocabulary fix was perfect. Let's run through the data again just to be sure.", delay: delay(2000) });
+                }
+                
+                introSequence.push({ sender: 'sarah', text: pick([
+                    "So, 60 minutes until exec review. Where do we start this time?",
+                    "Back to square one. What's our first move, Alex?",
+                    "We have the 65% drop-off data. How do you want to play this?"
+                ]), delay: delay(1500) });
+                introSequence.push({ sender: 'action', type: 'choices_intro' });
             }
-        };
 
-        // --- CHAT ENGINE ---
+            currentScript = {
+                intro: introSequence,
+                gather1: [
+                    { sender: 'user', text: pick([
+                        "@Sarah pull the FullStory session recordings for the drop-off step. Let's look at the raw tape.",
+                        "Let's look at the actual user sessions. @Sarah, pull the FullStory logs.",
+                        "We need qualitative data. @Sarah, can we see the session replays?"
+                    ]), delay: 500 },
+                    { sender: 'system_prompt', text: 'Fetching recordings... (Time elapsed: 15 mins)', delay: 1500 },
+                    { sender: 'sarah', text: pick([
+                        "I'm watching the replays now. They aren't exhibiting 'overload' behaviors like erratic mouse movements.",
+                        "Looking at the tape... this doesn't look like typical cognitive overload. They aren't scrolling wildly.",
+                    ]), delay: delay(2000) },
+                    { sender: 'sarah', text: "Instead, they are hovering over three labels: 'LDAP Binding', 'SSO Provisioning', and 'Webhooks'. They pause for 30 seconds, then close the tab.", delay: delay(2500) },
+                    { sender: 'action', type: 'scaffold_logs' }
+                ],
+                logs_correct: [
+                    { sender: 'system', text: 'CALIBRATION: Root cause accurately identified. (+1 Insight)', delay: 500 },
+                    { sender: 'user', text: 'They are hovering and clicking specific technical terms, then pausing. They are looking for tooltips or help text. It\'s a vocabulary mismatch.', delay: 500 },
+                    { sender: 'marcus', text: 'Wait... you\'re right. Our target beta users are Marketing Ops, not IT. They don\'t know what "LDAP" means. It\'s a translation issue.', delay: delay(2000) },
+                    { sender: 'sarah', text: 'That makes sense. They aren\'t overwhelmed by options, they just feel stupid because they don\'t know the acronyms.', delay: delay(2000) },
+                    { sender: 'action', type: 'choices_post_gather' }
+                ],
+                logs_incorrect_bug: [
+                    { sender: 'system', text: 'CALIBRATION: Technical assumption registered. Verifying...', delay: 500 },
+                    { sender: 'user', text: 'Rage-clicking means the buttons are broken. We need to file a critical bug report with engineering immediately.', delay: 500 },
+                    { sender: 'marcus', text: 'Actually, those aren\'t buttons. They are just text labels for the form fields. They aren\'t meant to be clickable.', delay: delay(2000) },
+                    { sender: 'sarah', text: 'Exactly. Which means they are clicking them out of frustration because they don\'t understand what the fields are asking for. It\'s a vocabulary issue.', delay: delay(2500) },
+                    { sender: 'action', type: 'choices_post_gather' }
+                ],
+                logs_incorrect_overload: [
+                    { sender: 'system', text: 'CALIBRATION: Confirmation bias detected. Verifying...', delay: 500 },
+                    { sender: 'user', text: 'They are pausing and giving up. It\'s too much information at once. Sarah is right, it\'s cognitive overload.', delay: 500 },
+                    { sender: 'sarah', text: 'Actually, looking closer... if it was overload, wouldn\'t they scroll around looking for an exit? They are fixated specifically on those three words.', delay: delay(2000) },
+                    { sender: 'marcus', text: 'Sarah\'s right. They are stuck on the terminology. Our users are Marketing Ops, not IT. We need to translate "LDAP" into human terms.', delay: delay(2500) },
+                    { sender: 'action', type: 'choices_post_gather' }
+                ],
+                gather2: [
+                    { sender: 'user', text: pick([
+                        "@Sarah pull competitor B2B onboarding benchmarks. Let's see industry standards.",
+                        "What do industry standards look like? @Sarah pull competitor benchmarks.",
+                        "Let's look outside our bubble. @Sarah, any data on competitor onboarding friction?"
+                    ]), delay: 500 },
+                    { sender: 'system_prompt', text: 'Aggregating industry data... (Time elapsed: 15 mins)', delay: 1500 },
+                    { sender: 'sarah', text: 'Benchmarks pulled. High-friction onboarding is actually standard for enterprise tools. A 60% drop-off is roughly the 50th percentile.', delay: delay(2000) },
+                    { sender: 'marcus', text: 'And look at the LTV! Competitors show that users who complete complex setups have a 90% higher lifetime value.', delay: delay(2000) },
+                    { sender: 'action', type: 'scaffold_benchmarks' }
+                ],
+                benchmarks_correct: [
+                    { sender: 'system', text: 'CALIBRATION: Business model accurately mapped. (+1 Insight)', delay: 500 },
+                    { sender: 'user', text: 'Look at the LTV. In B2B Enterprise, friction isn\'t always bad. It acts as a filter, ensuring high-intent buyers get a deeply customized experience.', delay: 500 },
+                    { sender: 'sarah', text: 'I see your point. We shouldn\'t optimize for pure volume if it sacrifices the quality of the activated user.', delay: delay(2000) },
+                    { sender: 'action', type: 'choices_post_gather' }
+                ],
+                benchmarks_incorrect: [
+                    { sender: 'system', text: 'CALIBRATION: Volume prioritization registered.', delay: 500 },
+                    { sender: 'user', text: 'Even if it\'s standard, 65% is too high. Our primary goal right now is top-of-funnel activation volume.', delay: 500 },
+                    { sender: 'marcus', text: 'Optimizing for volume over value is how you build a generic product that no one loves. But you\'re the boss.', delay: delay(2000) },
+                    { sender: 'action', type: 'choices_post_gather' }
+                ],
+                decision_prompt: [
+                    { sender: 'system', text: 'Final Decision Required. The executive review is starting.', delay: 1000 },
+                    { sender: 'action', type: 'choices_decision' }
+                ],
+                pre_mortem: [
+                    { sender: 'system_prompt', text: 'SYSTEM OVERRIDE: Final directive mapped. Please complete mandatory pre-mortem risk assessment before execution.', delay: 800 },
+                    { sender: 'action', type: 'risk_assessment' }
+                ]
+            };
+        }
+
+        // ── CHAT CORE ENGINE ──
         let chatQueue = [];
         let isProcessing = false;
 
         function updateHUD() {
-            const trustBar = document.getElementById('trust-bar');
-            trustBar.style.width = `${state.trust}%`;
-            document.getElementById('trust-text').innerText = `${state.trust}%`;
-            if (state.trust < 40) trustBar.className = "h-full bg-red-500 transition-all duration-700 ease-out";
-            else if (state.trust < 70) trustBar.className = "h-full bg-yellow-500 transition-all duration-700 ease-out";
-            else trustBar.className = "h-full bg-emerald-500 transition-all duration-700 ease-out";
+            const timeBar  = document.getElementById('time-bar');
+            const timeText = document.getElementById('time-text');
+            timeText.innerText = `${Math.max(0, state.timeLeft)} Mins`;
+            const pct = (state.timeLeft / 60) * 100;
+            timeBar.style.width = `${Math.max(0, pct)}%`;
+            if (state.timeLeft <= 15)      timeBar.className = "h-full bg-red-500 transition-all duration-700 ease-out";
+            else if (state.timeLeft <= 30) timeBar.className = "h-full bg-yellow-500 transition-all duration-700 ease-out";
+            else                           timeBar.className = "h-full bg-emerald-500 transition-all duration-700 ease-out";
         }
 
         function startGame() {
-            document.getElementById('screen-start').classList.add('hidden');
-            document.getElementById('screen-play').classList.remove('hidden');
-            state.trust = 60; state.evidenceGathered = []; state.ambiguityHeld = false; state.scaffoldScore = 0;
+            initAudio();
+            document.getElementById('interaction-area').classList.remove('hidden');
+            showScreen('screen-play');
+            resetState();
             updateHUD();
+            
+            let initialChatHTML = `
+                <div class="flex items-center justify-center my-4">
+                    <div class="h-px bg-white/5 flex-1"></div>
+                    <span class="text-[10px] font-semibold text-gray-500 px-4 border border-white/5 rounded-full py-1 bg-[#141414]">Today</span>
+                    <div class="h-px bg-white/5 flex-1"></div>
+                </div>
+            `;
+            document.getElementById('chat-container').innerHTML = initialChatHTML;
+            document.getElementById('choices-list').innerHTML = '';
+            
+            let history = JSON.parse(localStorage.getItem('nova_sim_history') || '[]');
+            chatQueue = []; 
+            generateScript(history);
+
             queueScenario('intro');
         }
 
-        function queueScenario(scenarioKey) {
-            chatQueue = chatQueue.concat(SCRIPT[scenarioKey]);
+        function queueScenario(key) {
+            chatQueue = chatQueue.concat(currentScript[key]);
             if (!isProcessing) processChatQueue();
         }
 
         async function processChatQueue() {
-            if (chatQueue.length === 0) {
-                isProcessing = false;
-                return;
-            }
+            if (chatQueue.length === 0) { isProcessing = false; return; }
             isProcessing = true;
             const msg = chatQueue.shift();
 
@@ -445,7 +661,9 @@
                 const typingId = showTypingIndicator(msg.sender);
                 scrollToBottom();
                 await new Promise(r => setTimeout(r, msg.delay));
-                document.getElementById(typingId).remove();
+                const el = document.getElementById(typingId);
+                if (el) el.remove();
+                playSubtlePop();
             } else {
                 await new Promise(r => setTimeout(r, msg.delay));
             }
@@ -457,250 +675,300 @@
 
         function renderBubble(sender, text) {
             const container = document.getElementById('chat-container');
-            const wrapper = document.createElement('div');
-            
+            const wrapper   = document.createElement('div');
+
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
             if (sender === 'system') {
-                wrapper.className = "flex justify-center fade-in-up my-6";
-                wrapper.innerHTML = `<span class="bg-[#1C1C1E] border border-white/10 text-gray-400 text-[10px] uppercase tracking-[0.2em] px-5 py-2 rounded-full shadow-sm font-semibold">${text}</span>`;
+                wrapper.className = "flex justify-center fade-in-up my-4 w-full px-2";
+                wrapper.innerHTML = `
+                    <div class="flex items-center w-full">
+                        <div class="h-px bg-white/5 flex-1"></div>
+                        <span class="text-[10px] uppercase tracking-widest text-gray-500 px-4 font-semibold text-center leading-relaxed">${text}</span>
+                        <div class="h-px bg-white/5 flex-1"></div>
+                    </div>
+                `;
             } else if (sender === 'system_prompt') {
-                wrapper.className = "flex justify-center fade-in-up my-4 w-full";
-                wrapper.innerHTML = `<div class="system-prompt-bg text-gray-200 text-sm px-6 py-4 rounded-2xl shadow-xl font-medium w-full text-center border-t-2 border-t-netflix"><i data-lucide="brain-circuit" class="w-5 h-5 inline text-netflix mr-2 mb-1"></i> ${text}</div>`;
-            } else if (sender === 'user') {
-                wrapper.className = "flex justify-end fade-in-up my-2";
-                wrapper.innerHTML = `<div class="bg-[#2C2C2E] text-white text-base p-5 rounded-3xl rounded-tr-md chat-bubble user border border-white/10 shadow-md">${text}</div>`;
+                wrapper.className = "flex fade-in-up my-2 w-full px-2";
+                wrapper.innerHTML = `
+                    <div class="system-prompt-bg text-gray-200 text-xs px-4 py-3 rounded-lg font-medium w-full flex items-center shadow-sm">
+                        <div class="w-6 h-6 rounded-full bg-netflix flex items-center justify-center mr-3 shrink-0">
+                            <i data-lucide="brain-circuit" class="w-3.5 h-3.5 text-white"></i>
+                        </div>
+                        <span class="leading-relaxed">${text}</span>
+                    </div>
+                `;
             } else {
-                wrapper.className = "flex space-x-4 fade-in-up my-2";
-                const isSarah = sender === 'sarah';
-                const imgSrc = isSarah ? imgSarahUrl : imgMarcusUrl;
-                const bubbleColor = isSarah ? 'bg-blue-900/20 border-blue-500/20 text-blue-50' : 'bg-yellow-900/20 border-yellow-500/20 text-yellow-50';
-                const nameColor = isSarah ? 'text-blue-400' : 'text-yellow-400';
-                const name = isSarah ? 'Sarah' : 'Marcus';
+                wrapper.className = "flex items-start space-x-3 w-full slack-message p-2 -mx-2 rounded fade-in-up";
+                
+                let imgSrc, name, nameColor;
+                if (sender === 'user') {
+                    imgSrc = imgUserUrl;
+                    name = 'Alex Rivera';
+                    nameColor = 'text-white';
+                } else if (sender === 'sarah') {
+                    imgSrc = imgSarahUrl;
+                    name = 'Sarah Jenkins';
+                    nameColor = 'text-white';
+                } else {
+                    imgSrc = imgMarcusUrl;
+                    name = 'Marcus Vance';
+                    nameColor = 'text-white';
+                }
 
                 wrapper.innerHTML = `
-                    <img src="${imgSrc}" class="w-10 h-10 rounded-full border border-white/20 shrink-0 mt-1 object-cover shadow-sm">
-                    <div class="flex flex-col items-start">
-                        <span class="text-[11px] ${nameColor} font-bold mb-1.5 ml-2 uppercase tracking-wide">${name}</span>
-                        <div class="${bubbleColor} border text-base p-5 rounded-3xl rounded-tl-md chat-bubble shadow-md leading-relaxed">${text}</div>
+                    <div class="w-9 h-9 min-w-[36px] min-h-[36px] shrink-0 rounded bg-white/5 overflow-hidden">
+                        <img src="${imgSrc}" alt="${name}" class="w-full h-full object-cover character-img" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzMzMyIvPjwvc3ZnPg=='">
+                    </div>
+                    <div class="flex flex-col min-w-0 flex-1 pt-0.5">
+                        <div class="flex items-baseline space-x-2 mb-0.5">
+                            <span class="font-bold text-[13px] ${nameColor}">${name}</span>
+                            <span class="text-[10px] text-gray-500 font-medium">${timeStr}</span>
+                        </div>
+                        <div class="text-[14px] text-gray-300 leading-relaxed break-words">${text}</div>
                     </div>
                 `;
             }
             container.appendChild(wrapper);
-            lucide.createIcons();
+            if (typeof lucide !== 'undefined') lucide.createIcons();
         }
 
         function showTypingIndicator(sender) {
             const container = document.getElementById('chat-container');
-            const wrapper = document.createElement('div');
+            const wrapper   = document.createElement('div');
             const id = 'typing-' + Date.now();
             wrapper.id = id;
-            wrapper.className = "flex space-x-3 fade-in-up";
+            wrapper.className = "flex items-start space-x-3 w-full p-2 -mx-2 fade-in-up";
             
-            const isSarah = sender === 'sarah';
-            const imgSrc = isSarah ? imgSarahUrl : imgMarcusUrl;
+            const imgSrc = sender === 'sarah' ? imgSarahUrl : imgMarcusUrl;
+            const name = sender === 'sarah' ? 'Sarah Jenkins' : 'Marcus Vance';
             
             wrapper.innerHTML = `
-                <img src="${imgSrc}" class="w-10 h-10 rounded-full border border-white/20 shrink-0 mt-1 object-cover opacity-60 shadow-sm">
-                <div class="bg-[#2C2C2E] border border-white/10 p-5 rounded-3xl rounded-tl-md flex items-center justify-center typing-indicator h-12 shadow-md">
-                    <span></span><span></span><span></span>
+                <div class="w-9 h-9 min-w-[36px] min-h-[36px] shrink-0 rounded bg-white/5 overflow-hidden opacity-60">
+                    <img src="${imgSrc}" alt="typing" class="w-full h-full object-cover character-img">
+                </div>
+                <div class="flex flex-col min-w-0 flex-1 pt-0.5">
+                    <div class="flex items-baseline space-x-2 mb-1">
+                        <span class="font-bold text-[13px] text-gray-500">${name}</span>
+                        <span class="text-[10px] text-gray-600">typing...</span>
+                    </div>
+                    <div class="typing-indicator mt-1">
+                        <span></span><span></span><span></span>
+                    </div>
                 </div>
             `;
             container.appendChild(wrapper);
             return id;
         }
 
+        let scrollTimeout;
         function scrollToBottom() {
             const c = document.getElementById('chat-container');
-            c.scrollTo({ top: c.scrollHeight, behavior: 'smooth' });
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => requestAnimationFrame(() => {
+                c.scrollTo({ top: c.scrollHeight, behavior: 'smooth' });
+            }), 50);
         }
 
-        function renderChoices(type) {
-            const choicesList = document.getElementById('choices-list');
-            choicesList.innerHTML = '';
-            
-            let options = [];
-            
-            if (type === 'choices_intro' || type === 'choices_post_gather') {
-                if (!state.evidenceGathered.includes('gather1')) {
-                    options.push({ text: "Review Session Logs", cost: "Gather Context", icon: "video", action: () => { state.evidenceGathered.push('gather1'); state.ambiguityHeld = true; updateHUD(); document.getElementById('choices-list').innerHTML=''; queueScenario('gather1'); }});
-                }
-                if (!state.evidenceGathered.includes('gather2')) {
-                    options.push({ text: "Review Competitor Benchmarks", cost: "Gather Context", icon: "bar-chart", action: () => { state.evidenceGathered.push('gather2'); state.ambiguityHeld = true; updateHUD(); document.getElementById('choices-list').innerHTML=''; queueScenario('gather2'); }});
-                }
-                options.push({ text: "Make Definitive Decision", cost: "Proceed", highlight: true, icon: "gavel", action: () => { document.getElementById('choices-list').innerHTML=''; queueScenario('decision_prompt'); }});
-            
-            } else if (type === 'scaffold_logs') {
-                // Critical Thinking Question 1 - Enhanced Plausible Wrongs
-                options = [
-                    { text: "Rage-clicking means the buttons are broken. File a bug.", sub: "Assume Technical Issue", action: () => { document.getElementById('choices-list').innerHTML=''; queueScenario('logs_incorrect_bug'); }},
-                    { text: "They are pausing and giving up. It's cognitive overload.", sub: "Agree with Original Data Bias", action: () => { document.getElementById('choices-list').innerHTML=''; queueScenario('logs_incorrect_overload'); }},
-                    { text: "They are clicking technical terms looking for help. It's vocabulary.", sub: "Identify True Root Cause", highlight: true, action: () => { state.scaffoldScore++; document.getElementById('choices-list').innerHTML=''; queueScenario('logs_correct'); }}
-                ];
-            } else if (type === 'scaffold_benchmarks') {
-                // Critical Thinking Question 2
-                options = [
-                    { text: "65% drop-off is still too high. We must optimize for volume.", sub: "Prioritize Top-of-Funnel", action: () => { document.getElementById('choices-list').innerHTML=''; queueScenario('benchmarks_incorrect'); }},
-                    { text: "The friction acts as a filter. It ensures high LTV buyers.", sub: "Understand Business Model", highlight: true, action: () => { state.scaffoldScore++; document.getElementById('choices-list').innerHTML=''; queueScenario('benchmarks_correct'); }}
-                ];
-            } else if (type === 'choices_decision') {
-                // Final Decision
-                options = [
-                    { text: "Cut the configuration step.", sub: "Side with Sarah", result: 'BAD_DATA' },
-                    { text: "Keep the step as-is.", sub: "Side with Marcus", result: 'BAD_CREATIVE' },
-                    { text: "Compromise: Add 'Skip Setup' button.", sub: "Middle Ground", result: 'GOOD_PATH' }
-                ];
-                if (state.evidenceGathered.includes('gather1') && state.scaffoldScore > 0) {
-                    options.push({ text: "Reframe: Rewrite the UI copy.", sub: "Address vocabulary confusion", result: 'BEST_PATH', highlight: true });
-                }
-            } else if (type === 'risk_assessment') {
-                // Pre-mortem Check
-                renderRiskAssessment();
-                return; // Handled specially
+        // ── CHOICES ──
+        function createChoiceButton(text, subtext, highlight, onClickAction, costText, icon, disabled) {
+            const btn  = document.createElement('button');
+            const base = "apple-btn flex-1 w-full sm:w-auto text-left p-3 rounded-lg border transition-all duration-200 flex flex-col justify-start items-start group focus:outline-none focus:ring-2 focus:ring-white/50 min-w-[240px]";
+
+            if (disabled) {
+                btn.className = `${base} bg-[#111] border-white/5 opacity-40 cursor-not-allowed`;
+            } else if (highlight) {
+                btn.className = `${base} bg-[#1A1A1A] border-[#ff4d57]/50 hover:bg-white hover:border-white shadow-[0_0_15px_rgba(229,9,20,0.1)]`;
+            } else {
+                btn.className = `${base} bg-[#1A1A1A] border-white/10 hover:bg-white hover:border-white`;
             }
 
-            // Render Standard Options
-            options.forEach(opt => {
-                const btn = document.createElement('button');
-                if (opt.result) {
-                    // It's a final decision - Route to Risk Assessment first
-                    btn.className = `apple-btn w-full text-left p-5 rounded-2xl ${opt.highlight ? 'bg-netflix/20 border-netflix/50' : 'bg-[#1C1C1E] border-white/10'} border hover:bg-white/10 transition-all flex justify-between items-center group`;
-                    btn.innerHTML = `<div><span class="block text-white font-bold text-base mb-1">${opt.text}</span><span class="text-sm text-gray-400">${opt.sub}</span></div><i data-lucide="chevron-right" class="w-5 h-5 text-gray-500 group-hover:text-white transition-transform group-hover:translate-x-1"></i>`;
-                    btn.onclick = () => { 
-                        state.pendingDecision = opt.result; 
-                        document.getElementById('choices-list').innerHTML=''; 
-                        renderChoices('risk_assessment'); 
-                    };
-                } else {
-                    // It's an investigation or scaffold choice
-                    btn.className = `apple-btn w-full text-left p-5 rounded-2xl ${opt.highlight ? 'bg-white text-black' : 'bg-[#1C1C1E] border-white/10 text-white'} border hover:bg-white/20 transition-all flex justify-between items-center`;
-                    
-                    let innerContent = `<div><span class="block font-bold text-base mb-1">${opt.text}</span>`;
-                    if (opt.sub) innerContent += `<span class="text-xs ${opt.highlight ? 'text-gray-700' : 'text-gray-400'}">${opt.sub}</span>`;
-                    innerContent += `</div>`;
-                    
-                    if (opt.cost) {
-                        innerContent += `<div class="flex items-center text-xs font-bold ${opt.highlight ? 'text-netflix' : 'text-gray-400'}"><i data-lucide="${opt.icon}" class="w-4 h-4 mr-2"></i> ${opt.cost}</div>`;
-                    }
-                    
-                    btn.innerHTML = innerContent;
-                    btn.onclick = opt.action;
-                }
-                choicesList.appendChild(btn);
-            });
-            lucide.createIcons();
-            scrollToBottom();
-        }
-
-        function renderRiskAssessment() {
-            const choicesList = document.getElementById('choices-list');
-            choicesList.innerHTML = `
-                <div class="system-prompt-bg p-5 rounded-2xl mb-2 text-center fade-in-up">
-                    <p class="text-sm text-white font-bold mb-2"><i data-lucide="alert-triangle" class="w-5 h-5 inline text-yellow-500 mr-2 mb-1"></i> Pre-Mortem Risk Assessment</p>
-                    <p class="text-xs text-gray-300">Identify the primary business risk of executing this directive before finalizing.</p>
+            let inner = `
+                <div class="flex items-start space-x-2 w-full mb-1.5">
+                    ${icon ? `<i data-lucide="${icon}" class="w-3.5 h-3.5 mt-0.5 ${disabled ? 'text-gray-600' : highlight ? 'text-[#ff4d57] group-hover:text-[#E50914]' : 'text-gray-400 group-hover:text-black'} shrink-0 transition-colors"></i>` : ''}
+                    <span class="font-bold text-[13px] leading-snug ${disabled ? 'text-gray-500' : 'text-gray-100 group-hover:text-black'} transition-colors whitespace-normal break-words text-left">${text}</span>
                 </div>
             `;
             
-            // Map risks to the pending decision to ensure logic holds
-            let risks = [];
-            if (state.pendingDecision === 'BAD_DATA') {
-                risks = [
-                    { text: "Risk: We alienate power users and increase long-term churn.", correct: true },
-                    { text: "Risk: We miss our short-term Q3 activation targets.", correct: false }
-                ];
-            } else if (state.pendingDecision === 'BAD_CREATIVE') {
-                risks = [
-                    { text: "Risk: We miss activation targets and cause executive panic.", correct: true },
-                    { text: "Risk: The tool becomes too generic and loses value.", correct: false }
-                ];
-            } else if (state.pendingDecision === 'GOOD_PATH') {
-                risks = [
-                    { text: "Risk: We fragment the user base making support harder.", correct: true },
-                    { text: "Risk: Both Sarah and Marcus will resign immediately.", correct: false }
-                ];
-            } else if (state.pendingDecision === 'BEST_PATH') {
-                risks = [
-                    { text: "Risk: Changing copy might not fix drop-off if it truly IS too complex.", correct: true },
-                    { text: "Risk: Changing copy will anger the enterprise buyers.", correct: false }
-                ];
+            if (disabled) {
+                inner += `<span class="text-[11px] text-gray-600 flex items-center mt-1"><i data-lucide="lock" class="w-3 h-3 mr-1"></i> Data Required</span>`;
+            } else if (subtext || costText) {
+                inner += `<div class="flex items-start justify-between w-full mt-auto pt-2 border-t border-white/5 group-hover:border-black/10 transition-colors gap-3">
+                            <span class="text-[10px] ${disabled ? 'text-gray-600' : 'text-gray-400 group-hover:text-gray-700'} transition-colors leading-relaxed whitespace-normal break-words text-left">${subtext || ''}</span>
+                            ${costText ? `<span class="text-[10px] font-bold ${highlight ? 'text-[#ff4d57] group-hover:text-[#E50914]' : 'text-gray-400 group-hover:text-black'} transition-colors shrink-0 whitespace-nowrap mt-0.5">${costText}</span>` : ''}
+                          </div>`;
             }
 
-            risks.forEach(risk => {
-                const btn = document.createElement('button');
-                btn.className = "apple-btn w-full text-left p-5 rounded-xl bg-[#1C1C1E] border border-white/10 hover:bg-white/10 text-gray-300 hover:text-white text-sm font-medium transition-all fade-in-up";
-                btn.innerText = risk.text;
-                btn.onclick = () => {
-                    if(risk.correct) state.scaffoldScore++;
-                    document.getElementById('choices-list').innerHTML=''; 
-                    resolveOutcome();
-                };
-                choicesList.appendChild(btn);
+            btn.innerHTML = inner;
+            btn.disabled = !!disabled;
+            if (!disabled && onClickAction) btn.onclick = onClickAction;
+            return btn;
+        }
+
+        function renderChoices(type) {
+            const ia = document.getElementById('interaction-area');
+            const cl = document.getElementById('choices-list');
+            cl.innerHTML = '';
+            ia.classList.add('attention-pulse');
+
+            let options = [];
+
+            const setHeader = (title) => {
+                document.querySelector('#interaction-area .title-text').innerText = title;
+            };
+
+            if (type === 'choices_intro' || type === 'choices_post_gather') {
+                setHeader("Executive Action");
+                
+                if (!state.evidenceGathered.includes('gather1')) {
+                    options.push({ text: "Review Session Logs", cost: "-15 Mins", icon: "video",
+                        action: () => { state.evidenceGathered.push('gather1'); state.timeLeft -= 15; state.ambiguityHeld = true; updateHUD(); clearChoices(); queueScenario('gather1'); }});
+                }
+                if (!state.evidenceGathered.includes('gather2')) {
+                    options.push({ text: "Review Benchmarks", cost: "-15 Mins", icon: "bar-chart",
+                        action: () => { state.evidenceGathered.push('gather2'); state.timeLeft -= 15; state.ambiguityHeld = true; updateHUD(); clearChoices(); queueScenario('gather2'); }});
+                }
+                const hasData = state.evidenceGathered.length > 0;
+                options.push({ text: "Make Final Decision", disabled: !hasData, highlight: false, icon: "gavel",
+                    action: () => { clearChoices(); queueScenario('decision_prompt'); }
+                });
+
+            } else if (type === 'scaffold_logs') {
+                setHeader("Interpret User Behavior");
+                options = [
+                    { text: "Rage-clicking = broken UI.", sub: "Assume Technical Issue",
+                        action: () => { clearChoices(); queueScenario('logs_incorrect_bug'); }},
+                    { text: "Pausing = cognitive overload.", sub: "Agree with Original Bias",
+                        action: () => { clearChoices(); queueScenario('logs_incorrect_overload'); }},
+                    { text: "Clicking terms = confusion.", sub: "Identify True Root Cause", highlight: false,
+                        action: () => { state.scaffoldScore++; clearChoices(); queueScenario('logs_correct'); }}
+                ];
+            } else if (type === 'scaffold_benchmarks') {
+                setHeader("Interpret Market Data");
+                options = [
+                    { text: "65% is too high. Optimize volume.", sub: "Prioritize Top-of-Funnel",
+                        action: () => { clearChoices(); queueScenario('benchmarks_incorrect'); }},
+                    { text: "Friction filters for high LTV.", sub: "Understand Business Model", highlight: false,
+                        action: () => { state.scaffoldScore++; clearChoices(); queueScenario('benchmarks_correct'); }}
+                ];
+            } else if (type === 'choices_decision') {
+                setHeader("Issue Official Directive");
+                options = [
+                    { text: "Cut the configuration step.", sub: "<span class='text-red-400 font-medium group-hover:text-red-600'>Risk:</span> Alienates power users <br><span class='text-emerald-400 font-medium group-hover:text-emerald-700'>Pro:</span> Hits short-term targets", result: 'BAD_DATA' },
+                    { text: "Keep the step as-is.", sub: "<span class='text-red-400 font-medium group-hover:text-red-600'>Risk:</span> Misses activation targets <br><span class='text-emerald-400 font-medium group-hover:text-emerald-700'>Pro:</span> Protects enterprise value", result: 'BAD_CREATIVE' },
+                    { text: "Compromise: Add 'Skip' button.", sub: "<span class='text-red-400 font-medium group-hover:text-red-600'>Risk:</span> Fragments user base <br><span class='text-emerald-400 font-medium group-hover:text-emerald-700'>Pro:</span> Immediate middle ground", result: 'GOOD_PATH' }
+                ];
+                if (state.evidenceGathered.includes('gather1') && state.scaffoldScore > 0) {
+                    options.push({ text: "Reframe: Rewrite UI copy.", sub: "<span class='text-red-400 font-medium group-hover:text-red-600'>Risk:</span> Delays immediate launch <br><span class='text-emerald-400 font-medium group-hover:text-emerald-700'>Pro:</span> Solves root cause", result: 'BEST_PATH', highlight: false });
+                }
+            } else if (type === 'risk_assessment') {
+                renderRiskAssessment(); return;
+            }
+
+            options.forEach(opt => {
+                let btn;
+                if (opt.result) {
+                    btn = createChoiceButton(opt.text, opt.sub, opt.highlight, () => {
+                        state.pendingDecision = opt.result; clearChoices(); queueScenario('pre_mortem');
+                    }, null, 'alert-triangle', false);
+                } else {
+                    btn = createChoiceButton(opt.text, opt.sub, opt.highlight, opt.action, opt.cost, opt.icon, opt.disabled);
+                }
+                cl.appendChild(btn);
             });
-            lucide.createIcons();
+
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            scrollToBottom();
+        }
+
+        function clearChoices() {
+            document.getElementById('choices-list').innerHTML = '';
+            document.getElementById('interaction-area').classList.remove('attention-pulse');
+            document.querySelector('#interaction-area .title-text').innerText = "Processing...";
+        }
+
+        function renderRiskAssessment() {
+            const cl = document.getElementById('choices-list');
+            cl.innerHTML = '';
+            document.querySelector('#interaction-area .text-gray-500').innerHTML = `<span class="bg-yellow-500 text-black px-1.5 py-0.5 rounded text-[8px] mr-2 uppercase font-bold tracking-widest">Alert</span> <span class="text-gray-300 uppercase title-text">Confirm Primary Risk</span>`;
+            
+            let risks = [];
+            if (state.pendingDecision === 'BAD_DATA')     risks = [{ text: "Risk: We alienate power users and increase churn.", correct: true },  { text: "Risk: We miss our short-term Q3 targets.", correct: false }];
+            if (state.pendingDecision === 'BAD_CREATIVE') risks = [{ text: "Risk: We miss activation targets causing panic.", correct: true },      { text: "Risk: The tool becomes generic and loses value.", correct: false }];
+            if (state.pendingDecision === 'GOOD_PATH')    risks = [{ text: "Risk: We fragment the user base making support harder.", correct: true }, { text: "Risk: Both Sarah and Marcus will resign immediately.", correct: false }];
+            if (state.pendingDecision === 'BEST_PATH')    risks = [{ text: "Risk: Changing copy might not fix complex drop-off.", correct: true },   { text: "Risk: Changing copy will anger enterprise buyers.", correct: false }];
+
+            risks.forEach(risk => {
+                const btn = createChoiceButton(risk.text, "", false, () => {
+                    if (risk.correct) state.scaffoldScore++;
+                    clearChoices(); resolveOutcome();
+                }, null, 'shield-alert', false);
+                cl.appendChild(btn);
+            });
+            if (typeof lucide !== 'undefined') lucide.createIcons();
             scrollToBottom();
         }
 
         function resolveOutcome() {
             const resultKey = state.pendingDecision;
-            const outcome = OUTCOMES[resultKey];
-            
-            let finalTrustImpact = outcome.trust;
-            if (!state.ambiguityHeld && resultKey !== 'BAD_DATA') finalTrustImpact -= 10; 
-            state.trust = Math.max(0, Math.min(100, state.trust + finalTrustImpact));
-            updateHUD();
+            const outcome   = OUTCOMES[resultKey];
+            state.timeLeft  = 0; updateHUD();
+            document.getElementById('interaction-area').classList.add('hidden'); // Hide input area fully
 
-            let commandText = "";
-            if (resultKey === 'BAD_DATA') commandText = "Team, we are cutting the configuration step to save activation targets. Make it happen.";
-            if (resultKey === 'BAD_CREATIVE') commandText = "Team, we are keeping the step as-is. We cannot lose the enterprise value prop.";
-            if (resultKey === 'GOOD_PATH') commandText = "Team, let's compromise. Add a 'Skip Setup' button to the flow.";
-            if (resultKey === 'BEST_PATH') commandText = "Team, the issue isn't complexity, it's clarity. Marcus, rewrite the technical tooltips based on Sarah's log analysis.";
-            
-            renderBubble('user', commandText);
+            // Save history
+            let history = JSON.parse(localStorage.getItem('nova_sim_history') || '[]');
+            history.push({ decision: resultKey, title: outcome.title, score: state.scaffoldScore });
+            localStorage.setItem('nova_sim_history', JSON.stringify(history));
+
+            const commands = {
+                BAD_DATA:     "Team, cut the configuration step to save activation targets.",
+                BAD_CREATIVE: "Team, keep the step as-is. We cannot lose the value prop.",
+                GOOD_PATH:    "Team, let's compromise. Add a 'Skip Setup' button to the flow.",
+                BEST_PATH:    "Team, the issue isn't complexity, it's clarity. Marcus, rewrite the tooltips based on Sarah's log analysis."
+            };
+            renderBubble('user', commands[resultKey]);
             scrollToBottom();
 
             setTimeout(() => {
                 const container = document.getElementById('chat-container');
-                const wrapper = document.createElement('div');
-                wrapper.className = "fade-in-up mt-8";
-                
-                // Calibration Assessment based on Scaffold Score
-                let calibrationText = "";
-                let calColor = "";
-                if (resultKey === 'BEST_PATH' && state.scaffoldScore >= 2) { calibrationText = "Masterful Calibration (High Critical Thinking)"; calColor="text-emerald-400"; }
-                else if (resultKey === 'BEST_PATH') { calibrationText = "Lucky Guess (Skipped Root Cause Analysis)"; calColor="text-yellow-400"; }
-                else if (state.scaffoldScore > 0) { calibrationText = "Analyzed correctly, but failed to execute."; calColor="text-yellow-400"; }
-                else { calibrationText = "Blind Spot Detected (Low Analytical Rigor)"; calColor="text-red-400"; }
+                const wrapper   = document.createElement('div');
+                wrapper.className = "fade-in-up mt-6 w-full";
+
+                let calText = "", calColor = "";
+                if      (resultKey === 'BEST_PATH' && state.scaffoldScore >= 2) { calText = "Masterful Calibration (High Rigor)";            calColor = "text-emerald-400"; }
+                else if (resultKey === 'BEST_PATH')                              { calText = "Lucky Guess (Skipped Root Cause Analysis)";      calColor = "text-yellow-400"; }
+                else if (state.scaffoldScore > 0)                                { calText = "Analyzed correctly, but failed to execute.";     calColor = "text-yellow-400"; }
+                else                                                             { calText = "Blind Spot Detected (Low Analytical Rigor)";     calColor = "text-red-400"; }
 
                 wrapper.innerHTML = `
-                    <div class="${outcome.bg} border ${outcome.border} rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-                        <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full blur-[80px] opacity-60 bg-current ${outcome.color}"></div>
-                        <div class="flex justify-between items-start mb-6">
-                            <span class="px-4 py-1.5 bg-black/60 rounded-full text-[10px] uppercase tracking-widest text-white border border-white/10 shadow-sm">Simulation Complete</span>
-                            <div class="text-right">
-                                <div class="text-[10px] uppercase tracking-widest text-gray-400 mb-1">Trust Impact</div>
-                                <div class="text-3xl font-bold ${finalTrustImpact >= 0 ? 'text-emerald-400' : 'text-red-400'}">${finalTrustImpact >= 0 ? '+' : ''}${finalTrustImpact}%</div>
-                            </div>
+                    <div class="bg-[#1C1C1E] border border-white/10 rounded-xl p-5 md:p-6 shadow-xl relative overflow-hidden my-4">
+                        <div class="absolute -top-10 -right-10 w-24 h-24 rounded-full blur-[50px] opacity-40 bg-current ${outcome.color}"></div>
+                        <div class="flex items-center gap-2 mb-3">
+                            <i data-lucide="flag" class="w-4 h-4 ${outcome.color}"></i>
+                            <span class="text-xs uppercase tracking-widest text-gray-400 font-bold">Simulation Complete</span>
                         </div>
-                        <h2 class="text-3xl font-bold text-white mb-3 tracking-tight">${outcome.title}</h2>
-                        <p class="text-base text-gray-200 leading-relaxed mb-6 font-medium">${outcome.text}</p>
+                        <h2 class="text-xl md:text-2xl font-bold text-white mb-2 tracking-tight">${outcome.title}</h2>
+                        <p class="text-[13px] md:text-sm text-gray-300 leading-relaxed mb-4">${outcome.text}</p>
                         
-                        <div class="bg-black/50 p-6 rounded-2xl border border-white/10 space-y-3 mt-4">
-                            <h4 class="text-sm uppercase tracking-widest font-bold ${outcome.color} flex items-center"><i data-lucide="book-open" class="w-5 h-5 mr-2"></i> Executive Debrief</h4>
-                            <p class="text-base text-gray-200 leading-relaxed">${outcome.debrief}</p>
-                            <div class="mt-4 pt-4 border-t border-white/10">
-                                <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-1">Analysis & Calibration Profile:</p>
-                                <p class="text-sm font-bold ${calColor}">${calibrationText}</p>
+                        <div class="bg-black/40 p-4 rounded-lg border border-white/5 space-y-2">
+                            <h4 class="text-[11px] uppercase tracking-widest font-bold ${outcome.color} flex items-center"><i data-lucide="book-open" class="w-3.5 h-3.5 mr-1.5"></i> Executive Debrief</h4>
+                            <p class="text-[13px] text-gray-300 leading-relaxed">${outcome.debrief}</p>
+                            <div class="mt-3 pt-3 border-t border-white/5">
+                                <p class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold mb-1">Calibration Profile — Alex Rivera:</p>
+                                <p class="text-[13px] font-bold ${calColor}">${calText}</p>
                             </div>
                         </div>
-
-                        <button onclick="location.reload()" class="w-full mt-8 bg-white text-black hover:bg-gray-200 font-bold py-4 rounded-xl transition-colors shadow-lg">Run New Scenario</button>
+                        <button onclick="startGame()" class="w-full mt-4 bg-white text-black hover:bg-gray-200 font-bold py-2.5 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-white/30 text-[13px]">Try Another Strategy</button>
                     </div>
                 `;
                 container.appendChild(wrapper);
-                lucide.createIcons();
+                if (typeof lucide !== 'undefined') lucide.createIcons();
                 scrollToBottom();
             }, 1500);
         }
 
-        window.onload = () => { initializeApp(); };
+        document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
 </body>
 </html>
