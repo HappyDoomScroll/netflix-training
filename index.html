@@ -151,7 +151,7 @@
                 
                 <div class="flex items-center gap-2 bg-[#2b2d31] text-gray-200 text-[11px] px-3 py-2 rounded-t-lg min-w-[140px] max-w-[240px] border-t border-x border-white/5 relative z-10 shadow-[0_-2px_6px_rgba(0,0,0,0.2)]">
                     <i data-lucide="hash" class="w-3.5 h-3.5 text-gray-400"></i>
-                    <span class="truncate font-medium flex-1">Nova Comm Channel</span>
+                    <span class="truncate font-medium flex-1" id="tab-title">Nova Comm Channel</span>
                     <i data-lucide="x" class="w-3.5 h-3.5 ml-auto opacity-50 hover:opacity-100 cursor-pointer"></i>
                     <div class="absolute -bottom-[1px] left-0 right-0 h-[2px] bg-[#2b2d31]"></div>
                 </div>
@@ -175,7 +175,7 @@
                 
                 <div class="flex-1 flex items-center bg-[#1e1f22] rounded-full px-4 h-7 gap-3 border border-white/10 shadow-inner">
                     <i data-lucide="lock" class="w-3.5 h-3.5 text-gray-400"></i>
-                    <span class="text-[11px] text-gray-300 font-mono tracking-tight flex-1 truncate select-all">https://app.novacorp.internal/comms</span>
+                    <span class="text-[11px] text-gray-300 font-mono tracking-tight flex-1 truncate select-all" id="url-bar">https://app.novacorp.internal/comms</span>
                     <i data-lucide="star" class="w-3.5 h-3.5 text-gray-400 cursor-pointer hover:text-white transition-colors"></i>
                 </div>
                 
@@ -219,7 +219,7 @@
                         <h1 class="text-4xl font-bold tracking-tighter text-white">
                             The <span class="text-netflix">Signal</span><br>and the Noise.
                         </h1>
-                        <p class="text-sm text-gray-400 font-light max-w-sm mx-auto">
+                        <p class="text-sm text-gray-400 font-light max-w-sm mx-auto" id="start-subtitle">
                             A conversational product leadership simulation.
                         </p>
                     </div>
@@ -229,9 +229,9 @@
                             <div class="w-8 h-8 rounded-lg bg-netflix flex items-center justify-center mb-3 shadow-[0_0_10px_rgba(229,9,20,0.4)]">
                                 <i data-lucide="target" class="w-4 h-4 text-white"></i>
                             </div>
-                            <h3 class="font-semibold text-sm mb-1.5 text-white">The Scenario</h3>
-                            <p class="text-gray-400 text-xs leading-relaxed">
-                                You are the newly hired <b class="text-white">Product Lead</b> for Project Nova. In your first week, the dashboard is bleeding users. Mediate a conflict between <b class="text-blue-300">Sarah (Data)</b> and <b class="text-yellow-300">Marcus (UX)</b> before the exec review.
+                            <h3 class="font-semibold text-sm mb-1.5 text-white" id="start-scenario-title">The Scenario</h3>
+                            <p class="text-gray-400 text-xs leading-relaxed" id="start-scenario-desc">
+                                Loading scenario...
                             </p>
                         </div>
                         <div class="glass-panel p-4 rounded-xl">
@@ -239,7 +239,7 @@
                                 <i data-lucide="brain-circuit" class="w-4 h-4 text-white"></i>
                             </div>
                             <h3 class="font-semibold text-sm mb-1.5 text-white">Learning Objectives</h3>
-                            <ul class="text-xs text-gray-400 space-y-1.5">
+                            <ul class="text-xs text-gray-400 space-y-1.5" id="start-objectives">
                                 <li>• <b class="text-white">Analyze</b> conflicting data to find root causes.</li>
                                 <li>• <b class="text-white">Evaluate</b> trade-offs and second-order risks.</li>
                                 <li>• <b class="text-white">Apply</b> psychological safety to mediate conflict.</li>
@@ -284,7 +284,7 @@
                                 <!-- Active Channel -->
                                 <div class="flex items-center space-x-2 text-white bg-[#1C1C1E] px-2 py-1.5 rounded cursor-pointer relative">
                                     <div class="absolute left-0 top-1.5 bottom-1.5 w-1 bg-netflix rounded-r"></div>
-                                    <i data-lucide="hash" class="w-3.5 h-3.5 opacity-70"></i><span class="text-[13px] font-medium">proj-nova-crisis</span>
+                                    <i data-lucide="hash" class="w-3.5 h-3.5 opacity-70"></i><span class="text-[13px] font-medium" id="sidebar-channel-name">proj-nova-crisis</span>
                                 </div>
                             </div>
                         </div>
@@ -346,7 +346,7 @@
                     <div class="h-14 border-b border-white/5 flex items-center px-4 justify-between shrink-0 bg-[#141414] z-10 shadow-sm">
                         <div class="flex items-center gap-2">
                             <i data-lucide="hash" class="w-4 h-4 text-gray-400"></i>
-                            <span class="font-bold text-white text-sm">proj-nova-crisis</span>
+                            <span class="font-bold text-white text-sm" id="chat-header-name">proj-nova-crisis</span>
                         </div>
                         <div class="flex items-center gap-4 text-gray-400">
                             <div class="flex -space-x-2">
@@ -365,7 +365,7 @@
                     <div id="interaction-area" class="shrink-0 p-4 glass-bar z-30 w-full transition-all duration-300">
                         <div class="max-w-4xl mx-auto w-full">
                             <div class="text-[10px] text-gray-500 font-semibold mb-2 flex items-center tracking-wider">
-                                <span class="bg-netflix text-white px-1.5 py-0.5 rounded text-[8px] mr-2 uppercase">Required</span> 
+                                <span id="interaction-badge" class="bg-netflix text-white px-1.5 py-0.5 rounded text-[8px] mr-2 uppercase">Required</span> 
                                 <span class="text-gray-300 uppercase title-text">Action</span>
                             </div>
                             <div id="choices-list" class="flex flex-col sm:flex-row flex-wrap gap-2 w-full">
@@ -409,7 +409,10 @@
         function clearHistory(btn) {
             localStorage.removeItem('nova_sim_history');
             btn.innerText = "History Cleared!";
-            setTimeout(() => btn.innerText = "Clear Simulation History", 2000);
+            setTimeout(() => {
+                btn.innerText = "Clear Simulation History";
+                window.location.reload();
+            }, 1000);
         }
 
         // ── DYNAMIC PADDING ──
@@ -420,19 +423,161 @@
             scrollToBottom();
         }).observe(interactionArea);
 
+        // ── SCENARIO DATA ──
+        const SCENARIOS = [
+            {
+                id: 'onboarding',
+                channel: 'proj-nova-crisis',
+                title: 'Scenario: The Onboarding Leak',
+                desc: 'You are the <b class="text-white">Product Lead</b> for Project Nova. The beta dashboard is bleeding users. Mediate a conflict between <b class="text-blue-300">Sarah (Data)</b> and <b class="text-yellow-300">Marcus (UX)</b>.',
+                obj1: '<b>Analyze</b> conflicting qualitative and quantitative raw data.',
+                obj2: '<b>Evaluate</b> trade-offs and second-order business risks.',
+                commands: {
+                    BAD_DATA: "Team, cut the configuration step to save activation targets.",
+                    BAD_CREATIVE: "Team, keep the step as-is. We cannot lose the value prop.",
+                    GOOD_PATH: "Team, let's compromise. Add a 'Skip Setup' button to the flow.",
+                    BEST_PATH: "Team, the issue isn't complexity, it's clarity. Rewrite the tooltips."
+                },
+                risks: {
+                    BAD_DATA: [
+                        { text: "Risk: We alienate power users and increase churn.", correct: true },
+                        { text: "Risk: We miss our short-term Q3 targets.", correct: false }
+                    ],
+                    BAD_CREATIVE: [
+                        { text: "Risk: We miss activation targets causing panic.", correct: true },
+                        { text: "Risk: The tool becomes generic and loses value.", correct: false }
+                    ],
+                    GOOD_PATH: [
+                        { text: "Risk: We fragment the user base making support harder.", correct: true },
+                        { text: "Risk: Both Sarah and Marcus will resign immediately.", correct: false }
+                    ],
+                    BEST_PATH: [
+                        { text: "Risk: Changing copy might not fix complex drop-off.", correct: true },
+                        { text: "Risk: Changing copy will anger enterprise buyers.", correct: false }
+                    ]
+                },
+                outcomes: {
+                    BAD_DATA: {
+                        title: "The Churn Trap", color: "text-red-400", bg: "bg-red-500/10", border: "border-red-500/30",
+                        text: "You forced Sarah's data edit. Activation metrics looked great, but 3-month churn skyrocketed because users never learned the tool's true power.",
+                        debrief: "Quantitative data answers the 'What', but often misses the 'Why'. By cutting the feature to hit short-term targets, you sacrificed long-term product value."
+                    },
+                    BAD_CREATIVE: {
+                        title: "The Friction Fire", color: "text-yellow-400", bg: "bg-yellow-500/10", border: "border-yellow-500/30",
+                        text: "You ignored the data and kept Marcus's step. Drop-off remained at 65%. The company missed its Q3 activation targets.",
+                        debrief: "Creative disagreement is healthy, but ignoring glaring quantitative warning signs is a process failure. You protected the design intent but failed the business goals."
+                    },
+                    GOOD_PATH: {
+                        title: "The Safe Middle", color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/30",
+                        text: "You added a 'Skip' button. It stopped the bleeding on metrics, and power users could still configure their workspace. However, the user base is now fragmented.",
+                        debrief: "You managed the tension and shipped a workable solution. But a compromise often leaves both sides slightly dissatisfied. True leadership pushes for the underlying truth."
+                    },
+                    BEST_PATH: {
+                        title: "Signal Master", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30",
+                        text: "By reframing the data, you discovered the real problem wasn't complexity, but clarity. Marcus rewrote the tooltips, and drop-off plummeted.",
+                        debrief: "You recognized that data was answering the wrong question. You scaffolded the team to investigate the 'Why', turning destructive conflict into creative collaboration."
+                    }
+                }
+            },
+            {
+                id: 'pricing',
+                channel: 'proj-nova-costs',
+                title: 'Scenario: The Pricing Pivot',
+                desc: 'Server costs for Project Nova are skyrocketing. Mediate a heated debate between <b class="text-blue-300">Sarah (Data)</b>, who wants to gate features to save money, and <b class="text-yellow-300">Marcus (UX)</b>, who refuses to compromise the free user experience.',
+                obj1: '<b>Distinguish</b> between aggregate metrics and segmented data.',
+                obj2: '<b>Balance</b> infrastructure costs against product-led growth.',
+                commands: {
+                    BAD_DATA: "Team, gate the Analytics feature behind the paid tier immediately.",
+                    BAD_CREATIVE: "Team, keep it free. We can't compromise the user experience.",
+                    GOOD_PATH: "Team, let's limit the Analytics history to 7 days for free users.",
+                    BEST_PATH: "Team, the issue isn't active users. Purge the dormant legacy cron jobs."
+                },
+                risks: {
+                    BAD_DATA: [
+                        { text: "Risk: We kill our primary free-to-paid conversion loop.", correct: true },
+                        { text: "Risk: Server costs will continue to increase.", correct: false }
+                    ],
+                    BAD_CREATIVE: [
+                        { text: "Risk: Server costs will bankrupt the Q3 budget.", correct: true },
+                        { text: "Risk: Free users will complain about the UI.", correct: false }
+                    ],
+                    GOOD_PATH: [
+                        { text: "Risk: Users get frustrated when old data disappears.", correct: true },
+                        { text: "Risk: The servers will crash immediately.", correct: false }
+                    ],
+                    BEST_PATH: [
+                        { text: "Risk: We might accidentally delete active user data.", correct: true },
+                        { text: "Risk: Paid users will demand refunds.", correct: false }
+                    ]
+                },
+                outcomes: {
+                    BAD_DATA: {
+                        title: "The Growth Killer", color: "text-red-400", bg: "bg-red-500/10", border: "border-red-500/30",
+                        text: "You gated the feature. Server costs dropped, but free-to-paid conversions plummeted by 80%. Without the 'Aha!' moment, users stopped upgrading.",
+                        debrief: "You reacted to a top-line metric (costs) without understanding its relationship to the growth loop. You saved the servers but starved the business."
+                    },
+                    BAD_CREATIVE: {
+                        title: "The Budget Sink", color: "text-yellow-400", bg: "bg-yellow-500/10", border: "border-yellow-500/30",
+                        text: "You kept it free. The UX remained pristine, but server costs exceeded the Q3 budget by week 4. Finance forced a feature freeze.",
+                        debrief: "You protected the user experience at the expense of business viability. Great UX is meaningless if the product runs out of funding to operate."
+                    },
+                    GOOD_PATH: {
+                        title: "The Band-Aid", color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/30",
+                        text: "Limiting data to 7 days reduced server load by 30%. It wasn't enough to hit margin goals, and some users complained, but it kept the lights on.",
+                        debrief: "A solid, pragmatic compromise. However, by settling for the middle ground, you missed the root cause hidden deeper in the server logs."
+                    },
+                    BEST_PATH: {
+                        title: "The Scalpel", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30",
+                        text: "By segmenting the data, you discovered 80% of the cost came from dormant legacy accounts. You purged them, saving the budget AND the free UX.",
+                        debrief: "Exceptional leadership. You didn't accept the false dichotomy. You pushed the team to segment the aggregate data, uncovering the true root cause."
+                    }
+                }
+            }
+        ];
+
+        // ── STATE ──
+        let state = {};
+        function resetState() {
+            let history = JSON.parse(localStorage.getItem('nova_sim_history') || '[]');
+            let scenarioIdx = history.length % SCENARIOS.length;
+            
+            state = { 
+                scenarioIndex: scenarioIdx,
+                timeLeft: 60, 
+                evidenceGathered: [], 
+                ambiguityHeld: false, 
+                scaffoldScore: 0, 
+                pendingDecision: null 
+            };
+
+            // Update UI for the scenario
+            const s = SCENARIOS[state.scenarioIndex];
+            document.getElementById('start-scenario-title').innerText = s.title;
+            document.getElementById('start-scenario-desc').innerHTML = s.desc;
+            document.getElementById('start-objectives').innerHTML = `
+                <li>• ${s.obj1}</li>
+                <li>• ${s.obj2}</li>
+                <li>• <b class="text-white">Apply</b> psychological safety to mediate conflict.</li>
+            `;
+            document.getElementById('sidebar-channel-name').innerText = s.channel;
+            document.getElementById('chat-header-name').innerText = s.channel;
+            document.getElementById('url-bar').innerText = `https://app.novacorp.internal/${s.channel}`;
+            document.getElementById('tab-title').innerText = s.channel;
+        }
+
         // ── INIT ──
         function initializeApp() {
             if (typeof lucide !== 'undefined') lucide.createIcons();
             const loadingBar  = document.getElementById('loading-bar');
             const loadingText = document.getElementById('loading-text');
 
-            // Preload character images
             const i1 = new Image(); i1.src = imgSarahUrl;
             const i2 = new Image(); i2.src = imgMarcusUrl;
             const i3 = new Image(); i3.src = imgUserUrl;
-            
             document.getElementById('sidebar-sarah').src  = imgSarahUrl;
             document.getElementById('sidebar-marcus').src = imgMarcusUrl;
+
+            resetState();
 
             loadingBar.style.width = "40%";
             setTimeout(() => { loadingBar.style.width = "80%";  loadingText.innerText = "Parsing simulation logic..."; }, 150);
@@ -460,170 +605,150 @@
             if (typeof lucide !== 'undefined') lucide.createIcons();
         }
 
-        // ── STATE ──
-        let state = {};
-        function resetState() {
-            state = { timeLeft: 60, evidenceGathered: [], ambiguityHeld: false, scaffoldScore: 0, pendingDecision: null };
-        }
-        resetState();
-
         // ── SCRIPT GENERATOR (DYNAMIC) ──
         let currentScript = {};
 
-        function generateScript(history) {
+        function generateScript() {
             const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
             const delay = (base) => base + Math.floor(Math.random() * 600); 
 
+            let history = JSON.parse(localStorage.getItem('nova_sim_history') || '[]');
             const iteration = history.length + 1;
             let introSequence = [];
 
             if (iteration === 1) {
-                introSequence = [
-                    { sender: 'system_prompt', text: 'You joined #proj-nova-crisis', delay: 600 },
+                introSequence.push(
+                    { sender: 'system_prompt', text: `You joined #${SCENARIOS[state.scenarioIndex].channel}`, delay: 600 },
                     { sender: 'sarah', text: 'Alex! Glad you\'re here. We need you on this right now. I\'ve been leading analytics for Nova since day one.', delay: delay(1500) },
-                    { sender: 'marcus', text: 'And I\'m Marcus, Lead UX. I\'ve been designing this product for 18 months. Welcome to the fire, I guess.', delay: delay(1500) },
-                    { sender: 'system', text: '— Historical context loaded —', delay: 1000 },
-                    { sender: 'sarah', text: 'The beta onboarding metrics for Project Nova are in. We have a massive leak.', delay: delay(1500) },
-                    { sender: 'sarah', text: 'When users reach the "Advanced Configuration" step—where they link their internal databases—we are seeing a 65% drop-off. The signal is clear: users are experiencing cognitive overload.', delay: delay(2000) },
-                    { sender: 'sarah', text: 'We need to cut this complex step entirely and default them straight into the basic dashboard to save our Q3 activation targets.', delay: delay(2000) },
-                    { sender: 'marcus', text: 'Hold on. That configuration step is where the user customizes the platform to their specific enterprise workflow. It is the core value prop of our highest tier!', delay: delay(2500) },
-                    { sender: 'marcus', text: 'If we cut it, the tool feels generic and they will churn later. Your data is missing the "why".', delay: delay(2000) },
-                    { sender: 'sarah', text: 'Alex, as the new Product Lead this call is yours. We have 60 minutes before the exec review. What do we do?', delay: delay(1800) },
-                    { sender: 'action', type: 'choices_intro' }
-                ];
+                    { sender: 'marcus', text: 'And I\'m Marcus, Lead UX. Welcome to the fire, I guess.', delay: delay(1500) },
+                    { sender: 'system', text: '— Historical context loaded —', delay: 1000 }
+                );
             } else {
                 const lastRun = history[history.length - 1];
-                const lastDec = lastRun.decision;
-                
                 introSequence.push({ sender: 'system_prompt', text: `— Reviewing Previous Strategy —<br>Last outcome: ${lastRun.title}`, delay: 1000 });
-                
-                if (lastDec === 'BAD_DATA') {
-                    introSequence.push({ sender: 'marcus', text: pick([
-                        "Alex, whatever we do this time, we CANNOT just cut the feature like we discussed. The churn would be a disaster.",
-                        "Okay, let's step back. If we cut the config step we alienate our power users. Let's not do that."
-                    ]), delay: delay(2000) });
-                    introSequence.push({ sender: 'sarah', text: pick([
-                        "Marcus is right. My previous recommendation to cut the step carries too much risk. But we still have a 65% drop-off.",
-                        "Agreed. Trimming it causes long-term churn. But the 65% drop-off is still staring us in the face."
-                    ]), delay: delay(2000) });
-                } else if (lastDec === 'BAD_CREATIVE') {
-                    introSequence.push({ sender: 'sarah', text: pick([
-                        "Alex, keeping the step as-is like we considered means we'll miss all our targets. We have to change something.",
-                        "Okay, let's rethink this. If we ignore the drop-off and keep the UX as-is, we fail our Q3 goals."
-                    ]), delay: delay(2000) });
-                    introSequence.push({ sender: 'marcus', text: pick([
-                        "I know, I know. My UX purism might hurt us. But we still can't just delete it. There has to be a better way.",
-                        "Fair point, Sarah. The friction is too high. Let's find a way to fix it without gutting the value prop."
-                    ]), delay: delay(2000) });
-                } else if (lastDec === 'GOOD_PATH') {
-                    introSequence.push({ sender: 'sarah', text: "Adding the 'Skip' button is an okay compromise, but the user base will get too fragmented.", delay: delay(2000) });
-                    introSequence.push({ sender: 'marcus', text: "Agreed. We avoid a disaster, but we don't solve the actual problem. Let's dig deeper this time.", delay: delay(2000) });
-                } else if (lastDec === 'BEST_PATH') {
-                    introSequence.push({ sender: 'sarah', text: "We nailed it last time by investigating the logs and rewriting the UI copy. Let's review why that worked.", delay: delay(2000) });
-                    introSequence.push({ sender: 'marcus', text: "Yeah, the vocabulary fix was perfect. Let's run through the data again just to be sure.", delay: delay(2000) });
-                }
-                
-                introSequence.push({ sender: 'sarah', text: pick([
-                    "So, 60 minutes until exec review. Where do we start this time?",
-                    "Back to square one. What's our first move, Alex?",
-                    "We have the 65% drop-off data. How do you want to play this?"
-                ]), delay: delay(1500) });
-                introSequence.push({ sender: 'action', type: 'choices_intro' });
+                introSequence.push({ sender: 'sarah', text: "Alright, new problem today. Let's make sure we handle this better than the last crisis.", delay: delay(2000) });
+                introSequence.push({ sender: 'marcus', text: "Agreed. Exec review is in 60 minutes. Let's focus.", delay: delay(2000) });
             }
 
-            currentScript = {
-                intro: introSequence,
-                gather1: [
-                    { sender: 'user', text: pick([
-                        "@Sarah pull the FullStory session recordings for the drop-off step. Let's look at the raw tape.",
-                        "Let's look at the actual user sessions. @Sarah, pull the FullStory logs.",
-                        "We need qualitative data. @Sarah, can we see the session replays?"
-                    ]), delay: 500 },
-                    { sender: 'system_prompt', text: 'Fetching recordings... (Time elapsed: 15 mins)', delay: 1500 },
-                    { sender: 'sarah', text: pick([
-                        "I'm watching the replays now. They aren't exhibiting 'overload' behaviors like erratic mouse movements.",
-                        "Looking at the tape... this doesn't look like typical cognitive overload. They aren't scrolling wildly.",
-                    ]), delay: delay(2000) },
-                    { sender: 'sarah', text: "Instead, they are hovering over three labels: 'LDAP Binding', 'SSO Provisioning', and 'Webhooks'. They pause for 30 seconds, then close the tab.", delay: delay(2500) },
-                    { sender: 'action', type: 'scaffold_logs' }
-                ],
-                logs_correct: [
-                    { sender: 'system', text: 'CALIBRATION: Root cause accurately identified. (+1 Insight)', delay: 500 },
-                    { sender: 'user', text: 'They are hovering and clicking specific technical terms, then pausing. They are looking for tooltips or help text. It\'s a vocabulary mismatch.', delay: 500 },
-                    { sender: 'marcus', text: 'Wait... you\'re right. Our target beta users are Marketing Ops, not IT. They don\'t know what "LDAP" means. It\'s a translation issue.', delay: delay(2000) },
-                    { sender: 'sarah', text: 'That makes sense. They aren\'t overwhelmed by options, they just feel stupid because they don\'t know the acronyms.', delay: delay(2000) },
-                    { sender: 'action', type: 'choices_post_gather' }
-                ],
-                logs_incorrect_bug: [
-                    { sender: 'system', text: 'CALIBRATION: Technical assumption registered. Verifying...', delay: 500 },
-                    { sender: 'user', text: 'Rage-clicking means the buttons are broken. We need to file a critical bug report with engineering immediately.', delay: 500 },
-                    { sender: 'marcus', text: 'Actually, those aren\'t buttons. They are just text labels for the form fields. They aren\'t meant to be clickable.', delay: delay(2000) },
-                    { sender: 'sarah', text: 'Exactly. Which means they are clicking them out of frustration because they don\'t understand what the fields are asking for. It\'s a vocabulary issue.', delay: delay(2500) },
-                    { sender: 'action', type: 'choices_post_gather' }
-                ],
-                logs_incorrect_overload: [
-                    { sender: 'system', text: 'CALIBRATION: Confirmation bias detected. Verifying...', delay: 500 },
-                    { sender: 'user', text: 'They are pausing and giving up. It\'s too much information at once. Sarah is right, it\'s cognitive overload.', delay: 500 },
-                    { sender: 'sarah', text: 'Actually, looking closer... if it was overload, wouldn\'t they scroll around looking for an exit? They are fixated specifically on those three words.', delay: delay(2000) },
-                    { sender: 'marcus', text: 'Sarah\'s right. They are stuck on the terminology. Our users are Marketing Ops, not IT. We need to translate "LDAP" into human terms.', delay: delay(2500) },
-                    { sender: 'action', type: 'choices_post_gather' }
-                ],
-                gather2: [
-                    { sender: 'user', text: pick([
-                        "@Sarah pull competitor B2B onboarding benchmarks. Let's see industry standards.",
-                        "What do industry standards look like? @Sarah pull competitor benchmarks.",
-                        "Let's look outside our bubble. @Sarah, any data on competitor onboarding friction?"
-                    ]), delay: 500 },
-                    { sender: 'system_prompt', text: 'Aggregating industry data... (Time elapsed: 15 mins)', delay: 1500 },
-                    { sender: 'sarah', text: 'Benchmarks pulled. High-friction onboarding is actually standard for enterprise tools. A 60% drop-off is roughly the 50th percentile.', delay: delay(2000) },
-                    { sender: 'marcus', text: 'And look at the LTV! Competitors show that users who complete complex setups have a 90% higher lifetime value.', delay: delay(2000) },
-                    { sender: 'action', type: 'scaffold_benchmarks' }
-                ],
-                benchmarks_correct: [
-                    { sender: 'system', text: 'CALIBRATION: Business model accurately mapped. (+1 Insight)', delay: 500 },
-                    { sender: 'user', text: 'Look at the LTV. In B2B Enterprise, friction isn\'t always bad. It acts as a filter, ensuring high-intent buyers get a deeply customized experience.', delay: 500 },
-                    { sender: 'sarah', text: 'I see your point. We shouldn\'t optimize for pure volume if it sacrifices the quality of the activated user.', delay: delay(2000) },
-                    { sender: 'action', type: 'choices_post_gather' }
-                ],
-                benchmarks_incorrect: [
-                    { sender: 'system', text: 'CALIBRATION: Volume prioritization registered.', delay: 500 },
-                    { sender: 'user', text: 'Even if it\'s standard, 65% is too high. Our primary goal right now is top-of-funnel activation volume.', delay: 500 },
-                    { sender: 'marcus', text: 'Optimizing for volume over value is how you build a generic product that no one loves. But you\'re the boss.', delay: delay(2000) },
-                    { sender: 'action', type: 'choices_post_gather' }
-                ],
-                decision_prompt: [
-                    { sender: 'system', text: 'Final Decision Required. The executive review is starting.', delay: 1000 },
-                    { sender: 'action', type: 'choices_decision' }
-                ],
-                pre_mortem: [
-                    { sender: 'system_prompt', text: 'SYSTEM OVERRIDE: Final directive mapped. Please complete mandatory pre-mortem risk assessment before execution.', delay: 800 },
-                    { sender: 'action', type: 'risk_assessment' }
-                ]
-            };
+            // Scenario Specific Intro
+            if (state.scenarioIndex === 0) {
+                // Onboarding Leak
+                introSequence.push(
+                    { sender: 'sarah', text: 'The beta onboarding metrics are in. We have a massive leak. 65% drop-off at "Advanced Configuration". It\'s cognitive overload.', delay: delay(2000) },
+                    { sender: 'sarah', text: 'We need to cut this complex step entirely and default them straight into the basic dashboard to save our Q3 activation targets.', delay: delay(2000) },
+                    { sender: 'marcus', text: 'Hold on. That step customizes the platform to their enterprise workflow. It is the core value prop of our highest tier!', delay: delay(2500) },
+                    { sender: 'marcus', text: 'If we cut it, the tool feels generic. Your data is missing the "why".', delay: delay(2000) },
+                    { sender: 'sarah', text: 'Alex, your call. What do we do?', delay: delay(1500) }
+                );
+            } else {
+                // Pricing Pivot
+                introSequence.push(
+                    { sender: 'sarah', text: 'Server costs for Nova are up 400%. We need to gate the Analytics Dashboard behind the Enterprise tier immediately to stop the bleeding.', delay: delay(2500) },
+                    { sender: 'marcus', text: 'You can\'t do that! Analytics is our core "Aha!" moment. If free users can\'t see their data, they\'ll never upgrade. It kills our product-led growth.', delay: delay(2500) },
+                    { sender: 'sarah', text: 'Alex, we are literally losing money every second. What do we do?', delay: delay(1500) }
+                );
+            }
+            
+            introSequence.push({ sender: 'action', type: 'choices_intro' });
+
+            // Scenario Specific Actions
+            if (state.scenarioIndex === 0) {
+                currentScript = {
+                    intro: introSequence,
+                    gather1: [
+                        { sender: 'user', text: "@Sarah pull the FullStory session recordings for the drop-off step. Let's look at the raw tape.", delay: 500 },
+                        { sender: 'system_prompt', text: 'Fetching recordings... (Time elapsed: 15 mins)', delay: 1500 },
+                        { sender: 'sarah', text: "They aren't exhibiting 'overload' behaviors like erratic mouse movements. Instead, they hover over 'LDAP', 'SSO', and 'Webhooks'. They pause, then close the tab.", delay: delay(2500) },
+                        { sender: 'action', type: 'scaffold_logs' }
+                    ],
+                    logs_correct: [
+                        { sender: 'system', text: 'CALIBRATION: Root cause accurately identified. (+1 Insight)', delay: 500 },
+                        { sender: 'user', text: 'They are hovering over technical terms, then pausing. It\'s a vocabulary mismatch, not feature overload.', delay: 500 },
+                        { sender: 'marcus', text: 'Wait... right. Our beta users are Marketing Ops, not IT. They don\'t know what "LDAP" means.', delay: delay(2000) },
+                        { sender: 'action', type: 'choices_post_gather' }
+                    ],
+                    logs_incorrect_bug: [
+                        { sender: 'system', text: 'CALIBRATION: Technical assumption registered.', delay: 500 },
+                        { sender: 'user', text: 'Rage-clicking means the buttons are broken. File a critical bug report.', delay: 500 },
+                        { sender: 'marcus', text: 'Actually, those are just text labels, not buttons. They are clicking out of frustration because they don\'t understand the words.', delay: delay(2500) },
+                        { sender: 'action', type: 'choices_post_gather' }
+                    ],
+                    logs_incorrect_overload: [
+                        { sender: 'system', text: 'CALIBRATION: Confirmation bias detected.', delay: 500 },
+                        { sender: 'user', text: 'They are pausing and giving up. Sarah is right, it\'s cognitive overload.', delay: 500 },
+                        { sender: 'marcus', text: 'Actually, if it was overload they\'d scroll for an exit. They are fixated on the terminology. They just don\'t know what the words mean.', delay: delay(2500) },
+                        { sender: 'action', type: 'choices_post_gather' }
+                    ],
+                    gather2: [
+                        { sender: 'user', text: "@Sarah pull competitor B2B onboarding benchmarks.", delay: 500 },
+                        { sender: 'system_prompt', text: 'Aggregating industry data... (Time elapsed: 15 mins)', delay: 1500 },
+                        { sender: 'sarah', text: 'High-friction onboarding is actually standard for enterprise tools. 60% drop-off is the 50th percentile.', delay: delay(2000) },
+                        { sender: 'marcus', text: 'And look at the LTV! Competitors show users who complete complex setups have a 90% higher lifetime value.', delay: delay(2000) },
+                        { sender: 'action', type: 'scaffold_benchmarks' }
+                    ],
+                    benchmarks_correct: [
+                        { sender: 'system', text: 'CALIBRATION: Business model accurately mapped. (+1 Insight)', delay: 500 },
+                        { sender: 'user', text: 'In B2B Enterprise, friction acts as a filter, ensuring high-intent buyers get a deeply customized experience.', delay: 500 },
+                        { sender: 'sarah', text: 'I see your point. We shouldn\'t optimize for pure volume if it sacrifices the quality of the activated user.', delay: delay(2000) },
+                        { sender: 'action', type: 'choices_post_gather' }
+                    ],
+                    benchmarks_incorrect: [
+                        { sender: 'system', text: 'CALIBRATION: Volume prioritization registered.', delay: 500 },
+                        { sender: 'user', text: '65% is too high. Our primary goal right now is top-of-funnel activation volume.', delay: 500 },
+                        { sender: 'marcus', text: 'Optimizing for volume over value is how you build a generic product that no one loves. But you\'re the boss.', delay: delay(2000) },
+                        { sender: 'action', type: 'choices_post_gather' }
+                    ]
+                };
+            } else {
+                // Pricing Pivot
+                currentScript = {
+                    intro: introSequence,
+                    gather1: [
+                        { sender: 'user', text: "@Sarah let's look at the server load distribution. Where is the computation actually happening?", delay: 500 },
+                        { sender: 'system_prompt', text: 'Fetching server logs... (Time elapsed: 15 mins)', delay: 1500 },
+                        { sender: 'sarah', text: "Wait... 80% of the load isn't from active free users. It's from dormant legacy accounts running automated cron jobs.", delay: delay(2500) },
+                        { sender: 'action', type: 'scaffold_logs' } // Reusing this key for the first scaffold
+                    ],
+                    logs_correct: [
+                        { sender: 'system', text: 'CALIBRATION: Root cause accurately identified. (+1 Insight)', delay: 500 },
+                        { sender: 'user', text: 'So active free users aren\'t the problem. The dormant accounts are eating our margins.', delay: 500 },
+                        { sender: 'sarah', text: 'Exactly. If we cull the dormant accounts, we can afford to keep Analytics free for the active ones.', delay: delay(2000) },
+                        { sender: 'action', type: 'choices_post_gather' }
+                    ],
+                    logs_incorrect_bug: [
+                        { sender: 'system', text: 'CALIBRATION: Blanket assumption registered.', delay: 500 },
+                        { sender: 'user', text: 'Free users are just too expensive. We still need to gate it.', delay: 500 },
+                        { sender: 'marcus', text: 'But Sarah just said the active users aren\'t the problem! You\'re punishing good users for bad architecture.', delay: delay(2500) },
+                        { sender: 'action', type: 'choices_post_gather' }
+                    ],
+                    logs_incorrect_overload: [
+                        { sender: 'system', text: 'CALIBRATION: Technical distraction registered.', delay: 500 },
+                        { sender: 'user', text: 'We must have a bug in our cron jobs. Have Engineering rewrite the analytics pipeline.', delay: 500 },
+                        { sender: 'sarah', text: 'That would take months. We need to save the Q3 budget right now.', delay: delay(2000) },
+                        { sender: 'action', type: 'choices_post_gather' }
+                    ],
+                    gather2: [
+                        { sender: 'user', text: "Let's review the free-to-paid conversion paths. How important is analytics?", delay: 500 },
+                        { sender: 'system_prompt', text: 'Aggregating conversion data... (Time elapsed: 15 mins)', delay: 1500 },
+                        { sender: 'sarah', text: 'Wow. Users who interact with the Analytics Dashboard are 5x more likely to upgrade within 14 days.', delay: delay(2000) },
+                        { sender: 'marcus', text: 'See! It\'s our primary acquisition driver. If we gate it, our funnel dies.', delay: delay(2000) },
+                        { sender: 'action', type: 'scaffold_benchmarks' }
+                    ],
+                    benchmarks_correct: [
+                        { sender: 'system', text: 'CALIBRATION: Business model accurately mapped. (+1 Insight)', delay: 500 },
+                        { sender: 'user', text: 'Analytics isn\'t a cost center, it\'s a loss leader that drives our Enterprise sales.', delay: 500 },
+                        { sender: 'sarah', text: 'I see your point. Cutting it would save server costs but destroy our revenue pipeline.', delay: delay(2000) },
+                        { sender: 'action', type: 'choices_post_gather' }
+                    ],
+                    benchmarks_incorrect: [
+                        { sender: 'system', text: 'CALIBRATION: Cost prioritization registered.', delay: 500 },
+                        { sender: 'user', text: '5x higher chance is great, but we literally cannot afford the servers. We have to gate it.', delay: 500 },
+                        { sender: 'marcus', text: 'You\'re going to kill the product to save the budget. Typical.', delay: delay(2000) },
+                        { sender: 'action', type: 'choices_post_gather' }
+                    ]
+                };
+            }
         }
-
-        const OUTCOMES = {
-            BAD_DATA: {
-                title: "The Churn Trap", color: "text-red-400", bg: "bg-red-500/10", border: "border-red-500/30",
-                text: "You forced Sarah's data edit. Short-term activation metrics looked great for Q3, but 3-month churn skyrocketed because users never learned how to leverage the tool's true power. Marcus feels his UX expertise was ignored.",
-                debrief: "You assumed quantitative data answers the 'Why', but it only answers the 'What'. By cutting the feature to hit short-term targets, you sacrificed long-term product value and crushed team safety."
-            },
-            BAD_CREATIVE: {
-                title: "The Friction Fire", color: "text-yellow-400", bg: "bg-yellow-500/10", border: "border-yellow-500/30",
-                text: "You ignored the data and kept Marcus's step. Drop-off remained at 65%. The company missed its Q3 activation targets. Sarah's data team feels their quantitative insights are viewed as 'performative'.",
-                debrief: "Creative disagreement is healthy, but ignoring glaring quantitative warning signs is a process failure. You protected the design intent but eroded the data team's psychological safety."
-            },
-            GOOD_PATH: {
-                title: "The Safe Middle", color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/30",
-                text: "You compromised and added a 'Skip' button. It stopped the bleeding on activation metrics, and power users could still configure their workspace. However, the user base is now fragmented.",
-                debrief: "You managed the tension and shipped a workable solution. But a compromise often leaves both sides slightly dissatisfied. True leadership is about finding the underlying truth, not just finding the middle."
-            },
-            BEST_PATH: {
-                title: "Signal Master", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30",
-                text: "By reframing the data, you discovered the real problem wasn't complexity, but clarity. Marcus rewrote the technical tooltips, Sarah validated the new retention curve, and drop-off plummeted.",
-                debrief: "You recognized that data was answering the wrong question. You scaffolded the team to investigate the 'Why', and turned a destructive conflict into a creative collaboration. Masterful."
-            }
-        };
 
         // ── CHAT CORE ENGINE ──
         let chatQueue = [];
@@ -644,6 +769,8 @@
             initAudio();
             document.getElementById('interaction-area').classList.remove('hidden');
             showScreen('screen-play');
+            
+            // Re-read state to ensure we have the correct scenario set
             resetState();
             updateHUD();
             
@@ -657,14 +784,12 @@
             document.getElementById('chat-container').innerHTML = initialChatHTML;
             document.getElementById('choices-list').innerHTML = '';
             
-            let history = JSON.parse(localStorage.getItem('nova_sim_history') || '[]');
-            chatQueue = []; 
-            generateScript(history);
-
+            generateScript();
             queueScenario('intro');
         }
 
         function queueScenario(key) {
+            if(!currentScript[key]) return;
             chatQueue = chatQueue.concat(currentScript[key]);
             if (!isProcessing) processChatQueue();
         }
@@ -833,6 +958,11 @@
             const ia = document.getElementById('interaction-area');
             const cl = document.getElementById('choices-list');
             cl.innerHTML = '';
+            
+            const badge = document.getElementById('interaction-badge');
+            badge.className = "bg-netflix text-white px-1.5 py-0.5 rounded text-[8px] mr-2 uppercase tracking-widest font-bold";
+            badge.innerText = "Required";
+
             ia.classList.add('attention-pulse');
 
             let options = [];
@@ -845,45 +975,68 @@
                 setHeader("Executive Action");
                 
                 if (!state.evidenceGathered.includes('gather1')) {
-                    options.push({ text: "Review Session Logs", cost: "-15 Mins", icon: "video",
+                    const txt = state.scenarioIndex === 0 ? "Review Session Logs" : "Review Server Logs";
+                    options.push({ text: txt, cost: "-15 Mins", icon: "video",
                         action: () => { state.evidenceGathered.push('gather1'); state.timeLeft -= 15; state.ambiguityHeld = true; updateHUD(); clearChoices(); queueScenario('gather1'); }});
                 }
                 if (!state.evidenceGathered.includes('gather2')) {
-                    options.push({ text: "Review Benchmarks", cost: "-15 Mins", icon: "bar-chart",
+                    const txt = state.scenarioIndex === 0 ? "Review Benchmarks" : "Review Upgrade Metrics";
+                    options.push({ text: txt, cost: "-15 Mins", icon: "bar-chart",
                         action: () => { state.evidenceGathered.push('gather2'); state.timeLeft -= 15; state.ambiguityHeld = true; updateHUD(); clearChoices(); queueScenario('gather2'); }});
                 }
                 const hasData = state.evidenceGathered.length > 0;
                 options.push({ text: "Make Final Decision", disabled: !hasData, highlight: false, icon: "gavel",
-                    action: () => { clearChoices(); queueScenario('decision_prompt'); }
+                    action: () => { clearChoices(); renderChoices('choices_decision'); }
                 });
 
             } else if (type === 'scaffold_logs') {
-                setHeader("Interpret User Behavior");
-                options = [
-                    { text: "Rage-clicking = broken UI.", sub: "Assume Technical Issue",
-                        action: () => { clearChoices(); queueScenario('logs_incorrect_bug'); }},
-                    { text: "Pausing = cognitive overload.", sub: "Agree with Original Bias",
-                        action: () => { clearChoices(); queueScenario('logs_incorrect_overload'); }},
-                    { text: "Clicking terms = confusion.", sub: "Identify True Root Cause", highlight: false,
-                        action: () => { state.scaffoldScore++; clearChoices(); queueScenario('logs_correct'); }}
-                ];
+                setHeader("Interpret Data");
+                if (state.scenarioIndex === 0) {
+                    options = [
+                        { text: "Rage-clicking = broken UI.", sub: "Assume Technical Issue", action: () => { clearChoices(); queueScenario('logs_incorrect_bug'); }},
+                        { text: "Pausing = cognitive overload.", sub: "Agree with Original Bias", action: () => { clearChoices(); queueScenario('logs_incorrect_overload'); }},
+                        { text: "Clicking terms = confusion.", sub: "Identify True Root Cause", highlight: false, action: () => { state.scaffoldScore++; clearChoices(); queueScenario('logs_correct'); }}
+                    ];
+                } else {
+                    options = [
+                        { text: "Free users are too expensive. Gate it.", sub: "Blanket Assumption", action: () => { clearChoices(); queueScenario('logs_incorrect_bug'); }},
+                        { text: "We have a bug in cron jobs. Rewrite it.", sub: "Technical Distraction", action: () => { clearChoices(); queueScenario('logs_incorrect_overload'); }},
+                        { text: "Dormant accounts are the real cost driver.", sub: "Identify True Root Cause", highlight: false, action: () => { state.scaffoldScore++; clearChoices(); queueScenario('logs_correct'); }}
+                    ];
+                }
             } else if (type === 'scaffold_benchmarks') {
                 setHeader("Interpret Market Data");
-                options = [
-                    { text: "65% is too high. Optimize volume.", sub: "Prioritize Top-of-Funnel",
-                        action: () => { clearChoices(); queueScenario('benchmarks_incorrect'); }},
-                    { text: "Friction filters for high LTV.", sub: "Understand Business Model", highlight: false,
-                        action: () => { state.scaffoldScore++; clearChoices(); queueScenario('benchmarks_correct'); }}
-                ];
+                if (state.scenarioIndex === 0) {
+                    options = [
+                        { text: "65% is too high. Optimize volume.", sub: "Prioritize Top-of-Funnel", action: () => { clearChoices(); queueScenario('benchmarks_incorrect'); }},
+                        { text: "Friction filters for high LTV.", sub: "Understand Business Model", highlight: false, action: () => { state.scaffoldScore++; clearChoices(); queueScenario('benchmarks_correct'); }}
+                    ];
+                } else {
+                    options = [
+                        { text: "Costs are too high, gate it anyway.", sub: "Prioritize Short-Term Costs", action: () => { clearChoices(); queueScenario('benchmarks_incorrect'); }},
+                        { text: "Analytics drives upgrades, it's an investment.", sub: "Understand Business Model", highlight: false, action: () => { state.scaffoldScore++; clearChoices(); queueScenario('benchmarks_correct'); }}
+                    ];
+                }
             } else if (type === 'choices_decision') {
                 setHeader("Issue Official Directive");
-                options = [
-                    { text: "Cut the configuration step.", sub: "<span class='text-red-400 font-medium group-hover:text-red-600'>Risk:</span> Alienates power users <br><span class='text-emerald-400 font-medium group-hover:text-emerald-700'>Pro:</span> Hits short-term targets", result: 'BAD_DATA' },
-                    { text: "Keep the step as-is.", sub: "<span class='text-red-400 font-medium group-hover:text-red-600'>Risk:</span> Misses activation targets <br><span class='text-emerald-400 font-medium group-hover:text-emerald-700'>Pro:</span> Protects enterprise value", result: 'BAD_CREATIVE' },
-                    { text: "Compromise: Add 'Skip' button.", sub: "<span class='text-red-400 font-medium group-hover:text-red-600'>Risk:</span> Fragments user base <br><span class='text-emerald-400 font-medium group-hover:text-emerald-700'>Pro:</span> Immediate middle ground", result: 'GOOD_PATH' }
-                ];
-                if (state.evidenceGathered.includes('gather1') && state.scaffoldScore > 0) {
-                    options.push({ text: "Reframe: Rewrite UI copy.", sub: "<span class='text-red-400 font-medium group-hover:text-red-600'>Risk:</span> Delays immediate launch <br><span class='text-emerald-400 font-medium group-hover:text-emerald-700'>Pro:</span> Solves root cause", result: 'BEST_PATH', highlight: false });
+                if (state.scenarioIndex === 0) {
+                    options = [
+                        { text: "Cut the configuration step.", sub: "Side with Sarah", result: 'BAD_DATA' },
+                        { text: "Keep the step as-is.", sub: "Side with Marcus", result: 'BAD_CREATIVE' },
+                        { text: "Compromise: Add 'Skip' button.", sub: "Middle Ground", result: 'GOOD_PATH' }
+                    ];
+                    if (state.evidenceGathered.includes('gather1') && state.scaffoldScore > 0) {
+                        options.push({ text: "Reframe: Rewrite UI copy.", sub: "Address vocabulary confusion", result: 'BEST_PATH', highlight: false });
+                    }
+                } else {
+                    options = [
+                        { text: "Gate the Analytics feature.", sub: "Side with Sarah", result: 'BAD_DATA' },
+                        { text: "Keep it free as-is.", sub: "Side with Marcus", result: 'BAD_CREATIVE' },
+                        { text: "Limit Analytics to 7 days.", sub: "Middle Ground", result: 'GOOD_PATH' }
+                    ];
+                    if (state.evidenceGathered.includes('gather1') && state.scaffoldScore > 0) {
+                        options.push({ text: "Reframe: Purge dormant cron jobs.", sub: "Address actual server load", result: 'BEST_PATH', highlight: false });
+                    }
                 }
             } else if (type === 'risk_assessment') {
                 renderRiskAssessment(); return;
@@ -893,8 +1046,21 @@
                 let btn;
                 if (opt.result) {
                     btn = createChoiceButton(opt.text, opt.sub, opt.highlight, () => {
-                        state.pendingDecision = opt.result; clearChoices(); queueScenario('pre_mortem');
-                    }, null, 'alert-triangle', false);
+                        state.pendingDecision = opt.result; 
+                        clearChoices(); 
+                        
+                        // Send the user's decision to the chat immediately
+                        const cmdText = SCENARIOS[state.scenarioIndex].commands[opt.result];
+                        renderBubble('user', cmdText);
+                        scrollToBottom();
+
+                        // Trigger the pre-mortem flow via system prompt
+                        setTimeout(() => {
+                            chatQueue = [{ sender: 'system_prompt', text: 'PRE-MORTEM INITIATED: Before executing this directive, identify its primary business risk.', delay: 800 }, { sender: 'action', type: 'risk_assessment'}];
+                            processChatQueue();
+                        }, 500);
+
+                    }, null, 'send', false);
                 } else {
                     btn = createChoiceButton(opt.text, opt.sub, opt.highlight, opt.action, opt.cost, opt.icon, opt.disabled);
                 }
@@ -909,23 +1075,39 @@
             document.getElementById('choices-list').innerHTML = '';
             document.getElementById('interaction-area').classList.remove('attention-pulse');
             document.querySelector('#interaction-area .title-text').innerText = "Processing...";
+            const badge = document.getElementById('interaction-badge');
+            badge.className = "bg-gray-700 text-white px-1.5 py-0.5 rounded text-[8px] mr-2 uppercase tracking-widest font-bold";
+            badge.innerText = "System";
         }
 
         function renderRiskAssessment() {
             const cl = document.getElementById('choices-list');
             cl.innerHTML = '';
-            document.querySelector('#interaction-area .text-gray-500').innerHTML = `<span class="bg-yellow-500 text-black px-1.5 py-0.5 rounded text-[8px] mr-2 uppercase font-bold tracking-widest">Alert</span> <span class="text-gray-300 uppercase title-text">Confirm Primary Risk</span>`;
             
-            let risks = [];
-            if (state.pendingDecision === 'BAD_DATA')     risks = [{ text: "Risk: We alienate power users and increase churn.", correct: true },  { text: "Risk: We miss our short-term Q3 targets.", correct: false }];
-            if (state.pendingDecision === 'BAD_CREATIVE') risks = [{ text: "Risk: We miss activation targets causing panic.", correct: true },      { text: "Risk: The tool becomes generic and loses value.", correct: false }];
-            if (state.pendingDecision === 'GOOD_PATH')    risks = [{ text: "Risk: We fragment the user base making support harder.", correct: true }, { text: "Risk: Both Sarah and Marcus will resign immediately.", correct: false }];
-            if (state.pendingDecision === 'BEST_PATH')    risks = [{ text: "Risk: Changing copy might not fix complex drop-off.", correct: true },   { text: "Risk: Changing copy will anger enterprise buyers.", correct: false }];
+            const badge = document.getElementById('interaction-badge');
+            badge.className = "bg-yellow-500 text-black px-1.5 py-0.5 rounded text-[8px] mr-2 uppercase tracking-widest font-bold";
+            badge.innerText = "Pre-Mortem";
+            document.querySelector('#interaction-area .title-text').innerText = "Identify the Risk";
+            
+            let risks = SCENARIOS[state.scenarioIndex].risks[state.pendingDecision];
 
             risks.forEach(risk => {
                 const btn = createChoiceButton(risk.text, "", false, () => {
                     if (risk.correct) state.scaffoldScore++;
-                    clearChoices(); resolveOutcome();
+                    clearChoices(); 
+                    
+                    // Render user answering the pre-mortem
+                    renderBubble('user', `My main concern is: ${risk.text}`);
+                    scrollToBottom();
+
+                    setTimeout(() => {
+                        renderBubble('system', "Risk logged. Executing directive.");
+                        scrollToBottom();
+                        setTimeout(() => {
+                            resolveOutcome();
+                        }, 1200);
+                    }, 1000);
+
                 }, null, 'shield-alert', false);
                 cl.appendChild(btn);
             });
@@ -935,7 +1117,7 @@
 
         function resolveOutcome() {
             const resultKey = state.pendingDecision;
-            const outcome   = OUTCOMES[resultKey];
+            const outcome   = SCENARIOS[state.scenarioIndex].outcomes[resultKey];
             state.timeLeft  = 0; updateHUD();
             document.getElementById('interaction-area').classList.add('hidden'); // Hide input area fully
 
@@ -943,15 +1125,6 @@
             let history = JSON.parse(localStorage.getItem('nova_sim_history') || '[]');
             history.push({ decision: resultKey, title: outcome.title, score: state.scaffoldScore });
             localStorage.setItem('nova_sim_history', JSON.stringify(history));
-
-            const commands = {
-                BAD_DATA:     "Team, cut the configuration step to save activation targets.",
-                BAD_CREATIVE: "Team, keep the step as-is. We cannot lose the value prop.",
-                GOOD_PATH:    "Team, let's compromise. Add a 'Skip Setup' button to the flow.",
-                BEST_PATH:    "Team, the issue isn't complexity, it's clarity. Marcus, rewrite the tooltips based on Sarah's log analysis."
-            };
-            renderBubble('user', commands[resultKey]);
-            scrollToBottom();
 
             setTimeout(() => {
                 const container = document.getElementById('chat-container');
@@ -982,13 +1155,13 @@
                                 <p class="text-[13px] font-bold ${calColor}">${calText}</p>
                             </div>
                         </div>
-                        <button onclick="startGame()" class="w-full mt-4 bg-white text-black hover:bg-gray-200 font-bold py-2.5 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-white/30 text-[13px]">Try Another Strategy</button>
+                        <button onclick="location.reload()" class="w-full mt-4 bg-white text-black hover:bg-gray-200 font-bold py-2.5 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-white/30 text-[13px]">Try Another Strategy</button>
                     </div>
                 `;
                 container.appendChild(wrapper);
                 if (typeof lucide !== 'undefined') lucide.createIcons();
                 scrollToBottom();
-            }, 1500);
+            }, 500);
         }
 
         document.addEventListener('DOMContentLoaded', initializeApp);
