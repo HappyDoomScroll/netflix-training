@@ -262,12 +262,14 @@
                     <div class="w-full max-w-md mx-auto mt-6 bg-[#111111] p-6 sm:p-8 rounded-2xl border border-white/10 shadow-2xl relative overflow-hidden">
                         <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full blur-[50px] opacity-20 bg-netflix"></div>
                         <div class="relative z-10 space-y-5 text-left">
-                            <div class="flex items-center justify-between mb-2">
-                                <div>
-                                    <h3 class="text-white font-bold text-base tracking-tight">System Authorization</h3>
-                                    <p class="text-[10px] text-gray-500 uppercase tracking-widest mt-0.5">NovaCorp Comm Link</p>
+                            <div class="flex items-start justify-between mb-2">
+                                <div class="pr-4">
+                                    <h3 class="text-white font-bold text-base tracking-tight">Join Workspace</h3>
+                                    <p class="text-[11px] text-gray-400 mt-1.5 leading-relaxed">Set up your profile to enter <b class="text-gray-200">#proj-nova-crisis</b>. The team needs to know who's stepping in to lead.</p>
                                 </div>
-                                <i data-lucide="lock" class="w-4 h-4 text-netflix"></i>
+                                <div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center shrink-0 border border-white/10">
+                                    <i data-lucide="hash" class="w-4 h-4 text-gray-400"></i>
+                                </div>
                             </div>
                             
                             <div class="flex gap-3">
@@ -282,7 +284,7 @@
                             </div>
 
                             <button id="btn-start" onclick="startGame()" style="color:#000 !important;" class="apple-btn w-full bg-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-gray-200 shadow-[0_0_20px_rgba(255,255,255,0.1)] focus:outline-none focus:ring-2 focus:ring-white/30 mt-2">
-                                <span style="color:#000 !important;">Authorize & Join Team Channel</span>
+                                <span style="color:#000 !important;">Join Team Channel</span>
                             </button>
                         </div>
                     </div>
@@ -348,7 +350,9 @@
                             <!-- Player -->
                             <div class="flex items-center space-x-2 px-2 py-1 rounded hover:bg-white/5 cursor-pointer">
                                 <div class="relative">
-                                    <img id="sidebar-user" class="w-5 h-5 rounded object-cover character-img" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150" alt="User">
+                                    <div class="w-5 h-5 rounded overflow-hidden">
+                                        <img id="sidebar-user" class="w-full h-full object-cover character-img blur-[1px] opacity-80 scale-110" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150" alt="User">
+                                    </div>
                                     <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 border border-black rounded-full"></div>
                                 </div>
                                 <span id="dm-user-name" class="text-[13px] text-gray-300 truncate">Alex Rivera <span class="text-gray-500 ml-1 text-[10px]">(you)</span></span>
@@ -386,9 +390,11 @@
                         </div>
                         <div class="flex items-center gap-4 text-gray-400">
                             <div class="flex -space-x-2">
-                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150&h=150" class="w-6 h-6 rounded border border-[#141414] character-img">
-                                <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=150&h=150" class="w-6 h-6 rounded border border-[#141414] character-img">
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150" class="w-6 h-6 rounded border border-[#141414] character-img">
+                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150&h=150" class="w-6 h-6 rounded border border-[#141414] character-img relative z-10">
+                                <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=150&h=150" class="w-6 h-6 rounded border border-[#141414] character-img relative z-20">
+                                <div class="w-6 h-6 rounded border border-[#141414] relative z-30 overflow-hidden bg-white/10">
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150" class="w-full h-full object-cover character-img blur-[1px] opacity-80 scale-110">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -719,16 +725,16 @@
                 // Onboarding Leak
                 introSequence.push(
                     { sender: 'sarah', text: `For my update: The beta onboarding metrics just came in. We have a massive leak. 65% drop-off at "Advanced Configuration".`, delay: delay(2000) },
-                    { sender: 'sarah', text: `It looks like cognitive overload. We need to cut this complex step entirely and default them straight into the basic dashboard to save our Q3 activation targets.`, delay: delay(2500) },
-                    { sender: 'marcus', text: `Hold on. That step customizes the platform to their enterprise workflow. It is the core value prop of our highest tier!`, delay: delay(2500) },
+                    { sender: 'sarah', text: `It looks like cognitive overload—basically, users are hitting a wall of complex information and freezing up. We need to cut this complex step entirely and default them straight into the basic dashboard to save our Q3 activation targets.`, delay: delay(3000) },
+                    { sender: 'marcus', text: `Hold on. That step customizes the platform to their specific enterprise workflow. It is the core reason big companies pay for our highest tier!`, delay: delay(2500) },
                     { sender: 'marcus', text: `If we cut it, the tool feels generic. Your data is missing the "why".`, delay: delay(2000) },
                     { sender: 'sarah', text: `${state.firstName}, you're the Product Lead. What's our play here?`, delay: delay(1500) }
                 );
             } else {
                 // Pricing Pivot
                 introSequence.push(
-                    { sender: 'sarah', text: `My update is a red alert: Server costs for Nova are up 400%. We need to gate the Analytics Dashboard behind the Enterprise tier immediately to stop the bleeding.`, delay: delay(2500) },
-                    { sender: 'marcus', text: `You can't do that! Analytics is our core "Aha!" moment. If free users can't see their data, they'll never upgrade. It kills our product-led growth.`, delay: delay(2500) },
+                    { sender: 'sarah', text: `My update is a red alert: Server costs for Nova are up 400%. We need to gate the Analytics Dashboard behind the Enterprise tier—make them pay to see it—immediately to stop the bleeding.`, delay: delay(3000) },
+                    { sender: 'marcus', text: `You can't do that! Analytics is our core "Aha!" moment—the exact feature that makes free users realize the tool is worth paying for. It drives our product-led growth.`, delay: delay(3000) },
                     { sender: 'sarah', text: `${state.firstName}, we are literally losing money every second. What do we do?`, delay: delay(1500) }
                 );
             }
@@ -740,14 +746,14 @@
                 currentScript = {
                     intro: introSequence,
                     gather1: [
-                        { sender: 'user', text: `@Sarah pull the FullStory session recordings for the drop-off step. Let's look at the raw tape.`, delay: 500 },
+                        { sender: 'user', text: `@Sarah pull the FullStory session recordings... Let's look at the raw tape to see exactly where their mice are moving and clicking.`, delay: 500 },
                         { sender: 'system_prompt', text: 'Fetching recordings... (Time elapsed: 15 mins)', delay: 1500 },
-                        { sender: 'sarah', text: `They aren't exhibiting 'overload' behaviors like erratic mouse movements. Instead, they hover over 'LDAP', 'SSO', and 'Webhooks'. They pause, then close the tab.`, delay: delay(2500) },
+                        { sender: 'sarah', text: `They aren't exhibiting 'overload' behaviors like erratic mouse movements. Instead, they hover over 'LDAP Binding', 'SSO Provisioning', and 'Webhooks'—heavy IT networking terms. They pause, then close the tab.`, delay: delay(2500) },
                         { sender: 'action', type: 'scaffold_logs' }
                     ],
                     logs_correct: [
                         { sender: 'system', text: 'CALIBRATION: Root cause accurately identified. (+1 Insight)', delay: 500 },
-                        { sender: 'user', text: 'They are hovering over technical terms, then pausing. It\'s a vocabulary mismatch, not feature overload.', delay: 500 },
+                        { sender: 'user', text: 'They are hovering over technical terms, then pausing. It\'s a vocabulary mismatch, not feature overload. They just don\'t know the jargon.', delay: 500 },
                         { sender: 'marcus', text: 'Wait... right. Our beta users are Marketing Ops, not IT. They don\'t know what "LDAP" means.', delay: delay(2000) },
                         { sender: 'action', type: 'choices_post_gather' }
                     ],
@@ -764,21 +770,21 @@
                         { sender: 'action', type: 'choices_post_gather' }
                     ],
                     gather2: [
-                        { sender: 'user', text: `@Sarah pull competitor B2B onboarding benchmarks.`, delay: 500 },
+                        { sender: 'user', text: `@Sarah pull competitor B2B onboarding benchmarks. Let's see what is normal for our industry.`, delay: 500 },
                         { sender: 'system_prompt', text: 'Aggregating industry data... (Time elapsed: 15 mins)', delay: 1500 },
-                        { sender: 'sarah', text: 'High-friction onboarding is actually standard for enterprise tools. 60% drop-off is the 50th percentile.', delay: delay(2000) },
-                        { sender: 'marcus', text: 'And look at the LTV! Competitors show users who complete complex setups have a 90% higher lifetime value.', delay: delay(2000) },
+                        { sender: 'sarah', text: 'High-friction onboarding is actually standard for enterprise tools. A 60% drop-off is the 50th percentile, meaning it\'s normal for it to be hard to get started.', delay: delay(2000) },
+                        { sender: 'marcus', text: 'And look at the LTV (Lifetime Value)! Competitors show users who complete complex setups stay subscribed longer and spend 90% more money.', delay: delay(2000) },
                         { sender: 'action', type: 'scaffold_benchmarks' }
                     ],
                     benchmarks_correct: [
                         { sender: 'system', text: 'CALIBRATION: Business model accurately mapped. (+1 Insight)', delay: 500 },
-                        { sender: 'user', text: 'In B2B Enterprise, friction acts as a filter, ensuring high-intent buyers get a deeply customized experience.', delay: 500 },
+                        { sender: 'user', text: 'In B2B Enterprise, friction acts as a filter. It ensures high-intent buyers—the ones who really need the tool—get a deeply customized experience.', delay: 500 },
                         { sender: 'sarah', text: 'I see your point. We shouldn\'t optimize for pure volume if it sacrifices the quality of the activated user.', delay: delay(2000) },
                         { sender: 'action', type: 'choices_post_gather' }
                     ],
                     benchmarks_incorrect: [
                         { sender: 'system', text: 'CALIBRATION: Volume prioritization registered.', delay: 500 },
-                        { sender: 'user', text: '65% is too high. Our primary goal right now is top-of-funnel activation volume.', delay: 500 },
+                        { sender: 'user', text: '65% is too high. Our primary goal right now is top-of-funnel activation volume—just getting as many people through the door as possible.', delay: 500 },
                         { sender: 'marcus', text: 'Optimizing for volume over value is how you build a generic product that no one loves. But you\'re the boss.', delay: delay(2000) },
                         { sender: 'action', type: 'choices_post_gather' }
                     ]
@@ -788,9 +794,9 @@
                 currentScript = {
                     intro: introSequence,
                     gather1: [
-                        { sender: 'user', text: `@Sarah let's look at the server load distribution. Where is the computation actually happening?`, delay: 500 },
+                        { sender: 'user', text: `@Sarah let's look at the server load distribution. Where is the heavy computation actually happening in the backend?`, delay: 500 },
                         { sender: 'system_prompt', text: 'Fetching server logs... (Time elapsed: 15 mins)', delay: 1500 },
-                        { sender: 'sarah', text: `Wait... 80% of the load isn't from active free users. It's from dormant legacy accounts running automated cron jobs.`, delay: delay(2500) },
+                        { sender: 'sarah', text: `Wait... 80% of the load isn't from active free users. It's from dormant legacy accounts running automated background tasks (cron jobs) that no one is even looking at.`, delay: delay(3000) },
                         { sender: 'action', type: 'scaffold_logs' }
                     ],
                     logs_correct: [
@@ -807,20 +813,20 @@
                     ],
                     logs_incorrect_overload: [
                         { sender: 'system', text: 'CALIBRATION: Technical distraction registered.', delay: 500 },
-                        { sender: 'user', text: 'We must have a bug in our cron jobs. Have Engineering rewrite the analytics pipeline.', delay: 500 },
+                        { sender: 'user', text: 'We must have a bug in our background tasks. Have Engineering rewrite the analytics pipeline.', delay: 500 },
                         { sender: 'sarah', text: 'That would take months. We need to save the Q3 budget right now.', delay: delay(2000) },
                         { sender: 'action', type: 'choices_post_gather' }
                     ],
                     gather2: [
-                        { sender: 'user', text: `Let's review the free-to-paid conversion paths. How important is analytics?`, delay: 500 },
+                        { sender: 'user', text: `Let's review the free-to-paid conversion paths. How exactly does using Analytics lead to a paid upgrade?`, delay: 500 },
                         { sender: 'system_prompt', text: 'Aggregating conversion data... (Time elapsed: 15 mins)', delay: 1500 },
                         { sender: 'sarah', text: 'Wow. Users who interact with the Analytics Dashboard are 5x more likely to upgrade within 14 days.', delay: delay(2000) },
-                        { sender: 'marcus', text: 'See! It\'s our primary acquisition driver. If we gate it, our funnel dies.', delay: delay(2000) },
+                        { sender: 'marcus', text: 'See! It\'s our primary acquisition driver—the main reason people decide to sign up. If we gate it, our sales funnel dies.', delay: delay(2500) },
                         { sender: 'action', type: 'scaffold_benchmarks' }
                     ],
                     benchmarks_correct: [
                         { sender: 'system', text: 'CALIBRATION: Business model accurately mapped. (+1 Insight)', delay: 500 },
-                        { sender: 'user', text: 'Analytics isn\'t a cost center, it\'s a loss leader that drives our Enterprise sales.', delay: 500 },
+                        { sender: 'user', text: 'Analytics isn\'t just a cost center, it\'s a loss leader. We lose money on it intentionally because it drives our massive Enterprise sales.', delay: 500 },
                         { sender: 'sarah', text: 'I see your point. Cutting it would save server costs but destroy our revenue pipeline.', delay: delay(2000) },
                         { sender: 'action', type: 'choices_post_gather' }
                     ],
@@ -946,11 +952,12 @@
             } else {
                 wrapper.className = "flex items-start space-x-3 w-full slack-message p-2 -mx-2 rounded fade-in-up";
                 
-                let imgSrc, name, nameColor;
+                let imgSrc, name, nameColor, extraImgClass = '';
                 if (sender === 'user') {
                     imgSrc = imgUserUrl;
                     name = `${state.firstName} ${state.lastName}`;
                     nameColor = 'text-white';
+                    extraImgClass = 'blur-[1px] opacity-80 scale-110';
                 } else if (sender === 'sarah') {
                     imgSrc = imgSarahUrl;
                     name = 'Sarah Jenkins';
@@ -963,7 +970,7 @@
 
                 wrapper.innerHTML = `
                     <div class="w-9 h-9 min-w-[36px] min-h-[36px] shrink-0 rounded bg-white/5 overflow-hidden">
-                        <img src="${imgSrc}" alt="${name}" class="w-full h-full object-cover character-img" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzMzMyIvPjwvc3ZnPg=='">
+                        <img src="${imgSrc}" alt="${name}" class="w-full h-full object-cover character-img ${extraImgClass}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzMzMyIvPjwvc3ZnPg=='">
                     </div>
                     <div class="flex flex-col min-w-0 flex-1 pt-0.5">
                         <div class="flex items-baseline space-x-2 mb-0.5">
