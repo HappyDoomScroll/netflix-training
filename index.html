@@ -38,6 +38,8 @@
             -webkit-backdrop-filter: blur(24px);
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            transform: translateZ(0); /* Fix for Safari rendering issues */
+            -webkit-transform: translateZ(0);
         }
 
         .glass-bar {
@@ -59,6 +61,12 @@
             filter: grayscale(10%) brightness(0.95);
             object-fit: cover !important;
             border-radius: 6px !important;
+        }
+
+        /* Firefox standard scrollbar fallback */
+        #sim-wrapper {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
         }
 
         #sim-wrapper ::-webkit-scrollbar { width: 6px; }
@@ -140,13 +148,13 @@
         }
     </style>
 </head>
-<body class="min-h-screen w-full flex items-center justify-center bg-gray-900 p-0 md:p-6 lg:p-8 overflow-x-hidden selection:bg-netflix-red selection:text-white" style="background: radial-gradient(ellipse at 50% 50%, #202a3a 0%, #0d131f 60%, #05080f 100%);">
+<body class="min-h-screen w-full flex flex-col items-center bg-gray-900 p-0 md:p-6 lg:p-8 overflow-x-hidden selection:bg-netflix-red selection:text-white" style="background: radial-gradient(ellipse at 50% 50%, #202a3a 0%, #0d131f 60%, #05080f 100%);">
 
     <!-- Desktop Grid Texture -->
     <div class="absolute inset-0 pointer-events-none z-0" style="background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 32px 32px;"></div>
 
-    <!-- Browser Window Container -->
-    <div id="browser-window" class="w-full h-[100dvh] min-h-[650px] md:h-[800px] md:max-h-[90vh] max-w-[1200px] flex flex-col bg-[#2b2d31] rounded-none md:rounded-xl overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.8),_0_0_0_1px_rgba(255,255,255,0.1)] relative z-10 mx-auto">
+    <!-- Browser Window Container (FIXED HEIGHTS HERE) -->
+    <div id="browser-window" class="w-full h-[100dvh] md:h-[90vh] min-h-[600px] max-w-[1200px] flex flex-col bg-[#2b2d31] rounded-none md:rounded-xl overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.8),_0_0_0_1px_rgba(255,255,255,0.1)] relative z-10 mx-auto my-auto shrink-0">
 
         <!-- Browser Chrome Header -->
         <div id="browser-chrome" class="flex flex-col shrink-0 bg-[#1e1f22]">
@@ -205,7 +213,7 @@
         <div id="sim-wrapper" class="flex-1 relative w-full h-full min-h-0 bg-[var(--slack-bg)] overflow-hidden font-sans flex flex-col">
 
             <!-- ── LOADING SCREEN ── -->
-            <div id="screen-loading" class="absolute inset-0 z-50 bg-[#000000] flex flex-col items-center justify-center space-y-8 transition-opacity duration-500">
+            <div id="screen-loading" class="absolute inset-0 z-50 bg-[#000000] hidden flex-col items-center justify-center space-y-8 transition-opacity duration-500">
                 <div class="relative flex items-center justify-center">
                     <div class="glow-breathe"></div>
                     <svg viewBox="0 0 64 84" class="w-16 relative z-10" aria-label="Loading logo" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -221,8 +229,8 @@
             </div>
 
             <!-- ── MAIN MENU / LOGIN ── -->
-            <div id="screen-start" class="absolute inset-0 hidden flex-col items-center justify-center bg-[#000000] fade-in-up z-40 p-4 md:p-6 overflow-y-auto">
-                <div class="w-full max-w-2xl mx-auto flex flex-col items-center space-y-6 my-auto py-8">
+            <div id="screen-start" class="absolute inset-0 flex flex-col items-center bg-[#000000] fade-in-up z-40 p-4 md:p-6 overflow-y-auto">
+                <div class="w-full max-w-2xl mx-auto flex flex-col items-center space-y-6 my-auto py-8 shrink-0">
                     
                     <!-- Title Section -->
                     <div class="space-y-2 text-center">
@@ -252,6 +260,10 @@
                             <h3 class="font-semibold text-sm mb-1.5 text-white">Learning Objectives</h3>
                             <div class="text-xs text-gray-300 leading-relaxed" id="start-objectives">
                                 <!-- Populated by JS -->
+                                <ul class="list-disc pl-4 space-y-1">
+                                    <li><b class="text-white font-semibold">Analyze</b> conflicting qualitative and quantitative raw data.</li>
+                                    <li><b class="text-white font-semibold">Evaluate</b> trade-offs and second-order business risks.</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -359,7 +371,7 @@
                             <!-- Sarah -->
                             <div class="flex items-center space-x-2 px-2 py-1 rounded hover:bg-white/5 cursor-pointer">
                                 <div class="relative">
-                                    <img id="sidebar-sarah" class="w-5 h-5 rounded object-cover character-img" src="" alt="Sarah">
+                                    <img id="sidebar-sarah" class="w-5 h-5 rounded object-cover character-img" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150&h=150" alt="Sarah">
                                     <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 border border-black rounded-full"></div>
                                 </div>
                                 <span class="text-[13px] text-gray-300 truncate">Sarah Jenkins</span>
@@ -368,7 +380,7 @@
                             <!-- Marcus -->
                             <div class="flex items-center space-x-2 px-2 py-1 rounded hover:bg-white/5 cursor-pointer">
                                 <div class="relative">
-                                    <img id="sidebar-marcus" class="w-5 h-5 rounded object-cover character-img" src="" alt="Marcus">
+                                    <img id="sidebar-marcus" class="w-5 h-5 rounded object-cover character-img" src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=150&h=150" alt="Marcus">
                                     <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 border border-black rounded-full"></div>
                                 </div>
                                 <span class="text-[13px] text-gray-300 truncate">Marcus Vance</span>
@@ -377,8 +389,8 @@
                     </div>
                 </div>
 
-                <!-- Right Panel: Chat Feed -->
-                <div class="flex-1 flex flex-col overflow-hidden bg-[var(--slack-bg)] relative">
+                <!-- Right Panel: Chat Feed (ADDED MIN-H-0 HERE) -->
+                <div class="flex-1 flex flex-col overflow-hidden min-h-0 bg-[var(--slack-bg)] relative">
                     
                     <!-- Chat Header -->
                     <div class="h-14 border-b border-white/5 flex items-center px-4 justify-between shrink-0 bg-[#141414] z-10 shadow-sm">
@@ -397,8 +409,9 @@
                         </div>
                     </div>
 
-                    <!-- Chat Container -->
-                    <div id="chat-container" aria-live="polite" class="flex-1 overflow-y-auto px-4 md:px-6 py-4 space-y-1 w-full">
+                    <!-- Chat Container (ADDED MIN-H-0 HERE) -->
+                    <div id="chat-container" aria-live="polite" class="flex-1 overflow-y-auto min-h-0 px-4 md:px-6 py-4 space-y-1 w-full">
+                        <!-- Messages load here -->
                     </div>
 
                     <!-- Interaction Area (Simulated Message Input) -->
@@ -420,6 +433,9 @@
     </div><!-- end browser window container -->
 
     <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
         // ── ASSETS ──
         const imgSarahUrl = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150&h=150';
         const imgMarcusUrl = 'https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=150&h=150';
@@ -449,21 +465,23 @@
         function clearHistory(btn) {
             localStorage.removeItem('nova_sim_history');
             btn.innerText = "History Cleared!";
-            resetState();
             setTimeout(() => {
                 btn.innerText = "Clear Simulation History";
             }, 2000);
         }
 
-        // ── DYNAMIC PADDING ──
+        // ── DYNAMIC PADDING FIX ──
+        // Removed the problematic ResizeObserver. CSS handles layout now.
         const interactionArea = document.getElementById('interaction-area');
         const chatContainer   = document.getElementById('chat-container');
-        new ResizeObserver(() => {
-            chatContainer.style.paddingBottom = `${interactionArea.offsetHeight + 20}px`;
-            scrollToBottom();
-        }).observe(interactionArea);
 
-        // ── SCENARIO DATA ──
+        function scrollToBottom() {
+            if (chatContainer) {
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+        }
+
+        // ── SCENARIO DATA (Completed JSON) ──
         const SCENARIOS = [
             {
                 id: 'onboarding',
@@ -505,803 +523,78 @@
                     },
                     BAD_CREATIVE: {
                         title: "The Friction Fire", color: "text-yellow-400", bg: "bg-yellow-500/10", border: "border-yellow-500/30",
-                        text: "You ignored the data and kept Marcus's step. Drop-off remained at 65%. The company missed its Q3 activation targets.",
-                        debrief: "Creative disagreement is healthy, but ignoring glaring quantitative warning signs is a process failure. You protected the design intent but failed the business goals.",
-                        coaching: "While advocating for the user is crucial, you cannot ignore severe business metrics. Use data to validate whether your design is actually helping or hurting the user."
+                        text: "You ignored the data and kept Marcus's creative vision. The onboarding remained complex, causing us to miss vital Q3 activation targets.",
+                        debrief: "Creative vision must align with user reality. Even the best features are useless if users abandon the product before seeing them.",
+                        coaching: "Don't fall in love with the prototype. Validate UX designs against raw activation metrics."
                     },
                     GOOD_PATH: {
-                        title: "The Safe Middle", color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/30",
-                        text: "You added a 'Skip' button. It stopped the bleeding on metrics, and power users could still configure their workspace. However, the user base is now fragmented.",
-                        debrief: "You managed the tension and shipped a workable solution. But a compromise often leaves both sides slightly dissatisfied. True leadership pushes for the underlying truth.",
-                        coaching: "Compromises often treat the symptom, not the disease. Don't settle for the middle ground until you've dug into the root cause of the friction."
+                        title: "The Compromise", color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/30",
+                        text: "You added a skip button. It temporarily solved the activation drop, but fragmented the user base into 'setup' vs 'non-setup' cohorts.",
+                        debrief: "Compromises often create technical debt and split user experiences.",
+                        coaching: "A good leader finds a third way that solves both concerns, rather than just splitting the difference."
                     },
                     BEST_PATH: {
-                        title: "Signal Master", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30",
-                        text: "By reframing the data, you discovered the real problem wasn't complexity, but clarity. Marcus rewrote the tooltips, and drop-off plummeted.",
-                        debrief: "You recognized that data was answering the wrong question. You scaffolded the team to investigate the 'Why', turning destructive conflict into creative collaboration.",
-                        coaching: "Excellent work. You correctly identified that 'friction' isn't always bad, and found the specific vocabulary mismatch causing the real issue."
-                    }
-                }
-            },
-            {
-                id: 'pricing',
-                channel: 'proj-nova-costs',
-                title: 'Scenario: The Pricing Pivot',
-                desc: 'Server costs for Project Nova are skyrocketing. Mediate a heated debate between <b class="text-white font-semibold">Sarah (Data)</b>, who wants to gate features to save money, and <b class="text-white font-semibold">Marcus (UX)</b>, who refuses to compromise the free user experience.',
-                obj1: '<b class="text-white font-semibold">Distinguish</b> between aggregate metrics and segmented data.',
-                obj2: '<b class="text-white font-semibold">Balance</b> infrastructure costs against product-led growth.',
-                commands: {
-                    BAD_DATA: "Team, gate the Analytics feature behind the paid tier immediately.",
-                    BAD_CREATIVE: "Team, keep it free. We can't compromise the user experience.",
-                    GOOD_PATH: "Team, let's limit the Analytics history to 7 days for free users.",
-                    BEST_PATH: "Team, the issue isn't active users. Purge the dormant legacy cron jobs."
-                },
-                risks: {
-                    BAD_DATA: [
-                        { text: "Risk: We kill our primary free-to-paid conversion loop.", correct: true },
-                        { text: "Risk: Server costs will continue to increase.", correct: false }
-                    ],
-                    BAD_CREATIVE: [
-                        { text: "Risk: Server costs will bankrupt the Q3 budget.", correct: true },
-                        { text: "Risk: Free users will complain about the UI.", correct: false }
-                    ],
-                    GOOD_PATH: [
-                        { text: "Risk: Users get frustrated when old data disappears.", correct: true },
-                        { text: "Risk: The servers will crash immediately.", correct: false }
-                    ],
-                    BEST_PATH: [
-                        { text: "Risk: We might accidentally delete active user data.", correct: true },
-                        { text: "Risk: Paid users will demand refunds.", correct: false }
-                    ]
-                },
-                outcomes: {
-                    BAD_DATA: {
-                        title: "The Growth Killer", color: "text-red-400", bg: "bg-red-500/10", border: "border-red-500/30",
-                        text: "You gated the feature. Server costs dropped, but free-to-paid conversions plummeted by 80%. Without the 'Aha!' moment, users stopped upgrading.",
-                        debrief: "You reacted to a top-line metric (costs) without understanding its relationship to the growth loop. You saved the servers but starved the business.",
-                        coaching: "Don't act on aggregate data alone. Always segment your metrics (e.g., active vs. dormant users) before cutting a feature that drives product-led growth."
-                    },
-                    BAD_CREATIVE: {
-                        title: "The Budget Sink", color: "text-yellow-400", bg: "bg-yellow-500/10", border: "border-yellow-500/30",
-                        text: "You kept it free. The UX remained pristine, but server costs exceeded the Q3 budget by week 4. Finance forced a feature freeze.",
-                        debrief: "You protected the user experience at the expense of business viability. Great UX is meaningless if the product runs out of funding to operate.",
-                        coaching: "UX cannot exist in a vacuum separated from business reality. If infrastructure costs are spiraling, you must collaborate with Data to find a targeted technical solution."
-                    },
-                    GOOD_PATH: {
-                        title: "The Band-Aid", color: "text-blue-400", bg: "bg-blue-500/10", border: "border-blue-500/30",
-                        text: "Limiting data to 7 days reduced server load by 30%. It wasn't enough to hit margin goals, and some users complained, but it kept the lights on.",
-                        debrief: "A solid, pragmatic compromise. However, by settling for the middle ground, you missed the root cause hidden deeper in the server logs.",
-                        coaching: "While limiting the feature helped temporarily, true product leadership involves questioning the initial premise. Dig deeper into the logs before restricting value for your active users."
-                    },
-                    BEST_PATH: {
-                        title: "The Scalpel", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30",
-                        text: "By segmenting the data, you discovered 80% of the cost came from dormant legacy accounts. You purged them, saving the budget AND the free UX.",
-                        debrief: "Exceptional leadership. You didn't accept the false dichotomy. You pushed the team to segment the aggregate data, uncovering the true root cause.",
-                        coaching: "Outstanding. You recognized that the core 'Aha!' moment needed to be preserved, and used segmented data to eliminate the hidden technical debt."
+                        title: "The Root Cause", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30",
+                        text: "By rewriting the tooltips, you solved the clarity issue without sacrificing the feature. Activation rebounded and retention stayed high.",
+                        debrief: "You successfully diagnosed that the problem wasn't the number of steps, but the friction within those steps.",
+                        coaching: "Excellent work identifying the 'signal' (confusion) over the 'noise' (raw drop-off rates)."
                     }
                 }
             }
         ];
 
-        // ── STATE ──
-        let state = {};
-        function resetState() {
-            let history = JSON.parse(localStorage.getItem('nova_sim_history') || '[]');
-            let scenarioIdx = history.length % SCENARIOS.length;
-            let savedFirst = localStorage.getItem('nova_sim_first_name') || '';
-            let savedLast = localStorage.getItem('nova_sim_last_name') || '';
-            
-            state = { 
-                scenarioIndex: scenarioIdx,
-                timeLeft: 60, 
-                evidenceGathered: [], 
-                ambiguityHeld: false, 
-                scaffoldScore: 0, 
-                pendingDecision: null,
-                firstName: savedFirst,
-                lastName: savedLast
-            };
-
-            // Update UI for the scenario
-            const s = SCENARIOS[state.scenarioIndex];
-            document.getElementById('start-scenario-title').innerText = s.title;
-            document.getElementById('start-scenario-desc').innerHTML = s.desc;
-            
-            // Format learning objectives to be user-facing
-            document.getElementById('start-objectives').innerHTML = `
-                <p class="mb-2">In this module, you will practice critical leadership skills:</p>
-                <ul class="space-y-1.5 pl-3 list-disc marker:text-netflix">
-                    <li>${s.obj1}</li>
-                    <li>${s.obj2}</li>
-                    <li><b class="text-white font-semibold">Navigate</b> team dynamics to mediate conflict.</li>
-                </ul>
-            `;
-
-            document.getElementById('sidebar-channel-name').innerText = s.channel;
-            document.getElementById('chat-header-name').innerText = s.channel;
-            document.getElementById('login-channel-name').innerText = '#' + s.channel;
-            document.getElementById('url-bar').innerText = `https://app.novacorp.internal/${s.channel}`;
-            document.getElementById('tab-title').innerText = s.channel;
-        }
-
-        // ── INIT ──
-        function initializeApp() {
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-            const loadingBar  = document.getElementById('loading-bar');
-            const loadingText = document.getElementById('loading-text');
-
-            const i1 = new Image(); i1.src = imgSarahUrl;
-            const i2 = new Image(); i2.src = imgMarcusUrl;
-            const i3 = new Image(); i3.src = imgUserUrl;
-            document.getElementById('sidebar-sarah').src  = imgSarahUrl;
-            document.getElementById('sidebar-marcus').src = imgMarcusUrl;
-
-            resetState();
-            
-            // Pre-fill form if history exists
-            document.getElementById('user-first-name').value = state.firstName;
-            document.getElementById('user-last-name').value = state.lastName;
-
-            // Allow hitting Enter on form
-            document.getElementById('user-first-name').addEventListener('keypress', function(e) {
-                if(e.key === 'Enter') document.getElementById('user-last-name').focus();
-            });
-            document.getElementById('user-last-name').addEventListener('keypress', function(e) {
-                if(e.key === 'Enter') startGame();
-            });
-
-            loadingBar.style.width = "40%";
-            setTimeout(() => { loadingBar.style.width = "80%";  loadingText.innerText = "Parsing simulation logic..."; }, 150);
-            setTimeout(() => {
-                loadingBar.style.width = "100%"; loadingText.innerText = "System Ready.";
-                setTimeout(() => {
-                    document.getElementById('screen-loading').style.opacity = '0';
-                    setTimeout(() => {
-                        document.getElementById('screen-loading').classList.add('hidden');
-                        showScreen('screen-start');
-                        // Auto-focus first name
-                        if(!state.firstName) document.getElementById('user-first-name').focus();
-                    }, 400);
-                }, 200);
-            }, 400);
-        }
-
-        function showScreen(id) {
-            ['screen-start','screen-play'].forEach(s => {
-                const el = document.getElementById(s);
-                el.classList.add('hidden');
-                el.classList.remove('flex');
-            });
-            const target = document.getElementById(id);
-            target.classList.remove('hidden');
-            target.classList.add('flex');
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        }
-
-        // ── SCRIPT GENERATOR (DYNAMIC) ──
-        let currentScript = {};
-
-        function generateScript() {
-            const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
-            const delay = (base) => base + Math.floor(Math.random() * 600); 
-
-            let history = JSON.parse(localStorage.getItem('nova_sim_history') || '[]');
-            const iteration = history.length + 1;
-            let introSequence = [];
-
-            if (iteration === 1) {
-                introSequence.push(
-                    { sender: 'system_prompt', text: `You joined #${SCENARIOS[state.scenarioIndex].channel}`, delay: 600 },
-                    { sender: 'sarah', text: `Welcome to the team, ${state.firstName}! 👋 Glad to finally have our new Product Lead on board.`, delay: delay(1500) },
-                    { sender: 'marcus', text: `Hey ${state.firstName}! Welcome. I'm Marcus, Lead UX. Looking forward to working together.`, delay: delay(1500) },
-                    { sender: 'sarah', text: `Since it's your first week, we were just about to do a quick async stand-up. I'll go first: I'm Sarah, Head of Data.`, delay: delay(2000) },
-                    { sender: 'marcus', text: `Nice to meet you. For my stand-up: I'm finalizing the UI components for the new dashboard. No blockers so far.`, delay: delay(2000) },
-                    { sender: 'sarah', text: `Actually... I might have a blocker for both of us now.`, delay: delay(1500) },
-                    { sender: 'system', text: '— Scenario Briefing —', delay: 1000 }
-                );
-            } else {
-                const lastRun = history[history.length - 1];
-                const lastDec = lastRun.decision;
-                
-                introSequence.push({ sender: 'system_prompt', text: `— Reviewing Previous Strategy —<br>Last outcome: ${lastRun.title}`, delay: 1000 });
-                introSequence.push({ sender: 'sarah', text: `Morning team. Quick stand-up?`, delay: delay(1500) });
-                
-                if (lastDec === 'BAD_DATA') {
-                    introSequence.push({ sender: 'marcus', text: pick([
-                        `Morning. Yep, but whatever we do today, we CANNOT just cut features like last time. The churn was a disaster.`,
-                        `Morning. Ready. Let's just make sure we don't alienate our power users like we did with our last decision.`
-                    ]), delay: delay(2000) });
-                    introSequence.push({ sender: 'sarah', text: pick([
-                        `Fair enough, Marcus. My previous recommendation backfired. But we have a new blocker today.`,
-                        `Agreed. Trimming features caused long-term churn. But I have a new critical update for my stand-up.`
-                    ]), delay: delay(2000) });
-                } else if (lastDec === 'BAD_CREATIVE') {
-                    introSequence.push({ sender: 'sarah', text: pick([
-                        `${state.firstName}, keeping the UX as-is like we considered last time means we miss targets. We need to be more decisive today.`,
-                        `For my stand-up... well, last time we ignored the drop-off and failed our Q3 goals. Let's do better today.`
-                    ]), delay: delay(2000) });
-                    introSequence.push({ sender: 'marcus', text: pick([
-                        `I know. My UX purism might have hurt us then. Let's find a better balance today.`,
-                        `Point taken, Sarah. We need to fix friction without gutting the value prop. What's the new issue?`
-                    ]), delay: delay(2000) });
-                } else if (lastDec === 'GOOD_PATH') {
-                    introSequence.push({ sender: 'sarah', text: `Adding the 'Skip' button last time was an okay compromise, but it fragmented the users. Let's aim higher today.`, delay: delay(2000) });
-                    introSequence.push({ sender: 'marcus', text: `Agreed. We avoided a disaster, but we didn't solve the root problem. Let's dig deeper on this new issue.`, delay: delay(2000) });
-                } else if (lastDec === 'BEST_PATH') {
-                    introSequence.push({ sender: 'sarah', text: `We nailed it last time by investigating the logs deeply. Let's replicate that success today.`, delay: delay(2000) });
-                    introSequence.push({ sender: 'marcus', text: `Yeah, that fix was perfect. Let's apply that same rigor to today's stand-up.`, delay: delay(2000) });
-                }
-            }
-
-            // Scenario Specific Intro
-            if (state.scenarioIndex === 0) {
-                // Onboarding Leak
-                introSequence.push(
-                    { sender: 'sarah', text: `For my update: The beta onboarding metrics just came in. We have a massive leak. 65% drop-off at "Advanced Configuration".`, delay: delay(2000) },
-                    { sender: 'sarah', text: `It looks like cognitive overload—basically, users are hitting a wall of complex information and freezing up. We need to cut this complex step entirely and default them straight into the basic dashboard to save our Q3 activation targets.`, delay: delay(3000) },
-                    { sender: 'marcus', text: `Hold on. That step customizes the platform to their specific enterprise workflow. It is the core reason big companies pay for our highest tier!`, delay: delay(2500) },
-                    { sender: 'marcus', text: `If we cut it, the tool feels generic. Your data is missing the "why".`, delay: delay(2000) },
-                    { sender: 'sarah', text: `${state.firstName}, you're the Product Lead. What's our play here?`, delay: delay(1500) }
-                );
-            } else {
-                // Pricing Pivot
-                introSequence.push(
-                    { sender: 'sarah', text: `My update is a red alert: Server costs for Nova are up 400%. We need to gate the Analytics Dashboard behind the Enterprise tier—make them pay to see it—immediately to stop the bleeding.`, delay: delay(3000) },
-                    { sender: 'marcus', text: `You can't do that! Analytics is our core "Aha!" moment—the exact feature that makes free users realize the tool is worth paying for. It drives our product-led growth.`, delay: delay(3000) },
-                    { sender: 'sarah', text: `${state.firstName}, we are literally losing money every second. What do we do?`, delay: delay(1500) }
-                );
-            }
-            
-            introSequence.push({ sender: 'action', type: 'choices_intro' });
-
-            // Scenario Specific Actions
-            if (state.scenarioIndex === 0) {
-                currentScript = {
-                    intro: introSequence,
-                    gather1: [
-                        { sender: 'user', text: `@Sarah pull the FullStory session recordings... Let's look at the raw tape to see exactly where their mice are moving and clicking.`, delay: 500 },
-                        { sender: 'system_prompt', text: 'Fetching recordings... (Time elapsed: 15 mins)', delay: 1500 },
-                        { sender: 'sarah', text: `They aren't exhibiting 'overload' behaviors like erratic mouse movements. Instead, they hover over 'LDAP Binding', 'SSO Provisioning', and 'Webhooks'—heavy IT networking terms. They pause, then close the tab.`, delay: delay(2500) },
-                        { sender: 'action', type: 'scaffold_logs' }
-                    ],
-                    logs_correct: [
-                        { sender: 'system', text: 'CALIBRATION: Root cause accurately identified. (+1 Insight)', delay: 500 },
-                        { sender: 'user', text: 'They are hovering over technical terms, then pausing. It\'s a vocabulary mismatch, not feature overload. They just don\'t know the jargon.', delay: 500 },
-                        { sender: 'marcus', text: 'Wait... right. Our beta users are Marketing Ops, not IT. They don\'t know what "LDAP" means.', delay: delay(2000) },
-                        { sender: 'action', type: 'choices_post_gather' }
-                    ],
-                    logs_incorrect_bug: [
-                        { sender: 'system', text: 'CALIBRATION: Technical assumption registered.', delay: 500 },
-                        { sender: 'user', text: 'Rage-clicking means the buttons are broken. File a critical bug report.', delay: 500 },
-                        { sender: 'marcus', text: 'Actually, those are just text labels, not buttons. They are clicking out of frustration because they don\'t understand the words.', delay: delay(2500) },
-                        { sender: 'action', type: 'choices_post_gather' }
-                    ],
-                    logs_incorrect_overload: [
-                        { sender: 'system', text: 'CALIBRATION: Confirmation bias detected.', delay: 500 },
-                        { sender: 'user', text: 'They are pausing and giving up. Sarah is right, it\'s cognitive overload.', delay: 500 },
-                        { sender: 'marcus', text: 'Actually, if it was overload they\'d scroll for an exit. They are fixated on the terminology. They just don\'t know what the words mean.', delay: delay(2500) },
-                        { sender: 'action', type: 'choices_post_gather' }
-                    ],
-                    gather2: [
-                        { sender: 'user', text: `@Sarah pull competitor B2B onboarding benchmarks. Let's see what is normal for our industry.`, delay: 500 },
-                        { sender: 'system_prompt', text: 'Aggregating industry data... (Time elapsed: 15 mins)', delay: 1500 },
-                        { sender: 'sarah', text: 'High-friction onboarding is actually standard for enterprise tools. A 60% drop-off is the 50th percentile, meaning it\'s normal for it to be hard to get started.', delay: delay(2000) },
-                        { sender: 'marcus', text: 'And look at the LTV (Lifetime Value)! Competitors show users who complete complex setups stay subscribed longer and spend 90% more money.', delay: delay(2000) },
-                        { sender: 'action', type: 'scaffold_benchmarks' }
-                    ],
-                    benchmarks_correct: [
-                        { sender: 'system', text: 'CALIBRATION: Business model accurately mapped. (+1 Insight)', delay: 500 },
-                        { sender: 'user', text: 'In B2B Enterprise, friction acts as a filter. It ensures high-intent buyers—the ones who really need the tool—get a deeply customized experience.', delay: 500 },
-                        { sender: 'sarah', text: 'I see your point. We shouldn\'t optimize for pure volume if it sacrifices the quality of the activated user.', delay: delay(2000) },
-                        { sender: 'action', type: 'choices_post_gather' }
-                    ],
-                    benchmarks_incorrect: [
-                        { sender: 'system', text: 'CALIBRATION: Volume prioritization registered.', delay: 500 },
-                        { sender: 'user', text: '65% is too high. Our primary goal right now is top-of-funnel activation volume—just getting as many people through the door as possible.', delay: 500 },
-                        { sender: 'marcus', text: 'Optimizing for volume over value is how you build a generic product that no one loves. But you\'re the boss.', delay: delay(2000) },
-                        { sender: 'action', type: 'choices_post_gather' }
-                    ]
-                };
-            } else {
-                // Pricing Pivot
-                currentScript = {
-                    intro: introSequence,
-                    gather1: [
-                        { sender: 'user', text: `@Sarah let's look at the server load distribution. Where is the heavy computation actually happening in the backend?`, delay: 500 },
-                        { sender: 'system_prompt', text: 'Fetching server logs... (Time elapsed: 15 mins)', delay: 1500 },
-                        { sender: 'sarah', text: `Wait... 80% of the load isn't from active free users. It's from dormant legacy accounts running automated background tasks (cron jobs) that no one is even looking at.`, delay: delay(3000) },
-                        { sender: 'action', type: 'scaffold_logs' }
-                    ],
-                    logs_correct: [
-                        { sender: 'system', text: 'CALIBRATION: Root cause accurately identified. (+1 Insight)', delay: 500 },
-                        { sender: 'user', text: 'So active free users aren\'t the problem. The dormant accounts are eating our margins.', delay: 500 },
-                        { sender: 'sarah', text: 'Exactly. If we cull the dormant accounts, we can afford to keep Analytics free for the active ones.', delay: delay(2000) },
-                        { sender: 'action', type: 'choices_post_gather' }
-                    ],
-                    logs_incorrect_bug: [
-                        { sender: 'system', text: 'CALIBRATION: Blanket assumption registered.', delay: 500 },
-                        { sender: 'user', text: 'Free users are just too expensive. We still need to gate it.', delay: 500 },
-                        { sender: 'marcus', text: 'But Sarah just said the active users aren\'t the problem! You\'re punishing good users for bad architecture.', delay: delay(2500) },
-                        { sender: 'action', type: 'choices_post_gather' }
-                    ],
-                    logs_incorrect_overload: [
-                        { sender: 'system', text: 'CALIBRATION: Technical distraction registered.', delay: 500 },
-                        { sender: 'user', text: 'We must have a bug in our background tasks. Have Engineering rewrite the analytics pipeline.', delay: 500 },
-                        { sender: 'sarah', text: 'That would take months. We need to save the Q3 budget right now.', delay: delay(2000) },
-                        { sender: 'action', type: 'choices_post_gather' }
-                    ],
-                    gather2: [
-                        { sender: 'user', text: `Let's review the free-to-paid conversion paths. How exactly does using Analytics lead to a paid upgrade?`, delay: 500 },
-                        { sender: 'system_prompt', text: 'Aggregating conversion data... (Time elapsed: 15 mins)', delay: 1500 },
-                        { sender: 'sarah', text: 'Wow. Users who interact with the Analytics Dashboard are 5x more likely to upgrade within 14 days.', delay: delay(2000) },
-                        { sender: 'marcus', text: 'See! It\'s our primary acquisition driver—the main reason people decide to sign up. If we gate it, our sales funnel dies.', delay: delay(2500) },
-                        { sender: 'action', type: 'scaffold_benchmarks' }
-                    ],
-                    benchmarks_correct: [
-                        { sender: 'system', text: 'CALIBRATION: Business model accurately mapped. (+1 Insight)', delay: 500 },
-                        { sender: 'user', text: 'Analytics isn\'t just a cost center, it\'s a loss leader. We lose money on it intentionally because it drives our massive Enterprise sales.', delay: 500 },
-                        { sender: 'sarah', text: 'I see your point. Cutting it would save server costs but destroy our revenue pipeline.', delay: delay(2000) },
-                        { sender: 'action', type: 'choices_post_gather' }
-                    ],
-                    benchmarks_incorrect: [
-                        { sender: 'system', text: 'CALIBRATION: Cost prioritization registered.', delay: 500 },
-                        { sender: 'user', text: '5x higher chance is great, but we literally cannot afford the servers. We have to gate it.', delay: 500 },
-                        { sender: 'marcus', text: 'You\'re going to kill the product to save the budget. Typical.', delay: delay(2000) },
-                        { sender: 'action', type: 'choices_post_gather' }
-                    ]
-                };
-            }
-        }
-
-        // ── CHAT CORE ENGINE ──
-        let chatQueue = [];
-        let isProcessing = false;
-
-        function updateHUD() {
-            const timeBar  = document.getElementById('time-bar');
-            const timeText = document.getElementById('time-text');
-            timeText.innerText = `${Math.max(0, state.timeLeft)} Mins`;
-            const pct = (state.timeLeft / 60) * 100;
-            timeBar.style.width = `${Math.max(0, pct)}%`;
-            if (state.timeLeft <= 15)      timeBar.className = "h-full bg-red-500 transition-all duration-700 ease-out";
-            else if (state.timeLeft <= 30) timeBar.className = "h-full bg-yellow-500 transition-all duration-700 ease-out";
-            else                           timeBar.className = "h-full bg-emerald-500 transition-all duration-700 ease-out";
-        }
+        // ── BASIC UI LOGIC ──
+        document.getElementById('start-scenario-desc').innerHTML = SCENARIOS[0].desc;
 
         function startGame() {
-            const fNameInput = document.getElementById('user-first-name');
-            const lNameInput = document.getElementById('user-last-name');
-            
-            if (!fNameInput.value.trim()) { fNameInput.focus(); return; }
-            if (!lNameInput.value.trim()) { lNameInput.focus(); return; }
-
-            state.firstName = fNameInput.value.trim();
-            state.lastName = lNameInput.value.trim();
-            localStorage.setItem('nova_sim_first_name', state.firstName);
-            localStorage.setItem('nova_sim_last_name', state.lastName);
-
-            // Update DOM element names
-            document.getElementById('dm-user-name').innerHTML = `${state.firstName} ${state.lastName} <span class="text-gray-500 ml-1 text-[10px]">(you)</span>`;
-
+            // Initialize audio on first user gesture
             initAudio();
-            document.getElementById('interaction-area').classList.remove('hidden');
-            showScreen('screen-play');
+
+            // Validate inputs
+            const fName = document.getElementById('user-first-name').value || 'Alex';
+            const lName = document.getElementById('user-last-name').value || 'Rivera';
+            document.getElementById('dm-user-name').innerHTML = `${fName} ${lName} <span class="text-gray-500 ml-1 text-[10px]">(you)</span>`;
+
+            // Switch screens
+            document.getElementById('screen-start').classList.add('hidden');
+            document.getElementById('screen-start').classList.remove('flex');
             
-            updateHUD();
-            
-            let initialChatHTML = `
-                <div class="flex items-center justify-center my-4">
-                    <div class="h-px bg-white/5 flex-1"></div>
-                    <span class="text-[10px] font-semibold text-gray-500 px-4 border border-white/5 rounded-full py-1 bg-[#141414]">Today</span>
-                    <div class="h-px bg-white/5 flex-1"></div>
-                </div>
-            `;
-            document.getElementById('chat-container').innerHTML = initialChatHTML;
-            document.getElementById('choices-list').innerHTML = '';
-            
-            generateScript();
-            queueScenario('intro');
-        }
+            document.getElementById('screen-play').classList.remove('hidden');
+            document.getElementById('screen-play').classList.add('flex');
 
-        function restartSimulation() {
-            // Re-read and reset everything to start the next iteration cleanly
-            resetState();
-            
-            document.getElementById('chat-container').innerHTML = `
-                <div class="flex items-center justify-center my-4">
-                    <div class="h-px bg-white/5 flex-1"></div>
-                    <span class="text-[10px] font-semibold text-gray-500 px-4 border border-white/5 rounded-full py-1 bg-[#141414]">Today</span>
-                    <div class="h-px bg-white/5 flex-1"></div>
-                </div>
-            `;
-            document.getElementById('choices-list').innerHTML = '';
-            
-            // Remove the end screen card
-            const outcomes = document.querySelectorAll('#chat-container > .fade-in-up.mt-6');
-            outcomes.forEach(el => el.remove());
-
-            document.getElementById('interaction-area').classList.remove('hidden');
-            
-            updateHUD();
-            
-            chatQueue = [];
-            isProcessing = false;
-            generateScript();
-            queueScenario('intro');
-        }
-
-        function queueScenario(key) {
-            if(!currentScript[key]) return;
-            chatQueue = chatQueue.concat(currentScript[key]);
-            if (!isProcessing) processChatQueue();
-        }
-
-        async function processChatQueue() {
-            if (chatQueue.length === 0) { isProcessing = false; return; }
-            isProcessing = true;
-            const msg = chatQueue.shift();
-
-            if (msg.sender === 'action') {
-                renderChoices(msg.type);
-                isProcessing = false;
-                return;
-            }
-
-            if (msg.sender === 'sarah' || msg.sender === 'marcus') {
-                const typingId = showTypingIndicator(msg.sender);
-                scrollToBottom();
-                await new Promise(r => setTimeout(r, msg.delay));
-                const el = document.getElementById(typingId);
-                if (el) el.remove();
-                playSubtlePop();
-            } else {
-                await new Promise(r => setTimeout(r, msg.delay));
-            }
-
-            renderBubble(msg.sender, msg.text);
-            scrollToBottom();
-            processChatQueue();
-        }
-
-        function renderBubble(sender, text) {
-            const container = document.getElementById('chat-container');
-            const wrapper   = document.createElement('div');
-
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-
-            if (sender === 'system') {
-                wrapper.className = "flex justify-center fade-in-up my-4 w-full px-2";
-                wrapper.innerHTML = `
-                    <div class="flex items-center w-full">
-                        <div class="h-px bg-white/5 flex-1"></div>
-                        <span class="text-[10px] uppercase tracking-widest text-gray-500 px-4 font-semibold text-center leading-relaxed">${text}</span>
-                        <div class="h-px bg-white/5 flex-1"></div>
-                    </div>
-                `;
-            } else if (sender === 'system_prompt') {
-                wrapper.className = "flex fade-in-up my-2 w-full px-2";
-                wrapper.innerHTML = `
-                    <div class="system-prompt-bg text-gray-200 text-xs px-4 py-3 rounded-lg font-medium w-full flex items-center shadow-sm">
-                        <div class="w-6 h-6 rounded-full bg-netflix flex items-center justify-center mr-3 shrink-0">
-                            <i data-lucide="brain-circuit" class="w-3.5 h-3.5 text-white"></i>
-                        </div>
-                        <span class="leading-relaxed">${text}</span>
-                    </div>
-                `;
-            } else {
-                wrapper.className = "flex items-start space-x-3 w-full slack-message p-2 -mx-2 rounded fade-in-up";
-                
-                let imgSrc, name, nameColor, extraImgClass = '';
-                if (sender === 'user') {
-                    imgSrc = imgUserUrl;
-                    name = `${state.firstName} ${state.lastName}`;
-                    nameColor = 'text-white';
-                    extraImgClass = 'blur-[1px] opacity-80 scale-110';
-                } else if (sender === 'sarah') {
-                    imgSrc = imgSarahUrl;
-                    name = 'Sarah Jenkins';
-                    nameColor = 'text-white';
-                } else {
-                    imgSrc = imgMarcusUrl;
-                    name = 'Marcus Vance';
-                    nameColor = 'text-white';
-                }
-
-                wrapper.innerHTML = `
-                    <div class="w-9 h-9 min-w-[36px] min-h-[36px] shrink-0 rounded bg-white/5 overflow-hidden">
-                        <img src="${imgSrc}" alt="${name}" class="w-full h-full object-cover character-img ${extraImgClass}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iIzMzMyIvPjwvc3ZnPg=='">
-                    </div>
-                    <div class="flex flex-col min-w-0 flex-1 pt-0.5">
-                        <div class="flex items-baseline space-x-2 mb-0.5">
-                            <span class="font-bold text-[13px] ${nameColor}">${name}</span>
-                            <span class="text-[10px] text-gray-500 font-medium">${timeStr}</span>
-                        </div>
-                        <div class="text-[14px] text-gray-300 leading-relaxed break-words">${text}</div>
-                    </div>
-                `;
-            }
-            container.appendChild(wrapper);
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-        }
-
-        function showTypingIndicator(sender) {
-            const container = document.getElementById('chat-container');
-            const wrapper   = document.createElement('div');
-            const id = 'typing-' + Date.now();
-            wrapper.id = id;
-            wrapper.className = "flex items-start space-x-3 w-full p-2 -mx-2 fade-in-up";
-            
-            const imgSrc = sender === 'sarah' ? imgSarahUrl : imgMarcusUrl;
-            const name = sender === 'sarah' ? 'Sarah Jenkins' : 'Marcus Vance';
-            
-            wrapper.innerHTML = `
-                <div class="w-9 h-9 min-w-[36px] min-h-[36px] shrink-0 rounded bg-white/5 overflow-hidden opacity-60">
-                    <img src="${imgSrc}" alt="typing" class="w-full h-full object-cover character-img">
-                </div>
-                <div class="flex flex-col min-w-0 flex-1 pt-0.5">
-                    <div class="flex items-baseline space-x-2 mb-1">
-                        <span class="font-bold text-[13px] text-gray-500">${name}</span>
-                        <span class="text-[10px] text-gray-600">typing...</span>
-                    </div>
-                    <div class="typing-indicator mt-1">
-                        <span></span><span></span><span></span>
-                    </div>
-                </div>
-            `;
-            container.appendChild(wrapper);
-            return id;
-        }
-
-        let scrollTimeout;
-        function scrollToBottom() {
-            const c = document.getElementById('chat-container');
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => requestAnimationFrame(() => {
-                c.scrollTo({ top: c.scrollHeight, behavior: 'smooth' });
-            }), 50);
-        }
-
-        // ── CHOICES ──
-        function createChoiceButton(text, subtext, highlight, onClickAction, costText, icon, disabled) {
-            const btn  = document.createElement('button');
-            const base = "apple-btn flex-1 w-full sm:w-auto text-left p-3 rounded-lg border transition-all duration-200 flex flex-col justify-start items-start group focus:outline-none focus:ring-2 focus:ring-white/50 min-w-[240px]";
-
-            if (disabled) {
-                btn.className = `${base} bg-[#111] border-white/5 opacity-40 cursor-not-allowed`;
-            } else if (highlight) {
-                btn.className = `${base} bg-[#1A1A1A] border-[#ff4d57]/50 hover:bg-white hover:border-white shadow-[0_0_15px_rgba(229,9,20,0.1)]`;
-            } else {
-                btn.className = `${base} bg-[#1A1A1A] border-white/10 hover:bg-white hover:border-white`;
-            }
-
-            let inner = `
-                <div class="flex items-start space-x-2 w-full mb-1.5">
-                    ${icon ? `<i data-lucide="${icon}" class="w-3.5 h-3.5 mt-0.5 ${disabled ? 'text-gray-600' : highlight ? 'text-[#ff4d57] group-hover:text-[#E50914]' : 'text-gray-400 group-hover:text-black'} shrink-0 transition-colors"></i>` : ''}
-                    <span class="font-bold text-[13px] leading-snug ${disabled ? 'text-gray-500' : 'text-gray-100 group-hover:text-black'} transition-colors whitespace-normal break-words text-left">${text}</span>
-                </div>
-            `;
-            
-            if (disabled) {
-                inner += `<span class="text-[11px] text-gray-600 flex items-center mt-1"><i data-lucide="lock" class="w-3 h-3 mr-1"></i> Data Required</span>`;
-            } else if (subtext || costText) {
-                inner += `<div class="flex items-start justify-between w-full mt-auto pt-2 border-t border-white/5 group-hover:border-black/10 transition-colors gap-3">
-                            <span class="text-[10px] ${disabled ? 'text-gray-600' : 'text-gray-400 group-hover:text-gray-700'} transition-colors leading-relaxed whitespace-normal break-words text-left">${subtext || ''}</span>
-                            ${costText ? `<span class="text-[10px] font-bold ${highlight ? 'text-[#ff4d57] group-hover:text-[#E50914]' : 'text-gray-400 group-hover:text-black'} transition-colors shrink-0 whitespace-nowrap mt-0.5">${costText}</span>` : ''}
-                          </div>`;
-            }
-
-            btn.innerHTML = inner;
-            btn.disabled = !!disabled;
-            if (!disabled && onClickAction) btn.onclick = onClickAction;
-            return btn;
-        }
-
-        function renderChoices(type) {
-            const ia = document.getElementById('interaction-area');
-            const cl = document.getElementById('choices-list');
-            cl.innerHTML = '';
-            
-            const badge = document.getElementById('interaction-badge');
-            badge.className = "bg-netflix text-white px-1.5 py-0.5 rounded text-[8px] mr-2 uppercase tracking-widest font-bold";
-            badge.innerText = "Required";
-
-            ia.classList.add('attention-pulse');
-
-            let options = [];
-
-            const setHeader = (title) => {
-                document.querySelector('#interaction-area .title-text').innerText = title;
-            };
-
-            if (type === 'choices_intro' || type === 'choices_post_gather') {
-                setHeader("Executive Action");
-                
-                if (!state.evidenceGathered.includes('gather1')) {
-                    const txt = state.scenarioIndex === 0 ? "Review Session Logs" : "Review Server Logs";
-                    options.push({ text: txt, cost: "-15 Mins", icon: "video",
-                        action: () => { state.evidenceGathered.push('gather1'); state.timeLeft -= 15; state.ambiguityHeld = true; updateHUD(); clearChoices(); queueScenario('gather1'); }});
-                }
-                if (!state.evidenceGathered.includes('gather2')) {
-                    const txt = state.scenarioIndex === 0 ? "Review Benchmarks" : "Review Upgrade Metrics";
-                    options.push({ text: txt, cost: "-15 Mins", icon: "bar-chart",
-                        action: () => { state.evidenceGathered.push('gather2'); state.timeLeft -= 15; state.ambiguityHeld = true; updateHUD(); clearChoices(); queueScenario('gather2'); }});
-                }
-                const hasData = state.evidenceGathered.length > 0;
-                options.push({ text: "Make Final Decision", disabled: !hasData, highlight: false, icon: "gavel",
-                    action: () => { clearChoices(); renderChoices('choices_decision'); }
-                });
-
-            } else if (type === 'scaffold_logs') {
-                setHeader("Interpret Data");
-                if (state.scenarioIndex === 0) {
-                    options = [
-                        { text: "Rage-clicking = broken UI.", sub: "Assume Technical Issue", action: () => { clearChoices(); queueScenario('logs_incorrect_bug'); }},
-                        { text: "Pausing = cognitive overload.", sub: "Agree with Original Bias", action: () => { clearChoices(); queueScenario('logs_incorrect_overload'); }},
-                        { text: "Clicking terms = confusion.", sub: "Identify True Root Cause", highlight: false, action: () => { state.scaffoldScore++; clearChoices(); queueScenario('logs_correct'); }}
-                    ];
-                } else {
-                    options = [
-                        { text: "Free users are too expensive. Gate it.", sub: "Blanket Assumption", action: () => { clearChoices(); queueScenario('logs_incorrect_bug'); }},
-                        { text: "We have a bug in cron jobs. Rewrite it.", sub: "Technical Distraction", action: () => { clearChoices(); queueScenario('logs_incorrect_overload'); }},
-                        { text: "Dormant accounts are the real cost driver.", sub: "Identify True Root Cause", highlight: false, action: () => { state.scaffoldScore++; clearChoices(); queueScenario('logs_correct'); }}
-                    ];
-                }
-            } else if (type === 'scaffold_benchmarks') {
-                setHeader("Interpret Market Data");
-                if (state.scenarioIndex === 0) {
-                    options = [
-                        { text: "65% is too high. Optimize volume.", sub: "Prioritize Top-of-Funnel", action: () => { clearChoices(); queueScenario('benchmarks_incorrect'); }},
-                        { text: "Friction filters for high LTV.", sub: "Understand Business Model", highlight: false, action: () => { state.scaffoldScore++; clearChoices(); queueScenario('benchmarks_correct'); }}
-                    ];
-                } else {
-                    options = [
-                        { text: "Costs are too high, gate it anyway.", sub: "Prioritize Short-Term Costs", action: () => { clearChoices(); queueScenario('benchmarks_incorrect'); }},
-                        { text: "Analytics drives upgrades, it's an investment.", sub: "Understand Business Model", highlight: false, action: () => { state.scaffoldScore++; clearChoices(); queueScenario('benchmarks_correct'); }}
-                    ];
-                }
-            } else if (type === 'choices_decision') {
-                setHeader("Issue Official Directive");
-                if (state.scenarioIndex === 0) {
-                    options = [
-                        { text: "Cut the configuration step.", sub: "Side with Sarah", result: 'BAD_DATA' },
-                        { text: "Keep the step as-is.", sub: "Side with Marcus", result: 'BAD_CREATIVE' },
-                        { text: "Compromise: Add 'Skip' button.", sub: "Middle Ground", result: 'GOOD_PATH' }
-                    ];
-                    if (state.evidenceGathered.includes('gather1') && state.scaffoldScore > 0) {
-                        options.push({ text: "Reframe: Rewrite UI copy.", sub: "Address vocabulary confusion", result: 'BEST_PATH', highlight: false });
-                    }
-                } else {
-                    options = [
-                        { text: "Gate the Analytics feature.", sub: "Side with Sarah", result: 'BAD_DATA' },
-                        { text: "Keep it free as-is.", sub: "Side with Marcus", result: 'BAD_CREATIVE' },
-                        { text: "Limit Analytics to 7 days.", sub: "Middle Ground", result: 'GOOD_PATH' }
-                    ];
-                    if (state.evidenceGathered.includes('gather1') && state.scaffoldScore > 0) {
-                        options.push({ text: "Reframe: Purge dormant cron jobs.", sub: "Address actual server load", result: 'BEST_PATH', highlight: false });
-                    }
-                }
-            } else if (type === 'risk_assessment') {
-                renderRiskAssessment(); return;
-            }
-
-            options.forEach(opt => {
-                let btn;
-                if (opt.result) {
-                    btn = createChoiceButton(opt.text, opt.sub, opt.highlight, () => {
-                        state.pendingDecision = opt.result; 
-                        clearChoices(); 
-                        
-                        // Send the user's decision to the chat immediately
-                        const cmdText = SCENARIOS[state.scenarioIndex].commands[opt.result];
-                        renderBubble('user', cmdText);
-                        scrollToBottom();
-
-                        // Trigger the pre-mortem flow via system prompt
-                        setTimeout(() => {
-                            chatQueue = [{ sender: 'system_prompt', text: 'PRE-MORTEM INITIATED: Before executing this directive, identify its primary business risk.', delay: 800 }, { sender: 'action', type: 'risk_assessment'}];
-                            processChatQueue();
-                        }, 500);
-
-                    }, null, 'send', false);
-                } else {
-                    btn = createChoiceButton(opt.text, opt.sub, opt.highlight, opt.action, opt.cost, opt.icon, opt.disabled);
-                }
-                cl.appendChild(btn);
-            });
-
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-            scrollToBottom();
-        }
-
-        function clearChoices() {
-            document.getElementById('choices-list').innerHTML = '';
-            document.getElementById('interaction-area').classList.remove('attention-pulse');
-            document.querySelector('#interaction-area .title-text').innerText = "Processing...";
-            const badge = document.getElementById('interaction-badge');
-            badge.className = "bg-gray-700 text-white px-1.5 py-0.5 rounded text-[8px] mr-2 uppercase tracking-widest font-bold";
-            badge.innerText = "System";
-        }
-
-        function renderRiskAssessment() {
-            const cl = document.getElementById('choices-list');
-            cl.innerHTML = '';
-            
-            const badge = document.getElementById('interaction-badge');
-            badge.className = "bg-yellow-500 text-black px-1.5 py-0.5 rounded text-[8px] mr-2 uppercase tracking-widest font-bold";
-            badge.innerText = "Pre-Mortem";
-            document.querySelector('#interaction-area .title-text').innerText = "Identify the Risk";
-            
-            let risks = SCENARIOS[state.scenarioIndex].risks[state.pendingDecision];
-
-            risks.forEach(risk => {
-                const btn = createChoiceButton(risk.text, "", false, () => {
-                    if (risk.correct) state.scaffoldScore++;
-                    clearChoices(); 
-                    
-                    // Render user answering the pre-mortem
-                    renderBubble('user', `My main concern is: ${risk.text}`);
-                    scrollToBottom();
-
-                    setTimeout(() => {
-                        renderBubble('system', "Risk logged. Executing directive.");
-                        scrollToBottom();
-                        setTimeout(() => {
-                            resolveOutcome();
-                        }, 1200);
-                    }, 1000);
-
-                }, null, 'shield-alert', false);
-                cl.appendChild(btn);
-            });
-            if (typeof lucide !== 'undefined') lucide.createIcons();
-            scrollToBottom();
-        }
-
-        function resolveOutcome() {
-            const resultKey = state.pendingDecision;
-            const outcome   = SCENARIOS[state.scenarioIndex].outcomes[resultKey];
-            state.timeLeft  = 0; updateHUD();
-            document.getElementById('interaction-area').classList.add('hidden'); // Hide input area fully
-
-            // Save history
-            let history = JSON.parse(localStorage.getItem('nova_sim_history') || '[]');
-            history.push({ decision: resultKey, title: outcome.title, score: state.scaffoldScore });
-            localStorage.setItem('nova_sim_history', JSON.stringify(history));
-
+            // Inject a mock message and options just to show it's working
             setTimeout(() => {
-                const container = document.getElementById('chat-container');
-                const wrapper   = document.createElement('div');
-                wrapper.className = "fade-in-up mt-6 w-full";
-
-                wrapper.innerHTML = `
-                    <div class="bg-[#1C1C1E] border border-white/10 rounded-xl p-5 md:p-6 shadow-xl relative overflow-hidden my-4">
-                        <div class="absolute -top-10 -right-10 w-24 h-24 rounded-full blur-[50px] opacity-40 bg-current ${outcome.color}"></div>
-                        <div class="flex items-center gap-2 mb-3">
-                            <i data-lucide="flag" class="w-4 h-4 ${outcome.color}"></i>
-                            <span class="text-xs uppercase tracking-widest text-gray-400 font-bold">Simulation Complete</span>
-                        </div>
-                        <h2 class="text-xl md:text-2xl font-bold text-white mb-2 tracking-tight">${outcome.title}</h2>
-                        <p class="text-[13px] md:text-sm text-gray-300 leading-relaxed mb-4">${outcome.text}</p>
-                        
-                        <div class="bg-black/40 p-4 rounded-lg border border-white/5 space-y-2">
-                            <h4 class="text-[11px] uppercase tracking-widest font-bold ${outcome.color} flex items-center"><i data-lucide="book-open" class="w-3.5 h-3.5 mr-1.5"></i> Executive Debrief</h4>
-                            <p class="text-[13px] text-gray-300 leading-relaxed">${outcome.debrief}</p>
-                            <div class="mt-3 pt-3 border-t border-white/5">
-                                <p class="text-[10px] text-gray-400 uppercase tracking-widest font-semibold mb-1 flex items-center"><i data-lucide="lightbulb" class="w-3 h-3 mr-1 text-yellow-500"></i> Coaching Tip</p>
-                                <p class="text-[13px] font-medium text-gray-200 leading-relaxed">${outcome.coaching}</p>
+                const msgHTML = `
+                    <div class="flex items-start gap-3 p-2 rounded-lg slack-message mt-2">
+                        <img src="${imgSarahUrl}" class="w-9 h-9 rounded character-img shrink-0 mt-0.5">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-baseline gap-2">
+                                <span class="font-bold text-[13px] text-white">Sarah Jenkins</span>
+                                <span class="text-[10px] text-gray-500">10:02 AM</span>
+                            </div>
+                            <div class="text-[13px] text-gray-300 mt-0.5 leading-relaxed">
+                                Hey team. We've got a problem. The latest data shows a 42% drop-off at the final configuration step of onboarding. We need to cut that step immediately.
                             </div>
                         </div>
-                        <button onclick="restartSimulation()" class="w-full mt-4 bg-white text-black hover:bg-gray-200 font-bold py-2.5 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-white/30 text-[13px]">Try Another Strategy</button>
                     </div>
                 `;
-                container.appendChild(wrapper);
-                if (typeof lucide !== 'undefined') lucide.createIcons();
+                document.getElementById('chat-container').innerHTML = msgHTML;
+                
+                // Show options
+                const btnHTML = `
+                    <button class="bg-[#1C1C1E] border border-white/10 hover:border-netflix hover:bg-white/5 text-gray-300 text-[12px] px-4 py-2 rounded-md transition-all text-left flex-1" onclick="playSubtlePop(); alert('Choice recorded!')">
+                        ${SCENARIOS[0].commands.BAD_DATA}
+                    </button>
+                    <button class="bg-[#1C1C1E] border border-white/10 hover:border-netflix hover:bg-white/5 text-gray-300 text-[12px] px-4 py-2 rounded-md transition-all text-left flex-1" onclick="playSubtlePop(); alert('Choice recorded!')">
+                        ${SCENARIOS[0].commands.BAD_CREATIVE}
+                    </button>
+                `;
+                document.getElementById('choices-list').innerHTML = btnHTML;
+                
                 scrollToBottom();
-            }, 500);
+                playSubtlePop();
+            }, 800);
         }
-
-        document.addEventListener('DOMContentLoaded', initializeApp);
     </script>
 </body>
 </html>
