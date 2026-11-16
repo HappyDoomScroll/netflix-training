@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="An interactive, conversational leadership simulation designed to teach critical thinking, data analysis, and psychological safety in high-stakes product management.">
     <title>The Signal & The Noise | Leadership Sim</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -139,6 +139,20 @@
             color: #000 !important;
         }
         
+        /* Keyboard focus is always visible */
+        #sim-wrapper button:focus-visible,
+        #sim-wrapper textarea:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 2px;
+        }
+        #sim-wrapper button:disabled { cursor: default; }
+        #sim-wrapper .choice-btn:disabled { opacity: 0.5; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .fade-in-up { animation: none; opacity: 1; transform: none; }
+            .attention-pulse, .glow-breathe { animation: none; }
+        }
+
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
         input:-webkit-autofill:focus, 
@@ -275,7 +289,7 @@
                             <div class="flex items-start justify-between mb-2">
                                 <div class="pr-4">
                                     <h3 class="text-white font-bold text-base tracking-tight">Join Workspace</h3>
-                                    <p class="text-[11px] text-gray-300 mt-1.5 leading-relaxed">Set up your profile to enter <b class="text-white font-semibold" id="login-channel-name">#proj-nova-crisis</b>. The team needs to know who's stepping in to lead.</p>
+                                    <p class="text-[12px] text-gray-300 mt-1.5 leading-relaxed">Set up your profile to enter <b class="text-white font-semibold" id="login-channel-name">#proj-nova-crisis</b>. The team needs to know who's stepping in to lead.</p>
                                 </div>
                                 <div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center shrink-0 border border-white/10">
                                     <i data-lucide="hash" class="w-4 h-4 text-gray-400"></i>
@@ -284,22 +298,25 @@
                             
                             <div class="flex gap-3">
                                 <div class="flex-1">
-                                    <label class="block text-[10px] uppercase tracking-widest text-gray-300 mb-1.5 font-bold">First Name</label>
-                                    <input type="text" id="user-first-name" class="w-full bg-black border border-white/10 rounded-lg px-3 py-2.5 text-white text-[13px] focus:outline-none focus:border-netflix focus:ring-1 focus:ring-netflix transition-colors placeholder:text-gray-500" placeholder="e.g. Alex" required autocomplete="off">
+                                    <label for="user-first-name" class="block text-[11px] uppercase tracking-widest text-gray-300 mb-1.5 font-bold">First Name</label>
+                                    <input type="text" id="user-first-name" class="w-full bg-black border border-white/10 rounded-lg px-3 py-2.5 text-white text-[14px] focus:outline-none focus:border-netflix focus:ring-1 focus:ring-netflix transition-colors placeholder:text-gray-500" placeholder="e.g. Alex" autocomplete="off">
                                 </div>
                                 <div class="flex-1">
-                                    <label class="block text-[10px] uppercase tracking-widest text-gray-300 mb-1.5 font-bold">Last Name</label>
-                                    <input type="text" id="user-last-name" class="w-full bg-black border border-white/10 rounded-lg px-3 py-2.5 text-white text-[13px] focus:outline-none focus:border-netflix focus:ring-1 focus:ring-netflix transition-colors placeholder:text-gray-500" placeholder="e.g. Rivera" required autocomplete="off">
+                                    <label for="user-last-name" class="block text-[11px] uppercase tracking-widest text-gray-300 mb-1.5 font-bold">Last Name</label>
+                                    <input type="text" id="user-last-name" class="w-full bg-black border border-white/10 rounded-lg px-3 py-2.5 text-white text-[14px] focus:outline-none focus:border-netflix focus:ring-1 focus:ring-netflix transition-colors placeholder:text-gray-500" placeholder="e.g. Rivera" autocomplete="off">
                                 </div>
                             </div>
 
-                            <button id="btn-start" onclick="startGame()" style="color:#000 !important;" class="apple-btn w-full bg-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-gray-200 shadow-[0_0_20px_rgba(255,255,255,0.1)] focus:outline-none focus:ring-2 focus:ring-white/30 mt-2">
+                            <button type="button" id="btn-start" onclick="startGame()" style="color:#000 !important;" class="apple-btn w-full bg-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-gray-200 shadow-[0_0_20px_rgba(255,255,255,0.1)] focus:outline-none focus:ring-2 focus:ring-white/30 mt-2">
                                 <span style="color:#000 !important;">Join Team Channel</span>
                             </button>
                         </div>
                     </div>
 
-                    <button onclick="clearHistory(this)" class="text-[10px] text-gray-400 hover:text-gray-200 mt-3 transition-colors font-medium tracking-wide">Clear Simulation History</button>
+                    <div class="flex flex-col items-center gap-1 mt-3">
+                        <p id="history-line" class="text-[12px] text-gray-300 font-medium" aria-live="polite"></p>
+                        <button type="button" id="btn-clear" onclick="clearHistory(this)" class="hidden text-[11px] text-gray-400 hover:text-gray-200 transition-colors font-medium tracking-wide underline underline-offset-2">Clear Simulation History</button>
+                    </div>
                 </div>
             </div>
 
@@ -340,7 +357,7 @@
                         <!-- Timer Widget -->
                         <div class="bg-[#141414] p-3 rounded-lg border border-white/5 mb-4 shrink-0 flex-1 md:w-full">
                             <div class="flex justify-between items-end mb-1.5">
-                                <span class="text-[10px] text-gray-400 font-medium">Exec Review</span>
+                                <span class="text-[11px] text-gray-300 font-medium">Exec Review</span>
                                 <span id="time-text" class="text-[11px] font-bold text-white">60 Mins</span>
                             </div>
                             <div class="w-full h-1 bg-white/5 rounded-full overflow-hidden">
@@ -365,26 +382,28 @@
                                     </div>
                                     <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 border border-black rounded-full"></div>
                                 </div>
-                                <span id="dm-user-name" class="text-[13px] text-gray-300 truncate">Alex Rivera <span class="text-gray-500 ml-1 text-[10px]">(you)</span></span>
+                                <span id="dm-user-name" class="text-[13px] text-gray-300 truncate">Alex Rivera <span class="text-gray-400 ml-1 text-[11px]">(you)</span></span>
                             </div>
 
                             <!-- Sarah -->
-                            <div class="flex items-center space-x-2 px-2 py-1 rounded hover:bg-white/5 cursor-pointer">
+                            <button type="button" id="dm-sarah" disabled class="w-full text-left flex items-center space-x-2 px-2 py-1 rounded hover:bg-white/5">
                                 <div class="relative">
-                                    <img id="sidebar-sarah" class="w-5 h-5 rounded object-cover character-img" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150&h=150" alt="Sarah">
+                                    <img id="sidebar-sarah" class="w-5 h-5 rounded object-cover character-img" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150&h=150" alt="">
                                     <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 border border-black rounded-full"></div>
                                 </div>
-                                <span class="text-[13px] text-gray-300 truncate">Sarah Jenkins</span>
-                            </div>
+                                <span class="text-[13px] text-gray-300 truncate flex-1">Sarah Jenkins</span>
+                                <span class="dm-dot hidden w-2 h-2 rounded-full bg-netflix" title="You can message Sarah"></span>
+                            </button>
 
                             <!-- Marcus -->
-                            <div class="flex items-center space-x-2 px-2 py-1 rounded hover:bg-white/5 cursor-pointer">
+                            <button type="button" id="dm-marcus" disabled class="w-full text-left flex items-center space-x-2 px-2 py-1 rounded hover:bg-white/5">
                                 <div class="relative">
-                                    <img id="sidebar-marcus" class="w-5 h-5 rounded object-cover character-img" src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=150&h=150" alt="Marcus">
+                                    <img id="sidebar-marcus" class="w-5 h-5 rounded object-cover character-img" src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=150&h=150" alt="">
                                     <div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-green-500 border border-black rounded-full"></div>
                                 </div>
-                                <span class="text-[13px] text-gray-300 truncate">Marcus Vance</span>
-                            </div>
+                                <span class="text-[13px] text-gray-300 truncate flex-1">Marcus Vance</span>
+                                <span class="dm-dot hidden w-2 h-2 rounded-full bg-netflix" title="You can message Marcus"></span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -399,27 +418,28 @@
                             <span class="font-bold text-white text-sm" id="chat-header-name">proj-nova-crisis</span>
                         </div>
                         <div class="flex items-center gap-4 text-gray-400">
-                            <div class="flex -space-x-2">
-                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150&h=150" class="w-6 h-6 rounded border border-[#141414] character-img relative z-10">
-                                <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=150&h=150" class="w-6 h-6 rounded border border-[#141414] character-img relative z-20">
+                            <button type="button" id="btn-mute" onclick="toggleMute()" class="text-[11px] font-medium text-gray-300 hover:text-white border border-white/15 rounded px-2 py-1">Sound on</button>
+                            <div class="flex -space-x-2" aria-hidden="true">
+                                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150&h=150" alt="" class="w-6 h-6 rounded border border-[#141414] character-img relative z-10">
+                                <img src="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=150&h=150" alt="" class="w-6 h-6 rounded border border-[#141414] character-img relative z-20">
                                 <div class="w-6 h-6 rounded border border-[#141414] relative z-30 overflow-hidden bg-white/10">
-                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150" class="w-full h-full object-cover character-img blur-[1px] opacity-80 scale-110">
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150" alt="" class="w-full h-full object-cover character-img blur-[1px] opacity-80 scale-110">
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Chat Container (ADDED MIN-H-0 HERE) -->
-                    <div id="chat-container" aria-live="polite" class="flex-1 overflow-y-auto min-h-0 px-4 md:px-6 py-4 space-y-1 w-full">
+                    <div id="chat-container" role="log" aria-live="polite" aria-label="Channel messages" class="flex-1 overflow-y-auto min-h-0 px-4 md:px-6 py-4 space-y-1 w-full">
                         <!-- Messages load here -->
                     </div>
 
                     <!-- Interaction Area (Simulated Message Input) -->
                     <div id="interaction-area" class="shrink-0 p-4 glass-bar z-30 w-full transition-all duration-300">
                         <div class="max-w-4xl mx-auto w-full">
-                            <div class="text-[10px] text-gray-500 font-semibold mb-2 flex items-center tracking-wider">
-                                <span id="interaction-badge" class="bg-netflix text-white px-1.5 py-0.5 rounded text-[8px] mr-2 uppercase">Required</span> 
-                                <span class="text-gray-300 uppercase title-text">Action</span>
+                            <div class="text-[11px] text-gray-300 font-semibold mb-2 flex items-center tracking-wider">
+                                <span id="interaction-badge" class="bg-netflix text-white px-1.5 py-0.5 rounded text-[10px] mr-2 uppercase">Required</span> 
+                                <span id="interaction-title" class="text-gray-200 uppercase title-text" aria-live="polite">Action</span>
                             </div>
                             <div id="choices-list" class="flex flex-col sm:flex-row flex-wrap gap-2 w-full">
                                 <!-- Reply buttons injected here -->
@@ -434,22 +454,36 @@
 
     <script>
         // Initialize Lucide icons
-        lucide.createIcons();
+        if (window.lucide) lucide.createIcons();
 
         // ── ASSETS ──
-        const imgSarahUrl = 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150&h=150';
-        const imgMarcusUrl = 'https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=150&h=150';
-        const imgUserUrl = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150';
-        
+        const IMG = {
+            sarah:  'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150&h=150',
+            marcus: 'https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&q=80&w=150&h=150',
+            user:   'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150'
+        };
+        const NAMES = { sarah: 'Sarah Jenkins', marcus: 'Marcus Vance' };
+        const HISTORY_KEY = 'nova_sim_history';
+        const MUTE_KEY = 'nova_sim_muted';
+
+        // People who ask for less motion get shorter pauses and no typing dots.
+        const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const SPEED = REDUCED ? 0.15 : 1;
+
+        // ── SOUND ──
         let audioCtx = null;
+        let muted = false;
+        try { muted = localStorage.getItem(MUTE_KEY) === '1'; } catch (e) {}
 
         function initAudio() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+            } catch (e) {}
         }
 
         function playSubtlePop() {
-            if (!audioCtx || audioCtx.state === 'suspended') return;
+            if (muted || !audioCtx || audioCtx.state === 'suspended') return;
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
             osc.type = 'sine';
@@ -459,43 +493,101 @@
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
             osc.connect(gain); gain.connect(audioCtx.destination);
             osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-            if (navigator.vibrate) navigator.vibrate(10);
         }
 
-        function clearHistory(btn) {
-            localStorage.removeItem('nova_sim_history');
-            btn.innerText = "History Cleared!";
-            setTimeout(() => {
-                btn.innerText = "Clear Simulation History";
-            }, 2000);
+        function renderMute() {
+            const btn = document.getElementById('btn-mute');
+            btn.textContent = muted ? 'Sound off' : 'Sound on';
+            btn.setAttribute('aria-pressed', String(!muted));
+        }
+        function toggleMute() {
+            muted = !muted;
+            try { localStorage.setItem(MUTE_KEY, muted ? '1' : '0'); } catch (e) {}
+            renderMute();
         }
 
-        // ── DYNAMIC PADDING FIX ──
-        // Removed the problematic ResizeObserver. CSS handles layout now.
-        const interactionArea = document.getElementById('interaction-area');
-        const chatContainer   = document.getElementById('chat-container');
-
-        function scrollToBottom() {
-            if (chatContainer) {
-                chatContainer.scrollTop = chatContainer.scrollHeight;
+        // ── HISTORY (which endings this browser has seen) ──
+        function loadHistory() {
+            try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; } catch (e) { return []; }
+        }
+        function saveRun(entry) {
+            try {
+                const h = loadHistory(); h.push(entry);
+                localStorage.setItem(HISTORY_KEY, JSON.stringify(h));
+            } catch (e) {}
+        }
+        function renderHistory() {
+            const found = new Set(loadHistory().map(r => r.path));
+            const line = document.getElementById('history-line');
+            const clear = document.getElementById('btn-clear');
+            if (found.size === 0) {
+                line.textContent = '';
+                clear.classList.add('hidden');
+            } else {
+                line.textContent = `Endings found: ${found.size} of 4`;
+                clear.classList.remove('hidden');
             }
         }
+        function clearHistory(btn) {
+            try { localStorage.removeItem(HISTORY_KEY); } catch (e) {}
+            btn.innerText = 'History cleared';
+            setTimeout(() => { btn.innerText = 'Clear Simulation History'; renderHistory(); }, 1500);
+        }
 
-        // ── SCENARIO DATA (Completed JSON) ──
+        // ── SCENARIO DATA ──
         const SCENARIOS = [
             {
                 id: 'onboarding',
                 channel: 'proj-nova-crisis',
                 title: 'Scenario: The Onboarding Leak',
                 desc: 'You are the <b class="text-white font-semibold">Product Lead</b> for Project Nova. The beta dashboard is bleeding users. Mediate a conflict between <b class="text-white font-semibold">Sarah (Data)</b> and <b class="text-white font-semibold">Marcus (UX)</b>.',
-                obj1: '<b class="text-white font-semibold">Analyze</b> conflicting qualitative and quantitative raw data.',
-                obj2: '<b class="text-white font-semibold">Evaluate</b> trade-offs and second-order business risks.',
+                funnel: [
+                    { step: 'Sign up', pct: 100 },
+                    { step: 'Create workspace', pct: 88 },
+                    { step: 'Invite team', pct: 81 },
+                    { step: 'Configure data', pct: 47, flag: true },
+                    { step: 'First dashboard', pct: 45 }
+                ],
+                // Each thread costs 15 of the 60 minutes before the exec review.
+                evidence: {
+                    sarah: {
+                        who: 'sarah',
+                        label: 'DM Sarah: ask her to break the drop-off down',
+                        short: 'Sarah\'s breakdown of the drop-off',
+                        ask: 'Before we cut anything, can you break that 42% down for me? What are people doing on that step?',
+                        replies: [
+                            'Sure. Three things stand out.',
+                            '<ul class="list-disc pl-5 space-y-1"><li>Median time on the config step is <b class="text-white">4m 10s</b>. Every other step is under a minute.</li><li><b class="text-white">68%</b> of the people who quit opened the help tooltip on the "Sync Scope" field at least twice before leaving.</li><li>Users who finish configuration are about <b class="text-white">3x</b> as likely to still be active at 90 days.</li></ul>',
+                            'Caveat on that last one: it\'s a correlation. The keen users may simply be the ones who push through. I still think the step is the leak.'
+                        ]
+                    },
+                    marcus: {
+                        who: 'marcus',
+                        label: 'DM Marcus: ask what he sees in the session recordings',
+                        short: 'Marcus\'s session recordings',
+                        ask: 'You\'ve watched the session recordings. What are people actually doing when they leave?',
+                        replies: [
+                            'I went through 12 recordings from last week. 9 of the 12 stall on the same field: "Sync Scope."',
+                            'They open the tooltip, close it, open it again, then leave. Two things users said out loud in testing:<div class="mt-2 pl-3 border-l-2 border-white/20 text-gray-300 space-y-1"><div>"What does sync scope mean? I don\'t want to break something."</div><div>"Is this going to change our live data? I\'ll ask IT first."</div></div>',
+                            'Nobody looks bored. They look worried about picking wrong. Small sample, I know, but it\'s the same spot every time.'
+                        ]
+                    },
+                    tickets: {
+                        who: null,
+                        label: 'Open the support queue and read the onboarding tickets',
+                        short: 'The support queue',
+                        system: '<b class="text-white">Support queue, last 30 days, tag: onboarding</b><ul class="list-disc pl-5 mt-1.5 space-y-1"><li>60 tickets total</li><li><b class="text-white">37</b> ask what a setting means or whether it is safe to change</li><li>11 are billing or login questions</li><li>6 ask for fewer steps</li><li>6 other</li></ul>'
+                    }
+                },
                 commands: {
                     BAD_DATA: "Team, cut the configuration step to save activation targets.",
                     BAD_CREATIVE: "Team, keep the step as-is. We cannot lose the value prop.",
                     GOOD_PATH: "Team, let's compromise. Add a 'Skip Setup' button to the flow.",
                     BEST_PATH: "Team, the issue isn't complexity, it's clarity. Rewrite the tooltips."
                 },
+                // BEST_PATH only appears once you have seen what users are doing.
+                unlock: { BEST_PATH: ['marcus', 'tickets'] },
+                riskAsker: { BAD_DATA: 'marcus', BAD_CREATIVE: 'sarah', GOOD_PATH: 'sarah', BEST_PATH: 'sarah' },
                 risks: {
                     BAD_DATA: [
                         { text: "Risk: We alienate power users and increase churn.", correct: true },
@@ -507,11 +599,31 @@
                     ],
                     GOOD_PATH: [
                         { text: "Risk: We fragment the user base making support harder.", correct: true },
-                        { text: "Risk: Both Sarah and Marcus will resign immediately.", correct: false }
+                        { text: "Risk: Power users feel the product was dumbed down.", correct: false }
                     ],
                     BEST_PATH: [
                         { text: "Risk: Changing copy might not fix complex drop-off.", correct: true },
-                        { text: "Risk: Changing copy will anger enterprise buyers.", correct: false }
+                        { text: "Risk: New copy forces a redesign of the whole setup flow.", correct: false }
+                    ]
+                },
+                // What the team posts three months later.
+                reactions: {
+                    BAD_DATA: [
+                        ['sarah', 'Activation went from 47% to 71%. The exec review loved it.'],
+                        ['sarah', 'The part I didn\'t see coming: 90-day retention fell from 38% to 21%. People get in and never connect their data.'],
+                        ['marcus', 'Support\'s top ticket is now "why is my dashboard empty?"']
+                    ],
+                    BAD_CREATIVE: [
+                        ['sarah', 'Activation is still at 47%. We missed the Q3 target by 14 points and I spent the review explaining why.'],
+                        ['marcus', 'I still think the step is right. I just can\'t prove it to people who quit before they saw what it does.']
+                    ],
+                    GOOD_PATH: [
+                        ['sarah', 'Activation is up to 66%. But 61% of new users hit Skip, and the skippers retain at about half the rate.'],
+                        ['marcus', 'We\'re now supporting two versions of the product. And we still don\'t know why people stalled in the first place.']
+                    ],
+                    BEST_PATH: [
+                        ['marcus', 'Shipped. "Sync Scope" is now "Which data should Nova read?" and the tooltip says plainly that nothing in your live data changes.'],
+                        ['sarah', 'Completion on that step went from 58% to 83%, and 90-day retention is holding. I\'ll say it: the funnel alone wouldn\'t have gotten me there.']
                     ]
                 },
                 outcomes: {
@@ -537,64 +649,388 @@
                         title: "The Root Cause", color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/30",
                         text: "By rewriting the tooltips, you solved the clarity issue without sacrificing the feature. Activation rebounded and retention stayed high.",
                         debrief: "You successfully diagnosed that the problem wasn't the number of steps, but the friction within those steps.",
-                        coaching: "Excellent work identifying the 'signal' (confusion) over the 'noise' (raw drop-off rates)."
+                        coaching: "The 42% told you where to look. The recordings and tickets told you why. Neither one was the signal alone; reading them together was."
                     }
                 }
             }
         ];
+        const S = SCENARIOS[0];
 
-        // ── BASIC UI LOGIC ──
-        document.getElementById('start-scenario-desc').innerHTML = SCENARIOS[0].desc;
+        // ── DOM + HELPERS ──
+        const interactionArea = document.getElementById('interaction-area');
+        const chatContainer   = document.getElementById('chat-container');
+        const choicesList     = document.getElementById('choices-list');
+
+        const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+        function scrollToBottom() {
+            if (chatContainer) chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        const state = { run: 0 };
+        function resetState() {
+            Object.assign(state, {
+                run: state.run + 1,
+                time: 60,
+                clock: 10 * 60 + 2,
+                seen: { sarah: false, marcus: false, tickets: false },
+                phase: 'intro',
+                path: null,
+                riskCorrect: null,
+                reflection: ''
+            });
+        }
+
+        // Pauses stop quietly if the learner restarts mid-conversation.
+        class Cancelled extends Error {}
+        async function wait(ms) {
+            const run = state.run;
+            await new Promise(r => setTimeout(r, ms * SPEED));
+            if (run !== state.run) throw new Cancelled();
+        }
+        function guard(fn) {
+            return (...args) => fn(...args).catch(e => { if (!(e instanceof Cancelled)) throw e; });
+        }
+
+        function stamp() {
+            const h = Math.floor(state.clock / 60), m = state.clock % 60;
+            state.clock += 1;
+            return `${((h + 11) % 12) + 1}:${String(m).padStart(2, '0')} ${h >= 12 ? 'PM' : 'AM'}`;
+        }
+
+        function messageEl(name, img, html) {
+            const el = document.createElement('div');
+            el.className = 'flex items-start gap-3 p-2 rounded-lg slack-message fade-in-up';
+            el.innerHTML = `
+                <img src="${img}" alt="" class="w-9 h-9 rounded character-img shrink-0 mt-0.5">
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-baseline gap-2">
+                        <span class="font-bold text-[14px] text-white">${esc(name)}</span>
+                        <span class="text-[11px] text-gray-400">${stamp()}</span>
+                    </div>
+                    <div class="text-[14px] text-gray-200 mt-0.5 leading-relaxed">${html}</div>
+                </div>`;
+            return el;
+        }
+
+        async function npcSay(who, html, target = chatContainer) {
+            if (!REDUCED) {
+                const typing = document.createElement('div');
+                typing.className = 'px-2 py-1 text-[12px] text-gray-400 flex items-center gap-2';
+                typing.setAttribute('aria-hidden', 'true');
+                typing.innerHTML = `<span class="typing-indicator"><span></span><span></span><span></span></span>${esc(NAMES[who])} is typing`;
+                target.appendChild(typing);
+                scrollToBottom();
+                try { await wait(Math.min(1800, 500 + html.replace(/<[^>]+>/g, '').length * 9)); }
+                finally { typing.remove(); }
+            } else {
+                await wait(400);
+            }
+            target.appendChild(messageEl(NAMES[who], IMG[who], html));
+            playSubtlePop();
+            scrollToBottom();
+        }
+
+        function playerSay(text, target = chatContainer) {
+            target.appendChild(messageEl(state.playerName, IMG.user, esc(text)));
+            scrollToBottom();
+        }
+
+        function divider(text) {
+            const el = document.createElement('div');
+            el.className = 'flex items-center gap-3 py-3 fade-in-up';
+            el.innerHTML = `<div class="h-px flex-1 bg-white/10"></div><span class="text-[11px] font-semibold text-gray-300 uppercase tracking-wider">${esc(text)}</span><div class="h-px flex-1 bg-white/10"></div>`;
+            chatContainer.appendChild(el);
+            scrollToBottom();
+        }
+
+        // A side conversation, shown inline so it also works on phones where the sidebar is hidden.
+        function thread(title) {
+            const el = document.createElement('div');
+            el.className = 'my-2 ml-2 pl-3 border-l-2 border-white/15 fade-in-up';
+            el.innerHTML = `<div class="text-[11px] font-semibold text-gray-300 uppercase tracking-wider px-2 pt-1">${esc(title)}</div>`;
+            chatContainer.appendChild(el);
+            scrollToBottom();
+            return el;
+        }
+
+        function funnelHTML() {
+            const rows = S.funnel.map(f => `
+                <div class="flex items-center gap-2">
+                    <span class="w-32 shrink-0 text-[12px] ${f.flag ? 'text-white font-semibold' : 'text-gray-300'}">${f.step}</span>
+                    <div class="flex-1 h-3 bg-white/5 rounded-sm overflow-hidden"><div class="h-full ${f.flag ? 'bg-netflix' : 'bg-gray-500'}" style="width:${f.pct}%"></div></div>
+                    <span class="w-10 text-right text-[12px] ${f.flag ? 'text-white font-semibold' : 'text-gray-300'}">${f.pct}%</span>
+                </div>`).join('');
+            return `<div class="mt-2 p-3 rounded-lg bg-black/40 border border-white/10 max-w-md" role="img" aria-label="Onboarding funnel. Sign up 100 percent, create workspace 88, invite team 81, configure data 47, first dashboard 45.">
+                <div class="text-[11px] font-semibold text-gray-300 uppercase tracking-wider mb-2">Onboarding funnel, beta cohort</div>
+                <div class="space-y-1.5">${rows}</div>
+                <div class="text-[11px] text-gray-400 mt-2">Share of sign-ups who reach each step</div>
+            </div>`;
+        }
+
+        function updateTimer() {
+            const t = state.time;
+            document.getElementById('time-text').textContent = `${t} Mins`;
+            const bar = document.getElementById('time-bar');
+            bar.style.width = `${(t / 60) * 100}%`;
+            bar.className = 'h-full transition-all duration-700 ease-out ' + (t > 30 ? 'bg-emerald-500' : t > 15 ? 'bg-yellow-500' : 'bg-red-500');
+        }
+
+        function updateSidebar() {
+            ['sarah', 'marcus'].forEach(who => {
+                const open = state.phase === 'investigate' && !state.seen[who];
+                const btn = document.getElementById('dm-' + who);
+                btn.disabled = !open;
+                btn.querySelector('.dm-dot').classList.toggle('hidden', !open);
+            });
+        }
+
+        // ── CHOICE BAR ──
+        function setChoices(title, items, badge = 'Required') {
+            document.getElementById('interaction-badge').textContent = badge;
+            document.getElementById('interaction-title').textContent = title;
+            const hadFocus = choicesList.contains(document.activeElement);
+            choicesList.innerHTML = '';
+            items.forEach(item => {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'choice-btn border text-[13px] px-4 py-2.5 rounded-md transition-all text-left flex-1 min-w-[220px] ' +
+                    (item.quiet ? 'bg-transparent border-white/10 text-gray-300 hover:bg-white/5'
+                                : 'bg-[#1C1C1E] border-white/15 text-gray-100 hover:border-netflix hover:bg-white/5');
+                b.innerHTML = esc(item.label) + (item.tag ? ` <span class="ml-1 text-[11px] text-gray-400 whitespace-nowrap">${esc(item.tag)}</span>` : '');
+                b.addEventListener('click', () => {
+                    choicesList.querySelectorAll('button').forEach(x => x.disabled = true);
+                    playSubtlePop();
+                    item.onClick();
+                });
+                choicesList.appendChild(b);
+            });
+            interactionArea.classList.toggle('attention-pulse', items.length > 0);
+            if (hadFocus && choicesList.firstElementChild) choicesList.firstElementChild.focus();
+            scrollToBottom();
+        }
+        function waitingBar(text) {
+            document.getElementById('interaction-badge').textContent = 'Wait';
+            document.getElementById('interaction-title').textContent = text;
+            choicesList.innerHTML = '';
+            interactionArea.classList.remove('attention-pulse');
+        }
+
+        // ── FLOW ──
+        const seenCount = () => Object.values(state.seen).filter(Boolean).length;
+
+        const runIntro = guard(async () => {
+            waitingBar('The team is talking');
+            await wait(600);
+            await npcSay('sarah', `Hey team. We've got a problem. The latest data shows a 42% drop-off at the final configuration step of onboarding. We need to cut that step immediately.${funnelHTML()}`);
+            await npcSay('marcus', 'Cut it? That step is where people connect their own data. Without it Nova is an empty dashboard. The step isn\'t the problem.');
+            await npcSay('sarah', 'Four in ten people who reach it walk away, Marcus. That is the problem.');
+            await npcSay('marcus', `${esc(state.firstName)}, you're leading this. Exec review is in 60 minutes. What do you want to do?`);
+            showInvestigate();
+        });
+
+        function showInvestigate() {
+            state.phase = 'investigate';
+            updateSidebar();
+            const items = Object.keys(S.evidence)
+                .filter(k => !state.seen[k])
+                .map(k => ({ label: S.evidence[k].label, tag: '15 min', onClick: () => investigate(k) }));
+            items.push({ label: seenCount() ? "I've seen enough. Make the call." : 'No time for that. Make the call now.', quiet: true, onClick: showDecision });
+            setChoices(items.length > 1 ? 'Look into it, or decide' : 'Time to decide', items);
+        }
+
+        const investigate = guard(async (key) => {
+            if (state.phase !== 'investigate' || state.seen[key]) return;
+            const ev = S.evidence[key];
+            state.phase = 'busy';
+            state.seen[key] = true;
+            updateSidebar();
+            waitingBar(ev.who ? `Talking with ${NAMES[ev.who]}` : 'Reading tickets');
+
+            if (ev.who) {
+                const t = thread(`Direct message with ${NAMES[ev.who]}`);
+                playerSay(ev.ask, t);
+                for (const r of ev.replies) await npcSay(ev.who, r, t);
+            } else {
+                const t = thread('Support queue');
+                await wait(700);
+                const el = document.createElement('div');
+                el.className = 'p-2 text-[14px] text-gray-200 leading-relaxed fade-in-up';
+                el.innerHTML = ev.system;
+                t.appendChild(el);
+                scrollToBottom();
+            }
+
+            state.time -= 15;
+            state.clock += 12;
+            updateTimer();
+            await wait(500);
+            showInvestigate();
+        });
+
+        function showDecision() {
+            state.phase = 'decide';
+            updateSidebar();
+            const keys = Object.keys(S.commands).filter(k => {
+                const need = S.unlock[k];
+                return !need || need.some(e => state.seen[e]);
+            });
+            // Shuffle so position never gives the answer away.
+            for (let i = keys.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [keys[i], keys[j]] = [keys[j], keys[i]];
+            }
+            const items = keys.map(k => ({ label: S.commands[k], onClick: () => decide(k) }));
+            if (seenCount() < 3) items.push({ label: 'Wait, I want to look at more first.', quiet: true, onClick: showInvestigate });
+            setChoices('Post your decision to the channel', items);
+        }
+
+        const decide = guard(async (path) => {
+            state.phase = 'busy';
+            state.path = path;
+            waitingBar('The team is reading your message');
+            divider('#' + S.channel);
+            playerSay(S.commands[path]);
+            const asker = S.riskAsker[path];
+            await npcSay(asker, path === 'BAD_CREATIVE' || path === 'BAD_DATA'
+                ? 'You know I disagree, but it\'s your call. Before we commit: what\'s the biggest risk you see in this?'
+                : 'OK. I can work with that. Before we commit: what\'s the biggest risk you see in this?');
+            const opts = [...S.risks[path]].sort(() => Math.random() - 0.5);
+            setChoices('Name the risk', opts.map(o => ({ label: o.text, onClick: () => answerRisk(o) })));
+        });
+
+        const answerRisk = guard(async (opt) => {
+            const path = state.path;
+            state.riskCorrect = opt.correct;
+            waitingBar('The team is talking');
+            playerSay(opt.text.replace(/^Risk:\s*/, ''));
+            const asker = S.riskAsker[path];
+            const real = S.risks[path].find(r => r.correct).text.replace(/^Risk:\s*/, '');
+            await npcSay(asker, opt.correct
+                ? 'That\'s the one I\'d watch too. Let\'s put a number on it and check back.'
+                : `Maybe. The one that worries me more: ${esc(real.charAt(0).toLowerCase() + real.slice(1))}`);
+            await wait(900);
+
+            state.clock = 9 * 60 + 14;
+            divider('Three months later');
+            for (const [who, line] of S.reactions[path]) await npcSay(who, line);
+            await wait(500);
+            showReflection();
+        });
+
+        function showReflection() {
+            state.phase = 'reflect';
+            document.getElementById('interaction-badge').textContent = 'Optional';
+            document.getElementById('interaction-title').textContent = 'Before the debrief';
+            interactionArea.classList.add('attention-pulse');
+            choicesList.innerHTML = `
+                <div class="w-full">
+                    <label for="reflection" class="block text-[13px] text-gray-200 mb-1.5">In a sentence or two: what do you make of how this turned out?</label>
+                    <textarea id="reflection" rows="2" class="w-full bg-black border border-white/15 rounded-lg px-3 py-2 text-white text-[14px] focus:outline-none focus:border-netflix focus:ring-1 focus:ring-netflix placeholder:text-gray-500" placeholder="Just for you. Nothing is sent anywhere."></textarea>
+                    <div class="flex gap-2 mt-2">
+                        <button type="button" id="btn-reflect" class="choice-btn bg-white text-black font-semibold text-[13px] px-4 py-2 rounded-md hover:bg-gray-200">See the debrief</button>
+                    </div>
+                </div>`;
+            document.getElementById('btn-reflect').addEventListener('click', () => {
+                state.reflection = document.getElementById('reflection').value.trim();
+                showDebrief();
+            });
+            scrollToBottom();
+        }
+
+        function showDebrief() {
+            state.phase = 'done';
+            const path = state.path, o = S.outcomes[path];
+            saveRun({ path, seen: seenCount(), risk: state.riskCorrect, at: Date.now() });
+            renderHistory();
+
+            const evidence = Object.keys(S.evidence).map(k =>
+                `<li class="${state.seen[k] ? 'text-gray-100' : 'text-gray-400'}">${state.seen[k] ? 'Opened' : 'Not opened'}: ${esc(S.evidence[k].short)}</li>`).join('');
+
+            let process;
+            if (seenCount() === 0) {
+                process = 'You made this call without opening a single thread. There was a fourth option you never saw; it only appears to a lead who looks at what users are doing.';
+            } else if (path !== 'BEST_PATH' && !S.unlock.BEST_PATH.some(e => state.seen[e])) {
+                process = 'You saw the numbers but not the people behind them. There was a fourth option you never saw; it only appears once you look at what users are doing.';
+            } else if (path !== 'BEST_PATH') {
+                process = 'You had the evidence for a different call in front of you. Worth a second run to see where it leads.';
+            } else {
+                process = `You spent ${seenCount() * 15} of your 60 minutes listening before you decided. That is what made this option visible at all.`;
+            }
+
+            const card = document.createElement('div');
+            card.className = `my-3 p-4 rounded-xl border ${o.bg} ${o.border} fade-in-up`;
+            card.setAttribute('tabindex', '-1');
+            card.innerHTML = `
+                <div class="text-[11px] font-semibold uppercase tracking-wider text-gray-300">Debrief</div>
+                <h2 class="text-lg font-bold ${o.color} mt-0.5">${esc(o.title)}</h2>
+                <p class="text-[14px] text-gray-100 mt-2 leading-relaxed">${esc(o.text)}</p>
+                <p class="text-[14px] text-gray-200 mt-2 leading-relaxed">${esc(o.debrief)}</p>
+                <div class="mt-3 p-3 rounded-lg bg-black/40 border border-white/10">
+                    <div class="text-[11px] font-semibold uppercase tracking-wider text-gray-300 mb-1">Coaching</div>
+                    <p class="text-[14px] text-gray-100 leading-relaxed">${esc(o.coaching)}</p>
+                </div>
+                <div class="mt-3 grid sm:grid-cols-2 gap-3 text-[13px]">
+                    <div><div class="text-[11px] font-semibold uppercase tracking-wider text-gray-300 mb-1">How you got here</div>
+                        <ul class="space-y-0.5">${evidence}</ul></div>
+                    <div><div class="text-[11px] font-semibold uppercase tracking-wider text-gray-300 mb-1">Risk call</div>
+                        <p class="text-gray-100">${state.riskCorrect ? 'You named the risk the team was most worried about.' : 'The team saw a bigger risk than the one you named.'}</p></div>
+                </div>
+                <p class="text-[13px] text-gray-200 mt-3 leading-relaxed">${esc(process)}</p>
+                ${state.reflection ? `<div class="mt-3 pl-3 border-l-2 border-white/20"><div class="text-[11px] font-semibold uppercase tracking-wider text-gray-300 mb-0.5">Your reflection</div><p class="text-[14px] text-gray-100 leading-relaxed">${esc(state.reflection)}</p></div>` : ''}`;
+            chatContainer.appendChild(card);
+
+            const found = new Set(loadHistory().map(r => r.path)).size;
+            setChoices(`Endings found: ${found} of 4`, [
+                { label: 'Run it again and try a different path', onClick: beginRun },
+                { label: 'Back to the start screen', quiet: true, onClick: backToStart }
+            ], 'Done');
+            card.focus({ preventScroll: true });
+            card.scrollIntoView({ block: 'start', behavior: REDUCED ? 'auto' : 'smooth' });
+        }
+
+        // ── SCREENS ──
+        function show(id, on) {
+            const el = document.getElementById(id);
+            el.classList.toggle('hidden', !on);
+            el.classList.toggle('flex', on);
+        }
+
+        function beginRun() {
+            resetState();
+            chatContainer.innerHTML = '';
+            updateTimer();
+            updateSidebar();
+            runIntro();
+        }
 
         function startGame() {
-            // Initialize audio on first user gesture
             initAudio();
-
-            // Validate inputs
-            const fName = document.getElementById('user-first-name').value || 'Alex';
-            const lName = document.getElementById('user-last-name').value || 'Rivera';
-            document.getElementById('dm-user-name').innerHTML = `${fName} ${lName} <span class="text-gray-500 ml-1 text-[10px]">(you)</span>`;
-
-            // Switch screens
-            document.getElementById('screen-start').classList.add('hidden');
-            document.getElementById('screen-start').classList.remove('flex');
-            
-            document.getElementById('screen-play').classList.remove('hidden');
-            document.getElementById('screen-play').classList.add('flex');
-
-            // Inject a mock message and options just to show it's working
-            setTimeout(() => {
-                const msgHTML = `
-                    <div class="flex items-start gap-3 p-2 rounded-lg slack-message mt-2">
-                        <img src="${imgSarahUrl}" class="w-9 h-9 rounded character-img shrink-0 mt-0.5">
-                        <div class="flex-1 min-w-0">
-                            <div class="flex items-baseline gap-2">
-                                <span class="font-bold text-[13px] text-white">Sarah Jenkins</span>
-                                <span class="text-[10px] text-gray-500">10:02 AM</span>
-                            </div>
-                            <div class="text-[13px] text-gray-300 mt-0.5 leading-relaxed">
-                                Hey team. We've got a problem. The latest data shows a 42% drop-off at the final configuration step of onboarding. We need to cut that step immediately.
-                            </div>
-                        </div>
-                    </div>
-                `;
-                document.getElementById('chat-container').innerHTML = msgHTML;
-                
-                // Show options
-                const btnHTML = `
-                    <button class="bg-[#1C1C1E] border border-white/10 hover:border-netflix hover:bg-white/5 text-gray-300 text-[12px] px-4 py-2 rounded-md transition-all text-left flex-1" onclick="playSubtlePop(); alert('Choice recorded!')">
-                        ${SCENARIOS[0].commands.BAD_DATA}
-                    </button>
-                    <button class="bg-[#1C1C1E] border border-white/10 hover:border-netflix hover:bg-white/5 text-gray-300 text-[12px] px-4 py-2 rounded-md transition-all text-left flex-1" onclick="playSubtlePop(); alert('Choice recorded!')">
-                        ${SCENARIOS[0].commands.BAD_CREATIVE}
-                    </button>
-                `;
-                document.getElementById('choices-list').innerHTML = btnHTML;
-                
-                scrollToBottom();
-                playSubtlePop();
-            }, 800);
+            const first = document.getElementById('user-first-name').value.trim() || 'Alex';
+            const last  = document.getElementById('user-last-name').value.trim() || 'Rivera';
+            state.firstName = first;
+            state.playerName = `${first} ${last}`;
+            document.getElementById('dm-user-name').innerHTML = `${esc(state.playerName)} <span class="text-gray-400 ml-1 text-[11px]">(you)</span>`;
+            show('screen-start', false);
+            show('screen-play', true);
+            beginRun();
         }
+
+        function backToStart() {
+            state.run += 1; // stops anything still mid-conversation
+            show('screen-play', false);
+            show('screen-start', true);
+            renderHistory();
+        }
+
+        // ── INIT ──
+        document.getElementById('start-scenario-desc').innerHTML = S.desc;
+        ['user-first-name', 'user-last-name'].forEach(id =>
+            document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') startGame(); }));
+        document.getElementById('dm-sarah').addEventListener('click', () => investigate('sarah'));
+        document.getElementById('dm-marcus').addEventListener('click', () => investigate('marcus'));
+        renderMute();
+        renderHistory();
     </script>
 </body>
 </html>
